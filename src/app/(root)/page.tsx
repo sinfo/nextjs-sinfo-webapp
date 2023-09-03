@@ -1,7 +1,14 @@
-export default function Home() {
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth/next";
+
+export default async function Home() {
+  const session = await getServerSession();
+
+  if (!session) redirect("/login");
+
   return (
-    <main className="min-h-screen bg-slate-900 text-white flex justify-center items-center">
-      <h1 className="text-4xl">SINFO WEBAPP</h1>
-    </main>
-  )
+    <div className="flex justify-center pt-16 text-2xl font-bold">
+      Welcome {session?.user?.name}
+    </div>
+  );
 }

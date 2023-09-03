@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg-cloudy {
+    background-image: url("../assets/images/bg-image.png");
+    background-size: cover;
+}
+
+.btn-white {
+    height: 55px;
+    border-width: 3.5px;
+    border-color: #083D77;
+    @apply rounded-full bg-white text-black font-semibold flex justify-center items-center gap-2;
+}
