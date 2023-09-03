@@ -14,12 +14,13 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="flex flex-row-reverse justify-between items-center p-5 font-bold text-lg">
+    <nav className="h-20 flex flex-row-reverse justify-between items-center px-5 font-bold text-lg">
       <button className="flex gap-1" onClick={handleExit}>
-        Exit <Image src={exitIcon} alt="Exit Icon" className="w-6" />
+        Exit
+        <Image src={exitIcon} alt="Exit Icon" className="w-6" />
       </button>
       {status === "authenticated" && (
-        <Image src={menuIcon} alt="Menu Icon" className="w-14" />
+        <Image src={menuIcon} alt="Menu Icon" className="w-12" />
       )}
     </nav>
   );

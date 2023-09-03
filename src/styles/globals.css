@@ -9,7 +9,6 @@
 
 .btn-white {
     height: 55px;
-    border-width: 3.5px;
-    border-color: #083D77;
-    @apply rounded-full bg-white text-black font-semibold flex justify-center items-center gap-2;
+    border-width: 4px;
+    @apply rounded-full bg-white text-black border-dark-blue font-semibold flex justify-center items-center gap-2;
 }

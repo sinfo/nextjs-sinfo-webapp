@@ -55,13 +55,13 @@ export default function Login() {
       ) : (
         <>
           <Image
-            className="mt-20 w-full"
+            className="mt-28 w-full"
             src={welcomeImage}
             alt="Welcome message"
             quality={100}
           />
           <button
-            className="mt-16 mx-auto btn-white w-48"
+            className="mt-14 mx-auto btn-white w-48"
             onClick={() => setLoginExpanded(true)}
           >
             Login
