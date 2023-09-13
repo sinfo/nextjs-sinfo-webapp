@@ -6,7 +6,10 @@ New SINFO webapp, made with Next.js.
 
 - Clone project
 - `yarn install` to install all dependencies
+- Rename `.env.local.example` to `.env.local` and provide values for the environment variables
 - `yarn dev` to run server (runs on port 3000 by default)
+
+**Note:** The client ID and secret to support authentication with Google (OAuth 2.0) can be requested [here](https://console.cloud.google.com/apis/credentials).
 
 ## Project Folder Structure
 
