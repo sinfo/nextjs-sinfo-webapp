@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import qrCodeIcon from "../assets/icons/qr-code.png";
-import cameraIcon from "../assets/icons/camera.png";
-import giftBoxIcon from "../assets/icons/gift-box.png";
+import qrCodeIcon from "@/assets/icons/qr-code.png";
+import cameraIcon from "@/assets/icons/camera.png";
+import giftBoxIcon from "@/assets/icons/gift-box.png";
 
 export default function BottomNavbar() {
   return (

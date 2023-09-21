@@ -3,8 +3,8 @@
 import { signOut, useSession } from "next-auth/react";
 import { Image } from "next/dist/client/image-component";
 
-import exitIcon from "../assets/icons/exit.png";
-import menuIcon from "../assets/icons/menu.png";
+import exitIcon from "@/assets/icons/exit.png";
+import menuIcon from "@/assets/icons/menu.png";
 
 export default function Navbar() {
   const { status } = useSession();

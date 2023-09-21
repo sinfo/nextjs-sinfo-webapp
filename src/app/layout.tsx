@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { getServerSession } from "next-auth";
 
-import "../styles/globals.css";
+import "@/styles/globals.css";
 import Navbar from "@/components/Navbar";
 import BottomNavbar from "@/components/BottomNavbar";
-import NextAuthProvider from "../context/NextAuthProvider";
+import NextAuthProvider from "@/context/NextAuthProvider";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 

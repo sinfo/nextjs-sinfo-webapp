@@ -5,12 +5,12 @@ import { signIn, useSession } from "next-auth/react";
 import { Image } from "next/dist/client/image-component";
 import { useRouter } from "next/navigation";
 
-import welcomeImage from "../../assets/images/login-welcome.png";
-import webappLogo from "../../assets/images/sinfo-webapp-logo.png";
-import googleIcon from "../../assets/icons/google.png";
-import istIcon from "../../assets/icons/ist.png";
-import linkedinIcon from "../../assets/icons/linkedin.png";
-import microsoftIcon from "../../assets/icons/microsoft.png";
+import welcomeImage from "@/assets/images/login-welcome.png";
+import webappLogo from "@/assets/images/sinfo-webapp-logo.png";
+import googleIcon from "@/assets/icons/google.png";
+import istIcon from "@/assets/icons/ist.png";
+import linkedinIcon from "@/assets/icons/linkedin.png";
+import microsoftIcon from "@/assets/icons/microsoft.png";
 
 export default function Login() {
   const { status } = useSession();

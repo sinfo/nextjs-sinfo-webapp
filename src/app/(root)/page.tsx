@@ -3,8 +3,8 @@ import { getServerSession } from "next-auth/next";
 
 import Image from "next/image";
 
-import hacky from "../../assets/images/hacky-peeking.png";
-import qrCode from "../../assets/images/qr-code-example.png";
+import hacky from "@/assets/images/hacky-peeking.png";
+import qrCode from "@/assets/images/qr-code-example.png";
 
 export default async function Home() {
   const session = await getServerSession();
