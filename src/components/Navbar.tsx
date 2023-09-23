@@ -10,7 +10,7 @@ export default function Navbar() {
   const { status } = useSession();
 
   async function handleExit() {
-    await signOut(); // only for testing
+    await signOut();
   }
 
   return (

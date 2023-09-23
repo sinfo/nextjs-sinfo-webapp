@@ -3,9 +3,11 @@ import { Montserrat } from "next/font/google";
 import { getServerSession } from "next-auth";
 
 import "@/styles/globals.css";
+
 import Navbar from "@/components/Navbar";
 import BottomNavbar from "@/components/BottomNavbar";
-import NextAuthProvider from "@/context/NextAuthProvider";
+import AuthProvider from "@/context/AuthProvider";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -19,18 +21,18 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <NextAuthProvider>
+        <AuthProvider>
           <div className="bg-cloudy text-white min-h-screen flex flex-col">
             <Navbar />
             <div className="grow">{children}</div>
             {session && <BottomNavbar />}
           </div>
-        </NextAuthProvider>
+        </AuthProvider>
       </body>
     </html>
   );

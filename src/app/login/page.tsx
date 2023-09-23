@@ -17,7 +17,7 @@ export default function Login() {
   const { push } = useRouter();
 
   useEffect(() => {
-    if (status === "authenticated") push("/"); // redirect to homepage
+    if (status === "authenticated") push("/");
   });
 
   const [loginExpanded, setLoginExpanded] = useState(false);
@@ -42,7 +42,10 @@ export default function Login() {
               <Image height={25} src={istIcon} alt="IST Icon" />
               Tecnico ID
             </button>
-            <button className="btn-white w-72">
+            <button
+              className="btn-white w-72"
+              onClick={() => signIn("linkedin")}
+            >
               <Image height={25} src={linkedinIcon} alt="LinkedIn Icon" />
               LinkedIn
             </button>
