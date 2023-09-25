@@ -37,8 +37,8 @@ export const authOptions: NextAuthOptions = {
           const { userId } = await resp.json();
           token.userId = userId;
         }
+        token.loginWith = account?.provider ?? "";
       }
-      token.loginWith = account?.provider ?? "";
       return token;
     },
     async session({ token, session }) {
