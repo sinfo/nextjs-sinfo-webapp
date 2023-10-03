@@ -14,7 +14,6 @@ export const authOptions: NextAuthOptions = {
     LinkedInProvider({
       clientId: process.env.LINKEDIN_CLIENT_ID as string,
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET as string,
-      // authorization: { params: { scope: "openid profile email" } },
     }),
   ],
   callbacks: {
@@ -34,15 +33,15 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify({ accessToken: account?.access_token }),
         });
         if (resp.ok) {
-          const { userId } = await resp.json();
-          token.userId = userId;
+          const { cannonToken } = await resp.json();
+          token.cannonToken = cannonToken;
+          token.loginWith = account?.provider ?? "";
         }
-        token.loginWith = account?.provider ?? "";
       }
       return token;
     },
     async session({ token, session }) {
-      session.user.id = token.userId;
+      session.cannonToken = token.cannonToken;
       session.loginWith = token.loginWith;
       return session;
     },

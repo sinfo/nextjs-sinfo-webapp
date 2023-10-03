@@ -2,16 +2,14 @@ import NextAuth, { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: {
-      id: string;
-    } & DefaultSession["user"];
+    cannonToken: string;
     loginWith: string;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
-    userId: string;
+    cannonToken: string;
     loginWith: string;
   }
 }
