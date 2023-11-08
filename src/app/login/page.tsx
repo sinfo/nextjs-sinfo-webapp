@@ -49,7 +49,10 @@ export default function Login() {
               <Image height={25} src={linkedinIcon} alt="LinkedIn Icon" />
               LinkedIn
             </button>
-            <button className="btn-white w-72">
+            <button
+              className="btn-white w-72"
+              onClick={() => signIn("microsoft")}
+            >
               <Image height={25} src={microsoftIcon} alt="Microsoft Icon" />
               Microsoft
             </button>
