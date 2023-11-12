@@ -14,7 +14,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="h-20 flex flex-row-reverse justify-between items-center px-5 font-bold text-lg">
+    <nav className="w-full h-full flex flex-row-reverse justify-between items-center px-5 font-bold text-lg">
       <button className="flex gap-1" onClick={handleExit}>
         Exit
         <Image src={exitIcon} alt="Exit Icon" className="w-6" />

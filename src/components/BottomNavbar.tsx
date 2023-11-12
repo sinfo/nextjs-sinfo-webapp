@@ -7,7 +7,7 @@ import giftBoxIcon from "@/assets/icons/gift-box.png";
 
 export default function BottomNavbar() {
   return (
-    <div className="fixed bottom-0 w-full bg-dark-blue flex justify-between items-center h-20 px-16">
+    <div className="h-full w-full bg-dark-blue flex justify-between items-center px-16">
       <Link href="/">
         <Image width={30} src={qrCodeIcon} alt="QR Code Icon" />
       </Link>

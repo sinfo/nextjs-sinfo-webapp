@@ -23,17 +23,17 @@ export default function Login() {
   const [loginExpanded, setLoginExpanded] = useState(false);
 
   return (
-    <div className="w-5/6 sm:w-[450px] py-8 mx-auto text-center">
+    <div className="h-full w-5/6 sm:w-[440px] mx-auto text-center">
       {loginExpanded ? (
         <>
           <Image
-            className="w-64 mx-auto"
+            className="pt-[15%] sm:pt-[5%] w-64 mx-auto"
             src={webappLogo}
             alt="SINFO WebApp logo"
             quality={100}
           />
           <h1 className="mt-12 text-4xl font-semibold">Login</h1>
-          <div className="flex flex-col items-center mt-12 gap-5">
+          <div className="flex flex-col items-center mt-12 gap-4">
             <button className="btn-white w-72" onClick={() => signIn("google")}>
               <Image height={25} src={googleIcon} alt="Google Icon" />
               Google
@@ -61,13 +61,13 @@ export default function Login() {
       ) : (
         <>
           <Image
-            className="mt-28 w-full"
+            className="pt-[40%] sm:pt-[20%] w-full"
             src={welcomeImage}
-            alt="Welcome message"
+            alt="Welcome Image"
             quality={100}
           />
           <button
-            className="mt-14 mx-auto btn-white w-48"
+            className="mt-12 mx-auto btn-white w-48"
             onClick={() => setLoginExpanded(true)}
           >
             Login

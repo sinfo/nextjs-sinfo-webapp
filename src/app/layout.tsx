@@ -22,15 +22,23 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
-  
+
   return (
     <html lang="en">
       <body className={montserrat.className}>
         <AuthProvider>
-          <div className="bg-cloudy text-white min-h-screen flex flex-col">
-            <Navbar />
-            <div className="grow">{children}</div>
-            {session && <BottomNavbar />}
+          <div className="bg-cloudy text-white h-screen flex flex-col">
+            <div className="h-[10%]">
+              <Navbar />
+            </div>
+            <div className={session ? "h-[80%]" : "h-[90%]"}>
+              {children}
+            </div>
+            {session && (
+              <div className="h-[10%]">
+                <BottomNavbar />
+              </div>
+            )}
           </div>
         </AuthProvider>
       </body>

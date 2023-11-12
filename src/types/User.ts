@@ -1,16 +1,16 @@
 type User = {
   id: string
   name: string
-  img?: string
+  img: string
   role: string
-  shareLinks?: boolean
-  company?: [
+  shareLinks: boolean
+  company: [] | [
     {
       edition: string
       company: string
     }
   ]
-  signatures?: [
+  signatures: [] | [
     {
       day: string,
       edition: string,
@@ -21,7 +21,7 @@ type User = {
       }[]
     }
   ]
-  linkShared?: [{
+  linkShared: [] | [{
     // edition: String,
     // links:[{
     //   id: String,
@@ -29,7 +29,7 @@ type User = {
     id: String
   }]
   mail?: string
-  bearer?: [
+  bearer: [] | [
     {
       token: string
       refreshToken: string
@@ -50,6 +50,6 @@ type User = {
     id: string
   }
   points?: number
-  registered?: string
-  updated?: string
+  registered: string
+  updated: string
 }

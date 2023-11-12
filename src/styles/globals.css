@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .bg-cloudy {
-    background-image: url("../assets/images/bg-image.png");
+    background-image: url("../assets/images/bg-cloudy.png");
     background-size: cover;
 }
 

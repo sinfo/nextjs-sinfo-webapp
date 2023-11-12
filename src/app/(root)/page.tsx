@@ -13,15 +13,13 @@ export default async function Home() {
   if (!session) redirect("/login");
 
   const user = await UserService.getMe(session.cannonToken);
+  if (!user) return <UserSignOut />;
 
-  if (!user) {
-    return <UserSignOut />;
-  }
   return (
-    <div className="flex flex-col items-center">
-      <Image width={120} src={hacky} alt="Hacky Peaking" />
+    <div className="h-full flex flex-col items-center">
+      <Image className="w-32 sm:w-24" src={hacky} alt="Hacky Peaking" />
       <QRCode
-        className={`w-80 h-80 p-5 border-[16px] bg-white rounded-lg`}
+        className="w-72 sm:w-64 h-72 sm:h-64 p-4 border-[14px] bg-white rounded-lg"
         style={{ borderColor: getBorderColor(user.role) }}
         value={user.id}
       />
@@ -30,6 +28,19 @@ export default async function Home() {
     </div>
   );
 }
+
+const getBorderColor = (role: string) => {
+  switch (role) {
+    case "team":
+    case "admin":
+      return "#296CB2"; // blue
+    case "company":
+      return "#B17EC9"; // pink
+    case "attendee":
+    default:
+      return "#74C48A"; // green
+  }
+};
 
 const getDisplayRole = (role: string) => {
   switch (role) {
@@ -42,18 +53,5 @@ const getDisplayRole = (role: string) => {
     case "user":
     default:
       return "Attendee";
-  }
-};
-
-const getBorderColor = (role: string) => {
-  switch (role) {
-    case "team":
-    case "admin":
-      return "#296CB2";
-    case "company":
-      return "#B17EC9";
-    case "attendee":
-    default:
-      return "#74C48A";
   }
 };

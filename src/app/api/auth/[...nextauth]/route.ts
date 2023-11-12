@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
       authorization: {
         params: { scope: "openid email" },
       },
-      async profile(profile, token) {
+      async profile(profile) {
         return {
           id: profile.sub,
           email: profile.email,
@@ -73,8 +73,7 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify({ accessToken: account?.access_token }),
         });
         if (resp.ok) {
-          const cannonToken = (await resp.json()).token;
-          token.cannonToken = cannonToken;
+          token.cannonToken = (await resp.json()).token;
           token.loginWith = account?.provider ?? "";
         }
       }

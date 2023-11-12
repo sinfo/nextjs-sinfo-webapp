@@ -1,11 +1,12 @@
 export const UserService = (() => {
   let me: User | null;
 
+  const usersEndpoint = process.env.CANNON_URL + "/users";
+
   const getMe = async (cannonToken: string, forceRefresh: boolean = false) => {
     if (me && !forceRefresh) return me;
 
-    const url = process.env.CANNON_URL + "/users/me";
-    const resp = await fetch(url, {
+    const resp = await fetch(usersEndpoint + "/me", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cannonToken}`,
