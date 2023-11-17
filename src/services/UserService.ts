@@ -9,15 +9,27 @@ export const UserService = (() => {
       },
       next: {
         revalidate: 300, // 5 mins
-        tags: ["modified-me"]
-      }
+        tags: ["modified-me"],
+      },
     });
 
-    if (resp.ok) {
-      return await resp.json();
-    }
+    if (resp.ok) return resp.json();
     return null;
   };
 
-  return { getMe };
+  const demoteMe = async (cannonToken: string) => {
+    const resp = await fetch(usersEndpoint + "/me", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${cannonToken}`,
+      },
+      body: JSON.stringify({ role: "user" }),
+    });
+    
+    if (resp.ok) return true;
+    return false;
+  };
+
+  return { getMe, demoteMe };
 })();
