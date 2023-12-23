@@ -38,7 +38,7 @@ export default function Login() {
               <Image height={25} src={googleIcon} alt="Google Icon" />
               Google
             </button>
-            <button className="btn-white w-72">
+            <button className="btn-white w-72" onClick={() => signIn("fenix")}>
               <Image height={25} src={istIcon} alt="IST Icon" />
               Tecnico ID
             </button>
