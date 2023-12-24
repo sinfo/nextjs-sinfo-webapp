@@ -6,10 +6,9 @@ New SINFO webapp, made with Next.js.
 
 - Clone project
 - `yarn install` to install all dependencies
-- Rename `.env.local.example` to `.env.local` and provide values for the environment variables
 - `yarn dev` to run server (runs on port 3000 by default)
 
-**Note:** The client ID and secret to support authentication with Google (OAuth 2.0) can be requested [here](https://console.cloud.google.com/apis/credentials).
+**Note:** Make sure you have an instance of cannon-api (including the authentication changes made to accomodate the new webapp) running on port 8090. You can get this version of cannon-api [here](https://github.com/sinfo/cannon-api/tree/new-webapp-auth-changes). In the future, once this version of cannon is merged to master (or staging), there won't be a need to run the cannon-api instance locally.
 
 ## Project Folder Structure
 
@@ -17,11 +16,11 @@ The following takes you through all the directories in the "src" directory and t
 
 ### `app`
 
-Stores all code related to the pages of the webapp, organized by folders.
+Stores all code related to the pages of the webapp, organized by directories.
 
-Each directory in the "app" directory is mapped automatically to a route by Next.js (given that it contains a page.js file). For example, "app/contact/page.js" maps to the route with path "/contact".
+Each directory in the "app" directory is mapped automatically to a route by Next.js (given that it contains a page.ts or route.ts file). For example, "app/contact/page.ts" maps to the route with path "/contact".
 
-The "app/(root)/page.js" maps to the route with path "/".
+The "app/(root)/page.ts" maps to the route with path "/".
 
 More on Next.js routing [here](https://nextjs.org/docs/app/building-your-application/routing).
 
@@ -33,19 +32,23 @@ Stores all static assets such as images, documents etc.
 
 Stores any reusable components, like buttons and UI components, that are not specific to any one page of the app and may be used throughout the application.
 
-### `hooks`
+### `context`
 
-Stores custom hooks that are not specific to any one page and may be used throughout the application.
+Stores files related to Context API.
+
+### `services`
+
+Stores files related to data fetching, external API calls, etc.
 
 ### `styles`
 
 Stores all project stylesheet files (CSS & SCSS files).
 
-### `utils`
+### `types`
 
-Stores any utility/helper functions that may be used throughout the application.
+Contains TypeScript type definitions.
 
-***More directories may be added for efficient project organization on as-needed basic.***
+***More directories may be added for efficient project organization on as-needed basis.***
 
 ## More on Next.js
 
