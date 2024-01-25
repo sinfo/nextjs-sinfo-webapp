@@ -8,8 +8,6 @@ New SINFO webapp, made with Next.js.
 - `yarn install` to install all dependencies
 - `yarn dev` to run server (runs on port 3000 by default)
 
-**Note:** Make sure you have an instance of cannon-api (including the authentication changes made to accomodate the new webapp) running on port 8090. You can get this version of cannon-api [here](https://github.com/sinfo/cannon-api/tree/new-webapp-auth-changes). In the future, once this version of cannon is merged to master (or staging), there won't be a need to run the cannon-api instance locally.
-
 ## Project Folder Structure
 
 The following takes you through all the directories in the "src" directory and their intended usage:
