@@ -1,0 +1,91 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.body-background {
+  background-image: url("../assets/images/bg-cloudy.png"); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.privacy-container {
+  max-width: 500px;
+  width: 100%;
+  margin: auto;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center children horizontally */
+  gap: 20px; /* Add space between children */
+  box-sizing: border-box; 
+}
+
+.privacy-header {
+  background-color: #000;
+  color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box; 
+}
+
+.privacy-header h1 {
+  display: inline-flex; /* Makes the header an inline flex container */
+  align-items: center; /* Vertical alignment */
+  justify-content: center; /* Center alignment for flex items */
+  gap: 0.5em; /* Adds some space between the icon and text */
+  margin: 0; /* Adjust as necessary to align with your design */
+}
+
+.privacy-header svg {
+  width: 1em; /* Scales the icon to match the font size */
+  height: 1em; /* Scales the icon to match the font size */
+}
+
+
+.privacy-content {
+  background-color: #fff;
+  color: #000;
+  padding: 20px;
+  border-radius: 10px;
+  border: 4px solid #083D77; 
+  width: 100%; 
+  box-sizing: border-box;
+}
+
+.back-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.back-button {
+  background-color: #ffffff;
+  color: #083D77;
+  border: 4px solid #083D77;
+  padding: 10px 20px;
+  border-radius: 10px;
+  width: 35%;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1rem;
+  margin-bottom: 20px; 
+  margin-top: 30px;
+  font-weight: bold;
+}
+
+.back-button:hover {
+  background-color: #65899a; 
+}
+

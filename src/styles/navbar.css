@@ -1,0 +1,56 @@
+/* navbar.css */
+
+.relativeWrapper {
+    position: relative; /* Establishes a positioning context for the dropdown */
+  }
+  
+  .navDropdown {
+    position: absolute;
+    top: 100%; /* Positions the dropdown right below the button */
+    left: 0; /* Aligns the dropdown with the left edge of the button */
+    background-color: #333333; /* Dark background for dropdown */
+    color: #FFFFFF; /* White text color */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Shadow for dropdown */
+    border-radius: 10px; /* Rounded borders for the dropdown */
+    overflow: auto; /* Allows scrolling */
+    max-height: 70vh; /* Maximum height to ensure it doesn't go off-screen */
+    width: 100%; /* Adjusted to ensure it takes the full width */
+    min-width: 200px; /* Minimum width to ensure dropdown is not too thin */
+    /* max-width: 90%; Removed or adjust as needed */
+  }
+  
+
+  .navDropdownItem {
+    padding: 10px 15px;
+    border-bottom: 1px solid #474747; /* Slightly lighter border for items */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .navDropdownItem .icon {
+    display: inline-block; /* Adjust as needed */
+    vertical-align: middle; /* Adjust as needed */
+    /* Add other styling specific to your icons here */
+  }
+  
+  .navDropdownItem:last-child {
+    border-bottom: none;
+  }
+  
+  .navDropdownItem:hover {
+    background-color: #7e7e7e; /* Lighter background on hover */
+  }
+  
+  .navDropdownItem a {
+    color: inherit; /* Ensure anchor tag inherits the color from parent */
+    text-decoration: none; /* No underline */
+    display: block; /* Makes the whole area clickable */
+    width: 100%;
+  }
+  
+  /* Add this to your CSS file */
+.buttonHover:hover {
+  background-color: #083D77; /* Light gray background on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for the color change */
+  border-radius: 10px;
+}
