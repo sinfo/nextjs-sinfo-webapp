@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import BottomNavbar from "@/components/BottomNavbar";
 import AuthProvider from "@/context/AuthProvider";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { UserService } from "@/services/UserService";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -22,14 +23,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
-
+  const user: User = await UserService.getMe(session!.cannonToken);
   return (
     <html lang="en">
       <body className={montserrat.className}>
         <AuthProvider>
           <div className="bg-cloudy text-white h-screen flex flex-col">
             <div className="h-[10%]">
-              <Navbar />
+              <Navbar role={user.role}/>
             </div>
             <div className={session ? "h-[80%]" : "h-[90%]"}>
               {children}
