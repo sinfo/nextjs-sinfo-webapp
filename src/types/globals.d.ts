@@ -62,3 +62,15 @@ type Company = {
   advertisementLvl: string;
   img: string;
 };
+
+
+type CVInfo = {
+  id: string,
+  user: string,
+  name: string,
+  kind: string,
+  extension: string,
+  updated: string,
+  created: string,
+  downloadLink: string
+}

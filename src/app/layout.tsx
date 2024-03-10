@@ -36,7 +36,7 @@ export default async function RootLayout({
             </div>
             {session && (
               <div className="h-[10%]">
-                <BottomNavbar />
+                {/* <BottomNavbar /> */}
               </div>
             )}
           </div>
