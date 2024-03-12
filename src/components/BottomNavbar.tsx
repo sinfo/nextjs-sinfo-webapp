@@ -7,8 +7,6 @@ import { UserService } from "@/services/UserService";
 
 import ClientBottomNavbar from "./ClientBottomNavbar";
 
-//TODO: add redirects
-
 export default async function BottomNavbar() {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
