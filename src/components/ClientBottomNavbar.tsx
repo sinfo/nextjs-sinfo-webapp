@@ -12,7 +12,7 @@ import giftBoxIcon from "@/assets/icons/gift-box.png";
 import attendeeLink from "@/assets/icons/link_card_attendee.png"
 import companyLink from "@/assets/icons/link_card_company.png"
 
-//TODO: add redirects
+//TODO: add the redirects on the buttons to the corresponding pages once the pages are implemented
 
 function RightIcon({ role } : { role: string}) {
   switch (role) {
@@ -49,7 +49,7 @@ function RightIcon({ role } : { role: string}) {
   }
 }
 
-export default function ClientBottomNavbar({ user } : { user: any}) {
+export default function ClientBottomNavbar({ user } : { user: User}) {
   const path = usePathname()
   return (
     <div className="flex flex-col items-center">
