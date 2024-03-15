@@ -3,12 +3,11 @@ import Head from 'next/head';
 import '@/styles/code-of-conduct.css'; // Update the import path as needed
 import { CodeOfConductIcon } from '@/components/Icons'; // Update the path to your actual icon
 
-
 export default function CodeOfConduct() {
   const router = useRouter();
 
   return (
-    <RootLayout>
+    <>
       <Head>
         <title>Code of Conduct</title>
       </Head>
@@ -68,6 +67,6 @@ export default function CodeOfConduct() {
           </div>
         </div>
       </div>
-    </RootLayout>
+    </>
   );
 }
