@@ -10,6 +10,7 @@ import "@/styles/navbar.css";
 
 import exitIcon from "@/assets/icons/exit.png";
 import menuIcon from "@/assets/icons/menu.png";
+import menuIconBlue from "@/assets/icons/menuButtonBlue.png";
 
 import {
   CvDownloadsIcon,
@@ -30,7 +31,7 @@ type UserRole = 'company' | 'user' | 'team';
 type MenuItem = {
   label: string;
   link: string;
-  icon?: JSX.Element;
+  icon?: JSX.Element; // Changed to a function that returns a JSX element
   isExternal?: boolean;
 };
 
@@ -102,17 +103,17 @@ export default function Navbar({ role } : { role: string}) {
   }
 
   return (
-    <nav className="w-full h-full flex flex-row-reverse justify-between items-center px-5 font-bold text-lg ">
-      <button className="flex gap-1" onClick={handleExit}>
+    <nav className="fullWidthHeightFlex">
+      <button className="flexGapPx" onClick={handleExit}>
         Exit
         <Image src={exitIcon} alt="Exit Icon" className="w-6" />
       </button>
       {status === "authenticated" && (
         <>
         <div className="relativeWrapper">
-            <button onClick={toggleMenu}>
-              <Image src={menuIcon} alt="Menu Icon" className="w-12 buttonHover" />
-            </button>
+        <button onClick={toggleMenu} className={isMenuOpen ? "buttonSandwich active" : "buttonSandwich"}>
+          <Image src={isMenuOpen ? menuIconBlue : menuIcon} alt="Menu Icon" className="w-12" />
+        </button>
             {isMenuOpen && (
               <div className="navDropdown">
                 {menuItems[userRole].map((item, index) => (

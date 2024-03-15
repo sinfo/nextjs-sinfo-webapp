@@ -61,10 +61,8 @@ export default async function BottomNavbar() {
   const user: User = await UserService.getMe(session.cannonToken);
   if (!user) return <UserSignOut />;
 
-  let headersList = headers();
-  let fullUrl = headersList.get('referer') || "";
-  let urlObject = new URL(fullUrl);
-  let path = urlObject.pathname;
+  
+  let path = "/";
   console.log(path)
   
   return (

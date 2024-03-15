@@ -14,19 +14,36 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: auto;
 }
 
 .privacy-container {
-  max-width: 500px;
-  width: 100%;
+  max-width: 90%; 
   margin: auto;
   border-radius: 10px;
-  padding: 20px;
+  padding: 1rem; 
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center children horizontally */
-  gap: 20px; /* Add space between children */
-  box-sizing: border-box; 
+  align-items: center;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .privacy-container {
+    max-width: 750px; 
+  }
+}
+
+@media (min-width: 1024px) {
+  .privacy-container {
+    max-width: 970px; 
+  }
+}
+
+@media (min-width: 1200px) {
+  .privacy-container {
+    max-width: 1170px; 
+  }
 }
 
 .privacy-header {
@@ -40,16 +57,16 @@ html, body {
 }
 
 .privacy-header h1 {
-  display: inline-flex; /* Makes the header an inline flex container */
-  align-items: center; /* Vertical alignment */
-  justify-content: center; /* Center alignment for flex items */
-  gap: 0.5em; /* Adds some space between the icon and text */
-  margin: 0; /* Adjust as necessary to align with your design */
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 0.5em; 
+  margin: 0;
 }
 
 .privacy-header svg {
-  width: 1em; /* Scales the icon to match the font size */
-  height: 1em; /* Scales the icon to match the font size */
+  width: 1em; 
+  height: 1em; 
 }
 
 
@@ -61,20 +78,25 @@ html, body {
   border: 4px solid #083D77; 
   width: 100%; 
   box-sizing: border-box;
+  overflow-y: auto; 
+  max-height: 75vh;
 }
 
 .back-button-container {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: auto;
+  position: sticky; 
+  bottom: 0;
+  background: inherit; 
+  padding: 1rem 0; 
 }
 
 .back-button {
   background-color: #ffffff;
   color: #083D77;
   border: 4px solid #083D77;
-  padding: 10px 20px;
+  padding: 0.5rem 1rem;
   border-radius: 10px;
   width: 35%;
   cursor: pointer;
@@ -87,5 +109,9 @@ html, body {
 
 .back-button:hover {
   background-color: #65899a; 
+}
+
+.privacy-header h1, .privacy-content {
+  width: 100%;
 }
 
