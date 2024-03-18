@@ -1,4 +1,5 @@
 import { revalidateTag } from "next/cache";
+import { EditionService } from "./EditionService";
 
 export const UserService = (() => {
   const usersEndpoint = process.env.CANNON_URL + "/users";
@@ -18,7 +19,6 @@ export const UserService = (() => {
       });
 
       if (resp.ok) return resp.json();
-
     } catch (error) {
       console.error(error);
     }
@@ -38,12 +38,36 @@ export const UserService = (() => {
         body: JSON.stringify({ role: "user" }),
       });
 
-      if (resp.ok) success = true;
-
+      if (resp.ok) {
+        success = true;
+        revalidateTag("modified-me");
+      }
     } catch (error) {
       console.error(error);
     }
     return success;
+  };
+
+  const getUser = async (cannonToken: string, userId: string) => {
+    try {
+      const editionId: string = await EditionService.getCurrentEdition();
+      const url = encodeURI(
+        `${usersEndpoint}/${userId}?editionId=${editionId}`
+      );
+      const resp = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        next: {
+          revalidate: 600, // 5 mins
+        },
+      });
+      if (resp.ok) return resp.json();
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
   };
 
   const getCVInfo = async (cannonToken: string) => {
@@ -59,16 +83,14 @@ export const UserService = (() => {
         },
       });
       if (resp.ok) return resp.json();
-
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     return null;
   };
 
   const uploadCV = async (cannonToken: string, cv: File) => {
     let success = false;
-
     try {
       let formData = new FormData();
       formData.append("file", cv, cv.name);
@@ -85,7 +107,6 @@ export const UserService = (() => {
         revalidateTag("modified-cv");
         success = true;
       }
-
     } catch (error) {
       console.error(error);
     }
@@ -94,7 +115,6 @@ export const UserService = (() => {
 
   const deleteCV = async (cannonToken: string) => {
     let success = false;
-
     try {
       const resp = await fetch(filesEndpoint + "/me", {
         method: "DELETE",
@@ -107,12 +127,76 @@ export const UserService = (() => {
         revalidateTag("modified-cv");
         success = true;
       }
-
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     return success;
   };
 
-  return { getMe, demoteMe, getCVInfo, uploadCV, deleteCV };
+  const createLink = async (
+    cannonToken: string,
+    userId: string,
+    scannedUserId: string,
+    companyId: string,
+    notes: string
+  ) => {
+    let success = false;
+    try {
+      const url = encodeURI(`${usersEndpoint}/${userId}/link`);
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        body: JSON.stringify({
+          userId: scannedUserId,
+          companyId,
+          notes: {
+            contacts: { email: "" },
+            internships: "",
+            otherObservations: notes,
+          },
+        }),
+      });
+      if (resp.ok) {
+        success = true;
+        revalidateTag("modified-links");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return success;
+  };
+
+  const getLink = async (
+    cannonToken: string,
+    userId: string,
+    companyId: string
+  ) => {
+    try {
+      const url = encodeURI(`${usersEndpoint}/${userId}/link/${companyId}`);
+      const resp = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cannonToken}`,
+        },
+      });
+      if (resp.ok) return resp.json();
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  };
+
+  return {
+    getMe,
+    demoteMe,
+    getUser,
+    getCVInfo,
+    uploadCV,
+    deleteCV,
+    createLink,
+    getLink,
+  };
 })();
