@@ -14,7 +14,11 @@ const config: Config = {
       blue: "#296CB2",
       green: "#74C48A",
       purple: "#B17EC9",
+      greenAC: "#338E2B",
+      red: "#E43E3E",
       "dark-blue": "#083D77",
+      "light-purple": "#5B58C4",
+      gray: "#B4B4B4"
     },
   },
   plugins: [],

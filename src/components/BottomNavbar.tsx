@@ -1,22 +1,20 @@
-import Link from "next/link";
-import Image from "next/image";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth/next";
 
-import qrCodeIcon from "@/assets/icons/qr-code.png";
-import cameraIcon from "@/assets/icons/camera.png";
-import giftBoxIcon from "@/assets/icons/gift-box.png";
+import UserSignOut from "@/components/UserSignOut";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { UserService } from "@/services/UserService";
 
-export default function BottomNavbar() {
+import ClientBottomNavbar from "./ClientBottomNavbar";
+
+export default async function BottomNavbar() {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/login");
+
+  const user: User = await UserService.getMe(session.cannonToken);
+  if (!user) return <UserSignOut />;
+  
   return (
-    <div className="h-full w-full bg-dark-blue flex justify-between items-center px-16">
-      <Link href="/">
-        <Image width={30} src={qrCodeIcon} alt="QR Code Icon" />
-      </Link>
-      <Link href="/">
-        <Image width={35} src={cameraIcon} alt="Camera Icon" />
-      </Link>
-      <Link href="/">
-        <Image width={25} src={giftBoxIcon} alt="Gift Box Icon" />
-      </Link>
-    </div>
+    <ClientBottomNavbar user={user} ></ClientBottomNavbar>
   );
 }

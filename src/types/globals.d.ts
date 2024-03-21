@@ -66,3 +66,15 @@ type Company = {
 type Session = {
   
 };
+
+
+type CVInfo = {
+  id: string,
+  user: string,
+  name: string,
+  kind: string,
+  extension: string,
+  updated: string,
+  created: string,
+  downloadLink: string
+}
