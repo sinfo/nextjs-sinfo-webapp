@@ -62,3 +62,7 @@ type Company = {
   advertisementLvl: string;
   img: string;
 };
+
+type Session = {
+  
+};
