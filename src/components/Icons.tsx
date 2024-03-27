@@ -75,7 +75,7 @@ export const MyCardIcon = () => (
   </svg>
 );
   
-export const Workshops = () => (
+export const WorkshopsIcon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
       <rect width="20" height="20" fill="url(#pattern0)"/>
       <defs>

@@ -1,10 +1,11 @@
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 import '@/styles/code-of-conduct.css'; // Update the import path as needed
-import { CodeOfConductIcon } from '@/components/Icons'; // Update the path to your actual icon
+import CodeOfConductIcon from '@/assets/icons/codeConduct.svg'; // Update the path to your actual icon
+import Image from "next/image";
+import Link from "next/link";
 
 export default function CodeOfConduct() {
-  const router = useRouter();
+
 
   return (
     <>
@@ -14,7 +15,10 @@ export default function CodeOfConduct() {
       <div className='body-background'>
         <div className='code-of-conduct-container'>
           <header className='code-of-conduct-header'>
-            <h1>Code Of Conduct <CodeOfConductIcon /></h1>
+            <h1>Code of Conduct</h1>  
+            <div className='imagecontainer'>
+                <Image priority src={CodeOfConductIcon} alt="Icons" className="image"/>
+            </div>
           </header>
           <main className="code-of-conduct-content">
             <span className="icon section-icon icon-multimedia-12 align-center"></span>
@@ -59,13 +63,15 @@ export default function CodeOfConduct() {
                   safe for the duration of the conference. We value your attendance. We expect participants to follow these rules
                   at conference and workshop venues and conference-related social events.</p>
               </div>
-          </main>
-          <div className="back-button-container">
-            <button onClick={() => router.back()} className="back-button">
-              Go back
-            </button>
-          </div>
+          </main>   
         </div>
+      </div>
+      <div className="back-button-container">
+          <Link href="/" passHref>
+              <button className="back-button">
+                  Go back
+              </button>
+          </Link>
       </div>
     </>
   );

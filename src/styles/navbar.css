@@ -32,6 +32,8 @@
   max-height: 75vh; 
   width: 100%; 
   min-width: 200px; 
+  border: 1px solid #ffffff; 
+  border-bottom: 2px solid #ffffff ;
 }
   
 /* Responsive adjustments for smaller devices */
@@ -51,10 +53,9 @@
   }
 }
   
-  
 .navDropdownItem {
   padding: 10px 15px;
-  border-bottom: 1px solid #474747; 
+  border: 1px solid #ffffff; 
   display: flex;
   align-items: center;
   gap: 10px;
@@ -62,6 +63,24 @@
 .navDropdownItem .icon {
   display: inline-block; 
   vertical-align: middle;
+}
+
+.itemLabel{
+  font-size: 16px;
+}
+
+.navDropdownItem .icon {
+  flex-shrink: 0; /* Prevent the icon from shrinking */
+  width: 25px; /* Default width */
+  height: 25px; /* Default height */
+}
+
+/* Responsive image size adjustments */
+@media (max-width: 600px) {
+  .navDropdownItem .icon {
+    width: 20px; /* Smaller size on smaller screens */
+    height: 20px;
+  }
 }
 
 .navDropdownItem:last-child {
@@ -93,7 +112,6 @@
   background-color: #083D77; 
   transition: background-color 0.3s ease; 
 }
-
 
 .buttonSandwich.active, .buttonSandwich:active {
   background-color: white;

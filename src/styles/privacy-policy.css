@@ -2,7 +2,6 @@ html, body {
   padding: 0;
   margin: 0;
   height: 100%;
-  width: 100%;
 }
 
 .body-background {
@@ -10,21 +9,72 @@ html, body {
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: auto;
+}
+
+.link{
+  font-weight: bold;
+  text-decoration: underline;
+  color: blue;
+}
+
+.col-md-12 h3 {
+  font-size: 1.2em; /* Adjust size as necessary */
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.custom-list {
+  list-style: disc;
+}
+
+.custom-list li:before {
+  content: "\2022"; /* Unicode character for a bullet point */
+  color: #007bff; /* You can adjust the color as needed */
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em; /* Ensures the bullet point is aligned properly */
+}
+
+.bold{
+  font-weight: bold;
 }
 
 .privacy-container {
-  max-width: 90%; 
+  max-width: 85%; 
+  max-height: 80%;
   margin: auto;
   border-radius: 10px;
   padding: 1rem; 
   display: flex;
   flex-direction: column;
-  align-items: center;
+  overflow-y: auto; /* Scrollable content */
+  max-height: 70vh;
+}
+
+/* Responsive adjustments */
+@media (min-height: 300px) {
+  .privacy-container {
+    max-height: 50vh;
+  }
+}
+
+/* Responsive adjustments */
+@media (min-height: 600px) {
+  .privacy-container {
+    max-height: 60vh;
+  }
+}
+
+/* Responsive adjustments */
+@media (min-height: 750px) {
+  .privacy-container {
+    max-height: 65vh; 
+  }
 }
 
 /* Responsive adjustments */
@@ -46,27 +96,68 @@ html, body {
   }
 }
 
+.privacy-content {
+  width: 100%;
+}
+
 .privacy-header {
+  display: flex; /* Establishes a flex container */
+  justify-content: space-between; /* Positions h1 on the left, image container on the right */
+  align-items: center; /* Align items vertically */
   background-color: #000;
   color: #fff;
   border-radius: 10px;
   padding: 20px;
   width: 100%;
-  text-align: center;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
+/* Ensure that the h1 element is not too big on smaller screens */
 .privacy-header h1 {
-  display: inline-flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 0.5em; 
-  margin: 0;
+  font-size: 26px; /* Starting font-size, can be adjusted as needed */
+  padding: 10px;
+  font-weight: bold;
 }
 
-.privacy-header svg {
-  width: 1em; 
-  height: 1em; 
+.imagecontainer {
+  width: 30%; /* Start with a percentage of the parent element's width */
+  max-width: 60px; 
+  height: auto; /* This will maintain the aspect ratio of the image */
+  display: flex; /* Use flexbox to center the image in the container if needed */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  padding: 10px;
+}
+
+/* Styles for the image within the container */
+.image {
+  height: 100%;
+  width: 100%; 
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .privacy-header {
+    padding: 10px; /* Reduces padding on smaller screens */
+  }
+
+  .privacy-header h1 {
+    font-size: 20; /* Reduces the font-size for smaller screens */
+  }
+
+  .imagecontainer {
+    max-width: 50px;
+  }
+}
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .privacy-header h1 {
+    font-size: 18px; /* Reduces the font-size for smaller screens */
+  }
+
+  .imagecontainer {
+    max-width: 40px;
+  }
 }
 
 
@@ -79,7 +170,7 @@ html, body {
   width: 100%; 
   box-sizing: border-box;
   overflow-y: auto; 
-  max-height: 75vh;
+  max-height: 100%;
 }
 
 .back-button-container {
@@ -93,25 +184,33 @@ html, body {
 }
 
 .back-button {
-  background-color: #ffffff;
-  color: #083D77;
-  border: 4px solid #083D77;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-  width: 35%;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: 1rem;
-  margin-bottom: 20px; 
-  margin-top: 30px;
-  font-weight: bold;
+  background-color: #ffffff; /* Light background for contrast */
+  color: #083D77; /* Dark text for readability */
+  border: 2px solid #083D77; /* Solid border to stand out */
+  padding: 0.5rem 1rem; /* Adequate padding */
+  border-radius: 10px; /* Rounded corners */
+  cursor: pointer; /* Cursor indicates it's clickable */
+  text-decoration: none; /* No underlines */
+  font-size: 1rem; /* Legible font size */
+  font-weight: bold; /* Bold text */
+  text-align: center; /* Centered text */
+  display: inline-block; /* Allows width to be set properly */
+  width: auto; /* Auto width based on content, with min-width for consistency */
+  min-width: 150px; /* Minimum width to avoid too narrow buttons */
+  margin: 30px auto 20px; /* Center button with top and bottom margins */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
 }
 
 .back-button:hover {
-  background-color: #65899a; 
+  background-color: #65899a; /* Darker background on hover */
+  color: #ffffff; /* Light text on hover for contrast */
 }
 
-.privacy-header h1, .privacy-content {
-  width: 100%;
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .back-button {
+    min-width: 120px; /* Smaller min-width */
+    margin: 20px auto 15px; /* Reduced margin */
+    padding: 0.4rem 0.8rem; /* Slightly smaller padding */
+  }
 }
-
