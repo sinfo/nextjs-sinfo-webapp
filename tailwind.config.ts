@@ -7,18 +7,19 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    colors: {
-      transparent: "transparent",
-      white: "#ffffff",
-      black: "#000000",
-      blue: "#296CB2",
-      green: "#74C48A",
-      purple: "#B17EC9",
-      greenAC: "#338E2B",
-      red: "#E43E3E",
-      "dark-blue": "#083D77",
-      "light-purple": "#5B58C4",
-      gray: "#B4B4B4"
+    extend: {
+      colors: {
+        blue: {
+          DEFAULT: "#00509A",
+          dark: "#083D77"
+        },
+        pink: {
+          light: "#B17EC9"
+        },
+        green: {
+          light: "#74C48A"
+        }
+      }
     },
   },
   plugins: [],

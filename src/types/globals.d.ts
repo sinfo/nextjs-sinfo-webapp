@@ -1,44 +1,54 @@
+type UserRole = "Attendee" | "Company" | "Member" | "Admin";
+
 type User = {
   id: string;
   name: string;
   img: string;
   role: string;
   shareLinks: boolean;
-  company: [] | [
-    {
-      edition: string;
-      company: string;
-    }
-  ];
-  signatures: [] | [
-    {
-      day: string;
-      edition: string;
-      redeemed: boolean;
-      signatures: {
-        companyId: string;
-        date: Date;
-      }[];
-    }
-  ];
-  linkShared: [] | [
-    {
-      // edition: String,
-      // links:[{
-      //   id: String,
-      // }]
-      id: String;
-    }
-  ];
+  company:
+    | []
+    | [
+        {
+          edition: string;
+          company: string;
+        }
+      ];
+  signatures:
+    | []
+    | [
+        {
+          day: string;
+          edition: string;
+          redeemed: boolean;
+          signatures: {
+            companyId: string;
+            date: Date;
+          }[];
+        }
+      ];
+  linkShared:
+    | []
+    | [
+        {
+          // edition: String,
+          // links:[{
+          //   id: String,
+          // }]
+          id: String;
+        }
+      ];
   mail?: string;
-  bearer: [] | [
-    {
-      token: string;
-      refreshToken: string;
-      ttl: number;
-      date: string;
-    }
-  ];
+  bearer:
+    | []
+    | [
+        {
+          token: string;
+          refreshToken: string;
+          ttl: number;
+          date: string;
+        }
+      ];
   facebook?: {
     id: string;
   };
@@ -62,15 +72,3 @@ type Company = {
   advertisementLvl: string;
   img: string;
 };
-
-
-type CVInfo = {
-  id: string,
-  user: string,
-  name: string,
-  kind: string,
-  extension: string,
-  updated: string,
-  created: string,
-  downloadLink: string
-}

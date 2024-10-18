@@ -1,20 +1,74 @@
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-
-import UserSignOut from "@/components/UserSignOut";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { UserService } from "@/services/UserService";
+import { getServerSession } from "next-auth";
+import {
+  HiOutlineHome,
+  HiOutlineCalendar,
+  HiOutlineUser,
+  HiOutlineUserGroup,
+  HiOutlineOfficeBuilding,
+} from "react-icons/hi";
+import UserSignOut from "./UserSignOut";
+import convertToAppRole from "@/utils/utils";
+import Link from "next/link";
 
-import ClientBottomNavbar from "./ClientBottomNavbar";
+// to add a new bottom navbar item, just add the item details to "navbarItems" and 
+// add the item key to the appropriate roles in "navbarItemKeysByRole"
+
+const navbarItems = {
+  home: {
+    name: "Home",
+    icon: HiOutlineHome,
+    route: "/home",
+  },
+  schedule: {
+    name: "Schedule",
+    icon: HiOutlineCalendar,
+    route: "/schedule",
+  },
+  profile: {
+    name: "Profile",
+    icon: HiOutlineUser,
+    route: "/profile",
+  },
+  connections: {
+    name: "Connections",
+    icon: HiOutlineUserGroup,
+    route: "/connections",
+  },
+  companies: {
+    name: "Companies",
+    icon: HiOutlineOfficeBuilding,
+    route: "/companies",
+  }
+};
+
+type NavbarItemKey = keyof typeof navbarItems;
+
+const navbarItemKeysByRole: Record<UserRole, NavbarItemKey[]> = {
+  Attendee: ["home", "schedule", "profile"],
+  Company: ["home", "connections", "profile"],
+  Member: ["home", "schedule", "companies", "profile"],
+  Admin: ["home", "schedule", "companies", "profile"],
+};
 
 export default async function BottomNavbar() {
   const session = await getServerSession(authOptions);
-  if (!session) redirect("/login");
 
-  const user: User = await UserService.getMe(session.cannonToken);
+  const user: User = await UserService.getMe(session!.cannonToken);
   if (!user) return <UserSignOut />;
-  
+
   return (
-    <ClientBottomNavbar user={user} ></ClientBottomNavbar>
+    <div className="bg-blue-dark flex flex-row justify-between pb-2 pt-4 px-5">
+      {navbarItemKeysByRole[convertToAppRole(user.role)].map((k) => {
+        const { name, icon: Icon, route } = navbarItems[k];
+        return (
+          <Link href={route} className="flex flex-col gap-1 items-center">
+            <Icon size={36} className="stroke-1" />
+            <span className="text-xs">{name}</span>
+          </Link>
+        );
+      })}
+    </div>
   );
 }
