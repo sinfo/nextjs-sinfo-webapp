@@ -64,6 +64,16 @@
     font-size: 18px;
 }
 
+@media (max-width: 400px) {
+    .sidebar-group {
+        font-size: 22px;
+    }
+
+    .groupgeneral {
+        font-size: 14px;
+    }
+}
+
 .logout {
     cursor: pointer;
 }

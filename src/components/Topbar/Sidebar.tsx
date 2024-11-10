@@ -1,15 +1,11 @@
 "use client";
 
 import '../../styles/sidebar.css';
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { UserService } from "@/services/UserService";
-import { getServerSession } from "next-auth";
 import { useEffect, useState } from 'react';
 import { signOut } from "next-auth/react";
 import { HiX } from 'react-icons/hi';
 import convertToAppRole from "@/utils/utils";
 import Link from "next/link";
-import UserSignOut from "../UserSignOut";
 
 const sidebarItems = {
     groupcv: {
@@ -75,10 +71,9 @@ const sidebarItemKeysByRole: Record<UserRole, sideBarItem[]> = {
     Admin: ["groupcv", "groupevents", "groupcompanies", "groupgeneral"]
 };
 
-export default function Sidebar({ onCloseAction }: { onCloseAction: () => void }) {
+export default function Sidebar({ onCloseAction, user }: { onCloseAction: () => void, user: User }) {
     const [burgerVisible, setBurgerVisible] = useState(false);
     const [burgerClosing, setBurgerClosing] = useState(false);
-    const [user, setUser] = useState("");
 
     useEffect(() => {
         if (burgerClosing) {
@@ -90,16 +85,6 @@ export default function Sidebar({ onCloseAction }: { onCloseAction: () => void }
             setBurgerVisible(true);
         }
     }, [burgerClosing, onCloseAction]);
-
-    useEffect(() => {
-        const getMe = async () => {
-            const session = await getServerSession(authOptions);
-            const fetchUser: User = await UserService.getMe(session!.cannonToken);
-            if (!fetchUser) return <UserSignOut />;
-            return setUser(fetchUser.role);
-        };
-        getMe();
-    }, []);
 
     const handleClose = () => {
         setBurgerClosing(true);
@@ -113,7 +98,7 @@ export default function Sidebar({ onCloseAction }: { onCloseAction: () => void }
         <div className={`sidebar bg-cloudy ${burgerVisible ? 'open' : ''} ${burgerClosing ? 'closing' : ''}`} >
             <HiX className="close-btn" onClick={handleClose}/>
             <div className="sidebar-content">
-                {sidebarItemKeysByRole[convertToAppRole(user)].map((group) => {
+                {sidebarItemKeysByRole[convertToAppRole(user.role)].map((group) => {
                     const items = sidebarItems[group];
                     return (
                         <div key={group} className={`sidebar-group ${group}`}>
