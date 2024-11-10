@@ -64,7 +64,7 @@
     font-size: 18px;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 380px) {
     .sidebar-group {
         font-size: 22px;
     }
