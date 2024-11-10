@@ -12,6 +12,7 @@ import convertToAppRole from "@/utils/utils";
 
 export default async function QR() {
   const session = await getServerSession(authOptions);
+  if (!session) redirect("/login");
 
   const user: User = await UserService.getMe(session!.cannonToken);
   if (!user) return <UserSignOut />;
