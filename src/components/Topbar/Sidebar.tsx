@@ -75,6 +75,9 @@ export default function Sidebar({ onCloseAction, user }: { onCloseAction: () => 
     const [burgerVisible, setBurgerVisible] = useState(false);
     const [burgerClosing, setBurgerClosing] = useState(false);
 
+    let role = user.role;
+    let rolConverted = convertToAppRole(role);
+
     useEffect(() => {
         if (burgerClosing) {
             const timer = setTimeout(() => {
@@ -96,10 +99,11 @@ export default function Sidebar({ onCloseAction, user }: { onCloseAction: () => 
 
     return (
         <div className={`sidebar bg-cloudy ${burgerVisible ? 'open' : ''} ${burgerClosing ? 'closing' : ''}`} >
-            <HiX className="close-btn" onClick={handleClose}/>
+            <HiX className="close-btn" onClick={handleClose} />
             <div className="sidebar-content">
-                {sidebarItemKeysByRole[convertToAppRole(user.role)].map((group) => {
+                {sidebarItemKeysByRole[rolConverted].map((group) => {
                     const items = sidebarItems[group];
+
                     return (
                         <div key={group} className={`sidebar-group ${group}`}>
                             {Object.entries(items).map(([key, { name, route }]) => (
