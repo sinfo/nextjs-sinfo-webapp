@@ -1,8 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-        domains: ["static.sinfo.org", "sinfo.ams3.cdn.digitaloceanspaces.com", "sonaesierracms-v2.cdnpservers.net"]
-    }
-}
+  images: {
+    domains: [
+      "static.sinfo.org",
+      "sinfo.ams3.cdn.digitaloceanspaces.com",
+      "sonaesierracms-v2.cdnpservers.net",
+    ],
+  },
+  experimental: {
+    instrumentationHook: true,
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

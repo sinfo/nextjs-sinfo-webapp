@@ -13,10 +13,10 @@ import convertToAppRole from "@/utils/utils";
 export default async function QR() {
   const session = await getServerSession(authOptions);
 
-  const user: User = await UserService.getMe(session!.cannonToken);
+  const user: User = await UserService.getMe(session?.cannonToken ?? "");
   if (!user) return <UserSignOut />;
 
-  let company!: Company | null;
+  let company: Company | null = null;
   if (user.role === "company") {
     // assumes that cannon api only provides the company associated with the current edition
     if (user.company.length == 0) {
