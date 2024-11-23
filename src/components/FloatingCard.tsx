@@ -1,42 +1,13 @@
-import Link from "next/link";
 import { Image } from "next/dist/client/image-component";
 
 const topName = (name: string) => {
-  return (<p className="text-black text-xs">{name}</p>)
+  return (<p className="text-black text-xs text-center">{name}</p>)
 }
 
-const sessionInfo = (sesh: Session) => {
-  const date = new Date(sesh.date)
-  const duration = new Date(sesh.duration)
-
-  const rep = sesh.kind == "KEYNOTE" ? sesh.speakers : sesh.companies
-
-  return (
-    <div>
-      <div className="flex flex-row items-center justify-start space-x-2">
-        <p className="text-gray-500 text-xs">--:-- - --:--</p>
-        <p className="text-gray-500 text-[8px]">({sesh.kind})</p>
-      </div>
-      <p className="text-black text-xs">{sesh.name}</p>
-      <p className="text-black text-[8px]">{rep.map((k)=>k.name).join(' | ')}</p>
-    </div>
-    
-  )
-}
-
-const person = (person: User | Speaker) => {
-  return (
-  <div>
-    <p className="text-black text-[14px]">{person.name}</p>
-    <p className="text-black text-[8px]">{'title' in person ? person.title : ""}</p>
-  </div>
-  )
-}
-
-const compImg = (speaker: any) => {
+const compImage = (img: string) => {
   return (
     <Image
-          src={speaker.img}  //TODO: Change to speaker.companyImg when cannon is updated
+          src={img}
           alt="Company"
           width={100}
           height={100}
@@ -45,52 +16,28 @@ const compImg = (speaker: any) => {
   )
 }
 
-const nothing = (any: any) => {return (null)}
+interface FloatingCardProps {
+  topText?: string;
+  img: string;
+  time?: string;
+  type?: string;
+  text?: string;
+  subtext?: string;
+  compImg?: string;
+  shape: "square" | "long"
+}
 
-const cards = {
-  session: {
-    cardShape: "w-[88vw] h-[7vh] flex-row justify-start px-[2%] py-[1%] space-x-2",
-    imageShape: "h-full w-auto",
-    name: nothing,
-    info: sessionInfo,
-    img: nothing,
-  },
-  company: {
+const shapes = {
+  square: {
     cardShape: "w-[41vw] h-[20vh] flex-col justify-center p-[5%]",
     imageShape: "w-full",
-    name: topName,
-    info: nothing,
-    img: nothing,
   },
-  employee: {
+  long: {
     cardShape: "w-[88vw] h-[7vh] flex-row justify-start px-[2%] py-[1%] space-x-2",
     imageShape: "h-full w-auto rounded-full",
-    name: nothing,
-    info: person,
-    img: nothing,
-  },
-  speaker: {
-    cardShape: "w-[88vw] h-[7vh] flex-row justify-start px-[2%] py-[1%] space-x-2",
-    imageShape: "h-full w-auto",
-    name: nothing,
-    info: person,
-    img: compImg,
-  },
-  simple_speaker: {
-    cardShape: "w-[41vw] h-[20vh] flex-col justify-center p-[5%]",
-    imageShape: "w-full",
-    name: topName,
-    info: nothing,
-    img: nothing,
   }
 }
 
-type cardType = keyof typeof cards;
-
-interface FloatingCardProps {
-  data: Company | Speaker | Session | User;
-  type: cardType;
-}
 
 /**
  * This function creates a floating card component.
@@ -98,23 +45,32 @@ interface FloatingCardProps {
  * @param {cardType} type - The type of card.
  * @returns {JSX.Element} The rendered card component.
  */
-export default function FloatingCard({data, type}: FloatingCardProps) {
-  
-  const { cardShape, imageShape, name, info , img} = cards[type]
+export default function FloatingCard(
+  {topText , img = "", time = "", type = "", text = "", subtext = "", compImg, shape}: FloatingCardProps
+) {
 
+  const { cardShape, imageShape } = shapes[shape]
+  
   return (
       <div className={`bg-white rounded-md shadow-md flex items-center ${cardShape}`}>
-        {name(data.name)}
+        {topText == undefined ? null : topName(topText)}
         <Image
-          src={data.img}
+          src={img}
           alt="Picture"
           width={100}
           height={100}
           className={`object-contain ${imageShape}`}
         />
         <div className="w-full h-full flex flex-row items-center justify-between">
-          {info(data)}
-          {img(data)}
+          <div>
+            <div className="flex flex-row items-center justify-start space-x-2">
+              <p className="text-gray-500 text-xs">{time}</p>
+              <p className="text-gray-500 text-[8px]">{type}</p>
+            </div>
+            <p className="text-black text-xs">{text}</p>
+            <p className="text-black text-[8px]">{subtext}</p>
+          </div>
+          { compImg == undefined ? null : compImage(compImg)}
         </div>
       </div>
   );
