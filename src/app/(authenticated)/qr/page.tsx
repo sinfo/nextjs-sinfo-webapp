@@ -8,12 +8,12 @@ import UserSignOut from "@/components/UserSignOut";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { UserService } from "@/services/UserService";
 import { CompanyService } from "@/services/CompanyService";
-import convertToAppRole from "@/utils/utils";
+import { convertToAppRole } from "@/utils/utils";
 
 export default async function QR() {
   const session = await getServerSession(authOptions);
 
-  const user: User = await UserService.getMe(session?.cannonToken ?? "");
+  const user: User | null = await UserService.getMe(session?.cannonToken ?? "");
   if (!user) return <UserSignOut />;
 
   let company: Company | null = null;
@@ -42,7 +42,7 @@ export default async function QR() {
   })();
 
   return (
-    <div className="h-full bg-gray-200 text-black flex flex-col items-center justify-center">
+    <div className="h-full text-black flex flex-col items-center justify-center">
       <Image className="w-48" src={hackyPeeking} alt="Hacky Peaking" />
       <QRCode
         className="w-72 h-auto p-4 border-[14px] bg-white rounded-lg"

@@ -3,8 +3,6 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Toolbar from "@/components/Toolbar";
 import BottomNavbar from "@/components/BottomNavbar";
-import { HiOutlineQrCode } from "react-icons/hi2";
-import Link from "next/link";
 
 export default async function AuthenticatedLayout({
   children,
@@ -15,16 +13,10 @@ export default async function AuthenticatedLayout({
   if (!session) redirect("/login");
 
   return (
-    <div className="h-screen bg-cloudy text-white flex flex-col">
+    <div className="h-screen bg-blue-gradient text-white flex flex-col">
       <Toolbar />
-      <div className="flex-1 relative">
+      <div className="flex-1 overflow-y-auto bg-gray-100 text-black">
         {children}
-        <Link
-          href={"/qr"}
-          className="absolute bottom-4 right-4 p-4 rounded-full bg-blue-dark"
-        >
-          <HiOutlineQrCode size={36} />
-        </Link>
       </div>
       <BottomNavbar />
     </div>
