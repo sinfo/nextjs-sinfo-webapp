@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.bg-cloudy {
-  background-image: url("../assets/images/bg-cloudy.png");
+.bg-blue-gradient {
+  background-image: url("../assets/images/bg-blue-gradient.png");
   background-size: cover;
 }

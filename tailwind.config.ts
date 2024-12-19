@@ -10,16 +10,16 @@ const config: Config = {
     extend: {
       colors: {
         blue: {
-          DEFAULT: "#00509A",
-          dark: "#083D77"
+          DEFAULT: "#024D88",
+          dark: "#083D77",
         },
         pink: {
-          light: "#B17EC9"
+          light: "#B17EC9",
         },
         green: {
-          light: "#74C48A"
-        }
-      }
+          light: "#74C48A",
+        },
+      },
     },
   },
   plugins: [],

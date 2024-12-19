@@ -22,7 +22,7 @@ export default function Login() {
   });
 
   return (
-    <div className="h-screen bg-cloudy flex flex-col">
+    <div className="h-screen bg-blue-gradient flex flex-col">
       <Image
         className="w-48 mx-auto pt-8"
         src={webappLogo}
