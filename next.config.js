@@ -1,10 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      "static.sinfo.org",
-      "sinfo.ams3.cdn.digitaloceanspaces.com",
-      "sonaesierracms-v2.cdnpservers.net",
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "**",
+      },
     ],
   },
   experimental: {
