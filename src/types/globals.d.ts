@@ -69,6 +69,51 @@ type User = {
 type Company = {
   id: string;
   name: string;
+  site?: string;
   advertisementLvl: string;
   img: string;
+};
+
+type Speaker = {
+  id: string;
+  name: string;
+  description: string;
+  title: string;
+  img: string;
+  companyImg?: string;
+  updated?: string;
+};
+
+type SINFOSession = {
+  id: string;
+  name: string;
+  kind: string;
+  img: string;
+  place: string;
+  description: string;
+  presenters: (Speaker | Company)[];
+  date: string;
+  duration: int; // minutes
+  updated?: string;
+  event: string;
+  tickets: {
+    needed?: boolean;
+    start?: string;
+    end?: string;
+    max?: number;
+  };
+  surveyNeeded?: boolean;
+};
+
+type SINFOEvent = {
+  id: string;
+  name: string;
+  kind: string;
+  date: string;
+  updated?: string;
+  duration?: string;
+  begin?: string;
+  end?: string;
+  isOcurring?: boolean;
+  calendarUrl: string;
 };
