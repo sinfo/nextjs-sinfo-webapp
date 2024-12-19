@@ -4,7 +4,7 @@ export const UserService = (() => {
   const usersEndpoint = process.env.CANNON_URL + "/users";
   const filesEndpoint = process.env.CANNON_URL + "/files";
 
-  const getMe = async (cannonToken: string) => {
+  const getMe = async (cannonToken: string): Promise<User | null> => {
     try {
       const resp = await fetch(usersEndpoint + "/me", {
         headers: {
@@ -17,15 +17,14 @@ export const UserService = (() => {
         },
       });
 
-      if (resp.ok) return resp.json();
-
+      if (resp.ok) return (await resp.json()) as User;
     } catch (error) {
       console.error(error);
     }
     return null;
   };
 
-  const demoteMe = async (cannonToken: string) => {
+  const demoteMe = async (cannonToken: string): Promise<boolean> => {
     let success = false;
 
     try {
@@ -39,7 +38,6 @@ export const UserService = (() => {
       });
 
       if (resp.ok) success = true;
-
     } catch (error) {
       console.error(error);
     }
@@ -59,7 +57,6 @@ export const UserService = (() => {
         },
       });
       if (resp.ok) return resp.json();
-
     } catch (error) {
       console.log(error);
     }
@@ -85,7 +82,6 @@ export const UserService = (() => {
         revalidateTag("modified-cv");
         success = true;
       }
-
     } catch (error) {
       console.error(error);
     }
@@ -107,7 +103,6 @@ export const UserService = (() => {
         revalidateTag("modified-cv");
         success = true;
       }
-
     } catch (error) {
       console.log(error);
     }
