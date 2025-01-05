@@ -27,5 +27,12 @@ export function generateTimeInterval(
   const startDate = new Date(timestamp);
   const endDate = new Date(startDate.getTime() + durationMinutes * 60000);
 
-  return `${formatTime(startDate)} - ${formatTime(endDate)}`;
+  return `${startDate.toLocaleDateString("en-GB", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+    hour: "numeric",
+    minute: "numeric",
+  })} - ${formatTime(endDate)}`;
 }
