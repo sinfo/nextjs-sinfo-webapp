@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { SessionService } from "@/services/SessionService";
 import { CompanyService } from "@/services/CompanyService";
 import { SpeakerService } from "@/services/SpeakerService";
@@ -6,6 +5,9 @@ import { CompanyTile } from "@/components/company";
 import { SpeakerTile } from "@/components/speaker";
 import { SessionTile } from "@/components/session";
 import { generateTimeInterval } from "@/utils/utils";
+import ListCard from "@/components/ListCard";
+import List from "@/components/List";
+import GridList from "@/components/GridList";
 
 const N_SESSION_TILES = 3;
 const N_COMPANY_TILES = 6;
@@ -35,79 +37,55 @@ export default async function Home() {
     : [];
 
   return (
-    <div className="h-full px-5 py-4 space-y-4 text-black">
+    <div className="container m-auto h-full gap-y-4 text-black">
       {/* Upcoming Sessions */}
-      <div className="flex flex-col gap-2">
-        <div className="flex justify-between items-center">
-          <span className="text-lg font-bold">Next Up</span>
-          <Link href="/sessions" className="text-blue">
-            See all
-          </Link>
-        </div>
+      <List title="Next Up" link="/schedule" linkText="See all">
         {upcomingSessions.length > 0 ? (
-          <div className="flex flex-col gap-2">
-            {upcomingSessions.map((s) => (
-              <SessionTile
-                img={s.img}
-                title={s.name}
-                time={generateTimeInterval(s.date, s.duration)}
-                presenter={s.presenters.length > 0 ? s.presenters[0] : null}
-                type={s.kind}
-              />
-            ))}
-          </div>
+          upcomingSessions.map((s) => (
+            <SessionTile
+              key={s.id}
+              img={s.img}
+              title={s.name}
+              time={generateTimeInterval(s.date, s.duration)}
+              presenter={s.presenters.length > 0 ? s.presenters[0] : null}
+              type={s.kind}
+            />
+          ))
         ) : (
-          <div className="text-gray-500">Nothing to show</div>
+          <ListCard title="Nothing to show" />
         )}
-      </div>
+      </List>
       {/* Highlighted Companies */}
-      <div className="flex flex-col gap-2">
-        <div className="flex justify-between items-center">
-          <span className="text-lg font-bold">Companies</span>
-          <Link href="/companies" className="text-blue">
-            See all
-          </Link>
-        </div>
+      <GridList title="Companies" link="/companies" linkText="See all" scrollable>
         {highlightedCompanies.length > 0 ? (
-          <div className="w-full overflow-x-auto">
-            <div className="inline-flex space-x-2">
-              {highlightedCompanies.map((c) => (
-                <CompanyTile
-                  name={c.name}
-                  img={c.img}
-                  // TODO(anees): set hereToday for companies present today
-                />
-              ))}
-            </div>
-          </div>
+          highlightedCompanies.map((c) => (
+            <CompanyTile
+              key={c.id}
+              id={c.id}
+              name={c.name}
+              img={c.img}
+              // TODO(anees): set hereToday for companies present today
+            />
+          ))
         ) : (
-          <div className="text-gray-500 text-sm">Nothing to show</div>
+          <ListCard title="Nothing to show" />
         )}
-      </div>
+      </GridList>
       {/* Highlighted Speakers */}
-      <div className="flex flex-col gap-2">
-        <div className="flex justify-between items-center">
-          <span className="text-lg font-bold">Speakers</span>
-          <Link href="/speakers" className="text-blue">
-            See all
-          </Link>
-        </div>
+      <GridList title="Speakers" linkText="See all" scrollable>
         {highlightedSpeakers.length > 0 ? (
-          <div className="w-full overflow-x-auto">
-            <div className="inline-flex space-x-2">
-              {highlightedSpeakers.map((s) => (
-                <SpeakerTile
-                  name={s.name}
-                  img={s.img}
-                  companyImg={s.companyImg}
-                />
-              ))}
-            </div>
-          </div>
+          highlightedSpeakers.map((c) => (
+            <SpeakerTile
+              key={c.id}
+              name={c.name}
+              img={c.img}
+              companyImg={c.companyImg}
+            />
+          ))
         ) : (
-          <div className="text-gray-500 text-sm">Nothing to show</div>
+          <ListCard title="Nothing to show" />
         )}
-      </div>
+      </GridList>
     </div>
   );
 }
