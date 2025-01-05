@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth/next";
 import { revalidateTag } from "next/cache";
 import { hackyPeeking } from "@/assets/images";
 import UserSignOut from "@/components/UserSignOut";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { UserService } from "@/services/UserService";
 import { CompanyService } from "@/services/CompanyService";
 import { convertToAppRole } from "@/utils/utils";
