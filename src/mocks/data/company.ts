@@ -1,11 +1,3 @@
-export const MOCK_COMPANY: Company = {
-  id: "company_10",
-  name: "Cloudflare",
-  site: "https://www.cloudflare.com",
-  advertisementLvl: "max",
-  img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2FCloudFlare-01.webp",
-};
-
 export const MOCK_COMPANIES: Company[] = [
   {
     id: "company_1",
@@ -83,3 +75,66 @@ export const MOCK_COMPANIES: Company[] = [
     img: "https://sinfo.ams3.cdn.digitaloceanspaces.com/static/24-sinfo/companies/noesis.png",
   },
 ];
+
+export const MOCK_COMPANY: Company = {
+  id: "company_10",
+  name: "Cloudflare",
+  site: "https://www.cloudflare.com",
+  advertisementLvl: "max",
+  img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2FCloudFlare-01.webp",
+  members: [
+    {
+      id: "member_1",
+      name: "Dani Rodrigues",
+      img: "https://media.licdn.com/dms/image/v2/D4D03AQE4q8YE9OJowg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1727827743994?e=1741824000&v=beta&t=a5j9_5zhhhh-Pj3MAk3R_6uvyduHHnu_vBhOqerDt7E",
+      role: "University Programs",
+    },
+    {
+      id: "member_2",
+      name: "João Borges",
+      img: "https://media.licdn.com/dms/image/v2/D4D03AQFMjDv5-DKq5A/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1700582933178?e=1741824000&v=beta&t=2T23_6w92MXWxMsy3Y3-RNyVPVgDys7qirQJ0grII4Q",
+      role: "Systems Engineer",
+    },
+    {
+      id: "member_2",
+      name: "Anees Asghar",
+      img: "https://media.licdn.com/dms/image/v2/D4D03AQFMjDv5-DKq5A/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1700582933178?e=1741824000&v=beta&t=2T23_6w92MXWxMsy3Y3-RNyVPVgDys7qirQJ0grII4Q",
+      role: "Systems Engineer",
+    },
+  ],
+  sessions: [
+    {
+      id: "session_6",
+      name: "Introducing Cloudflare",
+      kind: "Presentation",
+      img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2FCloudFlare-01.webp",
+      place: "Room 1",
+      description:
+        "Learn about Cloudflare's mission, services, and how it's shaping the future of the internet.",
+      presenters: [MOCK_COMPANIES[9]],
+      date: "2025-02-19T11:00:00Z",
+      duration: 20,
+      event: "31",
+      tickets: {},
+    },
+    {
+      id: "session_3",
+      name: "Deploy a Node.js App with Cloudflare Workers",
+      kind: "Workshop",
+      img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2FCloudFlare-01.webp",
+      place: "Room 1",
+      description:
+        "Hands-on session to learn how to deploy a scalable Node.js application using Cloudflare Workers.",
+      presenters: [MOCK_COMPANIES[9]],
+      date: "2025-02-18T09:00:00Z",
+      duration: 90,
+      event: "31",
+      tickets: {
+        needed: true,
+        start: "2024-04-07T22:00:00Z",
+        end: "2024-04-08T10:00:00Z",
+        max: 31,
+      },
+    },
+  ],
+};

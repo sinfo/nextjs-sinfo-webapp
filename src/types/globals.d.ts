@@ -12,7 +12,7 @@ type User = {
         {
           edition: string;
           company: string;
-        }
+        },
       ];
   signatures:
     | []
@@ -21,11 +21,8 @@ type User = {
           day: string;
           edition: string;
           redeemed: boolean;
-          signatures: {
-            companyId: string;
-            date: Date;
-          }[];
-        }
+          signatures: { companyId: string; date: Date }[];
+        },
       ];
   linkShared:
     | []
@@ -36,7 +33,7 @@ type User = {
           //   id: String,
           // }]
           id: String;
-        }
+        },
       ];
   mail?: string;
   bearer:
@@ -47,20 +44,12 @@ type User = {
           refreshToken: string;
           ttl: number;
           date: string;
-        }
+        },
       ];
-  facebook?: {
-    id: string;
-  };
-  linkedin?: {
-    id: string;
-  };
-  google?: {
-    id: string;
-  };
-  fenix?: {
-    id: string;
-  };
+  facebook?: { id: string };
+  linkedin?: { id: string };
+  google?: { id: string };
+  fenix?: { id: string };
   points?: number;
   registered: string;
   updated: string;
@@ -72,6 +61,15 @@ type Company = {
   site?: string;
   advertisementLvl: string;
   img: string;
+  sessions?: SINFOSession[];
+  members?: CompanyMember[];
+};
+
+type CompanyMember = {
+  id: string;
+  name: string;
+  img?: string;
+  role?: string;
 };
 
 type Speaker = {
@@ -96,12 +94,7 @@ type SINFOSession = {
   duration: int; // minutes
   updated?: string;
   event: string;
-  tickets: {
-    needed?: boolean;
-    start?: string;
-    end?: string;
-    max?: number;
-  };
+  tickets: { needed?: boolean; start?: string; end?: string; max?: number };
   surveyNeeded?: boolean;
 };
 
