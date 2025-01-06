@@ -82,6 +82,16 @@ export const MOCK_COMPANY: Company = {
   site: "https://www.cloudflare.com",
   advertisementLvl: "max",
   img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2FCloudFlare-01.webp",
+  stands: [
+    { id: "13", date: "2025-02-15" },
+    { id: "13", date: "2025-02-16" },
+    { id: "13", date: "2025-02-17" },
+  ],
+  standDetails: {
+    chairs: 0,
+    table: false,
+    lettering: true,
+  },
   members: [
     {
       id: "member_1",
@@ -98,7 +108,7 @@ export const MOCK_COMPANY: Company = {
     {
       id: "member_2",
       name: "Anees Asghar",
-      img: "https://media.licdn.com/dms/image/v2/D4D03AQFMjDv5-DKq5A/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1700582933178?e=1741824000&v=beta&t=2T23_6w92MXWxMsy3Y3-RNyVPVgDys7qirQJ0grII4Q",
+      img: "https://media.licdn.com/dms/image/v2/D4D03AQF1FzOQusxcDw/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1680626784682?e=1741824000&v=beta&t=pKhCswHukDEYb6Bl1nyYFbprmx5P04GXfRal577brhs",
       role: "Systems Engineer",
     },
   ],

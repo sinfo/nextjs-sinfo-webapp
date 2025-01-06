@@ -64,7 +64,11 @@ export default async function BottomNavbar() {
       {navbarItemKeysByRole[convertToAppRole(user.role)].map((k) => {
         const { name, icon: Icon, route } = navbarItems[k];
         return (
-          <Link key={`path-${name}`} href={route} className="flex flex-col gap-1 items-center">
+          <Link
+            key={`path-${name}`}
+            href={route}
+            className="flex flex-col gap-1 items-center"
+          >
             <Icon size={36} className="stroke-1" />
             <span className="text-xs">{name}</span>
           </Link>

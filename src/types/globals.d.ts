@@ -63,6 +63,8 @@ type Company = {
   img: string;
   sessions?: SINFOSession[];
   members?: CompanyMember[];
+  stands?: Stand[];
+  standDetails?: StandDetails;
 };
 
 type CompanyMember = {
@@ -70,6 +72,17 @@ type CompanyMember = {
   name: string;
   img?: string;
   role?: string;
+};
+
+type Stand = {
+  id: string;
+  date: string;
+};
+
+type StandDetails = {
+  chairs: number;
+  table: boolean;
+  lettering: boolean;
 };
 
 type Speaker = {

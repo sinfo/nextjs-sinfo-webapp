@@ -56,16 +56,15 @@ export default async function Home() {
         )}
       </List>
       {/* Highlighted Companies */}
-      <GridList title="Companies" link="/companies" linkText="See all" scrollable>
+      <GridList
+        title="Companies"
+        link="/companies"
+        linkText="See all"
+        scrollable
+      >
         {highlightedCompanies.length > 0 ? (
           highlightedCompanies.map((c) => (
-            <CompanyTile
-              key={c.id}
-              id={c.id}
-              name={c.name}
-              img={c.img}
-              // TODO(anees): set hereToday for companies present today
-            />
+            <CompanyTile key={c.id} company={c} />
           ))
         ) : (
           <ListCard title="Nothing to show" />
@@ -74,14 +73,7 @@ export default async function Home() {
       {/* Highlighted Speakers */}
       <GridList title="Speakers" linkText="See all" scrollable>
         {highlightedSpeakers.length > 0 ? (
-          highlightedSpeakers.map((c) => (
-            <SpeakerTile
-              key={c.id}
-              name={c.name}
-              img={c.img}
-              companyImg={c.companyImg}
-            />
-          ))
+          highlightedSpeakers.map((s) => <SpeakerTile key={s.id} speaker={s} />)
         ) : (
           <ListCard title="Nothing to show" />
         )}
