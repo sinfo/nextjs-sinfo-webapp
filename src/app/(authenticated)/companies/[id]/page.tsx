@@ -45,8 +45,8 @@ export default async function Company({ params }: { params: CompanyParams }) {
 
   return (
     <div className="container m-auto h-full gap-y-4 text-black">
-      <div className="flex flex-col items-center gap-y-2 p-4">
-        <span className="text-2xl font-bold">{company.name}</span>
+      <div className="flex flex-col items-center gap-y-2 p-4 text-center">
+        <h2 className="text-2xl font-bold">{company.name}</h2>
         <Image
           className="w-40 h-40 object-contain"
           width={150}
@@ -91,6 +91,7 @@ export default async function Company({ params }: { params: CompanyParams }) {
               title={s.name}
               headtext={generateTimeInterval(s.date, s.duration)}
               label={s.kind}
+              link={`/sessions/${s.id}`}
             />
           ))}
         </List>

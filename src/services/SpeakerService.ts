@@ -1,6 +1,16 @@
 export const SpeakerService = (() => {
   const speakersEndpoint = process.env.CANNON_URL + "/speaker";
 
+  const getSpeaker = async (id: string): Promise<Speaker | null> => {
+    const resp = await fetch(`${speakersEndpoint}/${id}`, {
+      next: {
+        revalidate: 86400, // 1 day
+      },
+    });
+    if (resp.ok) return (await resp.json()) as Speaker;
+    return null;
+  };
+
   const getSpeakers = async (): Promise<Speaker[] | null> => {
     const resp = await fetch(speakersEndpoint, {
       next: {
@@ -14,5 +24,5 @@ export const SpeakerService = (() => {
     return null;
   };
 
-  return { getSpeakers };
+  return { getSpeaker, getSpeakers };
 })();

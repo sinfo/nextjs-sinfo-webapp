@@ -91,7 +91,11 @@ type Speaker = {
   description: string;
   title: string;
   img: string;
-  companyImg?: string;
+  company?: {
+    name: string;
+    img?: string;
+  };
+  sessions?: SINFOSession[];
   updated?: string;
 };
 
@@ -99,16 +103,28 @@ type SINFOSession = {
   id: string;
   name: string;
   kind: string;
-  img: string;
+  img?: string;
   place: string;
   description: string;
-  presenters: (Speaker | Company)[];
+  company?: Company;
+  speakers?: Speaker[];
   date: string;
   duration: int; // minutes
   updated?: string;
   event: string;
   tickets: { needed?: boolean; start?: string; end?: string; max?: number };
-  surveyNeeded?: boolean;
+  prize?: Prize;
+  breakfast?: bool;
+  extraInformation?: {
+    type: "info" | "warning" | "danger";
+    title?: string;
+    content?: string;
+  }[];
+};
+
+type Prize = {
+  name: string;
+  img: string;
 };
 
 type SINFOEvent = {
