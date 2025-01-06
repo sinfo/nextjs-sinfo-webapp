@@ -19,7 +19,7 @@ export function trimText(text: string, n: number): string {
 
 export function generateTimeInterval(
   timestamp: string,
-  durationMinutes: number
+  durationMinutes: number,
 ): string {
   // extract "HH:mm" from ISO string
   const formatTime = (date: Date) => date.toISOString().slice(11, 16);
@@ -35,4 +35,25 @@ export function generateTimeInterval(
     hour: "numeric",
     minute: "numeric",
   })} - ${formatTime(endDate)}`;
+}
+
+export function getEventDay(date: string): string {
+  return new Date(date).toLocaleDateString("en-GB", {
+    day: "numeric",
+  });
+}
+
+export function getEventMonth(date: string, short: boolean = false): string {
+  return new Date(date).toLocaleDateString("en-GB", {
+    month: short ? "short" : "long",
+  });
+}
+
+export function getEventFullDate(date: string): string {
+  return new Date(date).toLocaleDateString("en-GB", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 }

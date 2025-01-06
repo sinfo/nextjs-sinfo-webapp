@@ -1,27 +1,18 @@
 import GridCard from "@/components/GridCard";
+import { isHereToday } from "@/utils/company";
 
 interface CompanyTileProps {
-  id: string;
-  name: string;
-  img: string;
-  imgAltText?: string;
-  hereToday?: boolean;
+  company: Company;
 }
 
-export function CompanyTile({
-  id,
-  name,
-  img,
-  imgAltText = "No alt text.",
-  hereToday = false,
-}: CompanyTileProps) {
+export function CompanyTile({ company }: CompanyTileProps) {
   return (
     <GridCard
-      title={name}
-      img={img}
-      imgAltText={imgAltText}
-      link={`/companies/${id}`}
-      {...(hereToday && { label: "Here Today" })}
+      title={company.name}
+      img={company.img}
+      imgAltText={`${company.name} logo`}
+      link={`/companies/${company.id}`}
+      {...(isHereToday(company) && { label: "Here Today" })}
     />
   );
 }

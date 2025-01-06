@@ -2,6 +2,7 @@ import Link, { LinkProps } from "next/link";
 
 export interface ListProps {
   title: string;
+  description?: string;
   link?: string;
   linkText?: string;
   linkProps?: LinkProps;
@@ -10,6 +11,7 @@ export interface ListProps {
 
 export default function List({
   title,
+  description,
   link,
   linkText,
   linkProps,
@@ -18,7 +20,12 @@ export default function List({
   return (
     <div className="flex flex-col gap-y-2 p-4">
       <div className="flex justify-between items-center">
-        <span className="text-lg font-bold">{title}</span>
+        <div className="flex flex-col">
+          <span className="text-lg font-bold">{title}</span>
+          {description && (
+            <span className="text-sm text-gray-500">{description}</span>
+          )}
+        </div>
         {linkText && (
           <Link
             className="text-blue-500 hover:underline active:text-blue-900"

@@ -9,7 +9,8 @@ interface CompaniesListProps {
 }
 
 export default function CompaniesList({ companies }: CompaniesListProps) {
-  const [filteredCompanies, setFilteredCompanies] = useState<Company[]>(companies);
+  const [filteredCompanies, setFilteredCompanies] =
+    useState<Company[]>(companies);
   let debounce: NodeJS.Timeout;
 
   function handleSearch(text: string) {
@@ -20,8 +21,9 @@ export default function CompaniesList({ companies }: CompaniesListProps) {
       } else {
         setFilteredCompanies(
           companies.filter((company) =>
-            company.name.toLowerCase().includes(text.toLowerCase())
-          ));
+            company.name.toLowerCase().includes(text.toLowerCase()),
+          ),
+        );
       }
     }, 300);
   }
@@ -29,16 +31,19 @@ export default function CompaniesList({ companies }: CompaniesListProps) {
   return (
     <>
       {/* TODO: Fix search width */}
-      <input type="text" placeholder="Search companies" className="w-[90%] p-2 border mt-4 mx-4 rounded-md shadow-md sticky top-4 border-box" onChange={(e) => { handleSearch(e.target.value) }}/>
+      <input
+        type="text"
+        placeholder="Search companies"
+        className="w-[90%] p-2 border mt-4 mx-4 rounded-md shadow-md sticky top-4 border-box"
+        onChange={(e) => {
+          handleSearch(e.target.value);
+        }}
+      />
       <GridList title="Companies">
         {filteredCompanies.length === 0 && <div>No companies found</div>}
         {filteredCompanies.map((c) => (
-          <CompanyTile
-            key={c.id}
-            id={c.id}
-            name={c.name}
-            img={c.img}
-          />))}
+          <CompanyTile key={c.id} company={c} />
+        ))}
       </GridList>
     </>
   );

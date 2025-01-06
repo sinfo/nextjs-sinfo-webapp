@@ -1,18 +1,16 @@
 import GridCard from "@/components/GridCard";
 
 interface SpeakerTileProps {
-  name: string;
-  img: string;
-  companyImg?: string;
+  speaker: Speaker;
 }
 
-export function SpeakerTile({ name, img, companyImg }: SpeakerTileProps) {
+export function SpeakerTile({ speaker }: SpeakerTileProps) {
   return (
     <GridCard
-      title={name}
-      img={img}
-      imgAltText={`${name} picture`}
-      extraImage={companyImg}
+      title={speaker.name}
+      img={speaker.img}
+      imgAltText={`${speaker.name} picture`}
+      extraImage={speaker.companyImg}
     />
   );
 }
