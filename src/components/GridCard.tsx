@@ -39,7 +39,7 @@ export default function GridCard({
         <div className="h-[32px]">
           {extraImage && (
             <Image
-              className="m-auto h-full w-full object-contain"
+              className="h-full w-full object-contain"
               width={100}
               height={32}
               src={extraImage}

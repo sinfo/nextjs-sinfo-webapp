@@ -121,7 +121,7 @@ export const MOCK_COMPANY: Company = {
       place: "Room 1",
       description:
         "Learn about Cloudflare's mission, services, and how it's shaping the future of the internet.",
-      presenters: [MOCK_COMPANIES[9]],
+      company: MOCK_COMPANIES[9],
       date: "2025-02-19T11:00:00Z",
       duration: 20,
       event: "31",
@@ -135,7 +135,7 @@ export const MOCK_COMPANY: Company = {
       place: "Room 1",
       description:
         "Hands-on session to learn how to deploy a scalable Node.js application using Cloudflare Workers.",
-      presenters: [MOCK_COMPANIES[9]],
+      company: MOCK_COMPANIES[9],
       date: "2025-02-18T09:00:00Z",
       duration: 90,
       event: "31",

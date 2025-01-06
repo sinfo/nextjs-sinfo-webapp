@@ -41,16 +41,7 @@ export default async function Home() {
       {/* Upcoming Sessions */}
       <List title="Next Up" link="/schedule" linkText="See all">
         {upcomingSessions.length > 0 ? (
-          upcomingSessions.map((s) => (
-            <SessionTile
-              key={s.id}
-              img={s.img}
-              title={s.name}
-              time={generateTimeInterval(s.date, s.duration)}
-              presenter={s.presenters.length > 0 ? s.presenters[0] : null}
-              type={s.kind}
-            />
-          ))
+          upcomingSessions.map((s) => <SessionTile key={s.id} session={s} />)
         ) : (
           <ListCard title="Nothing to show" />
         )}
@@ -71,7 +62,7 @@ export default async function Home() {
         )}
       </GridList>
       {/* Highlighted Speakers */}
-      <GridList title="Speakers" linkText="See all" scrollable>
+      <GridList title="Speakers" link="/speakers" linkText="See all" scrollable>
         {highlightedSpeakers.length > 0 ? (
           highlightedSpeakers.map((s) => <SpeakerTile key={s.id} speaker={s} />)
         ) : (
