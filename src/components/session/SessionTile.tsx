@@ -1,27 +1,24 @@
 import ListCard from "@/components/ListCard";
+import { generateTimeInterval } from "@/utils/utils";
 
 interface SesionTileProps {
-  img?: string;
-  title: string;
-  time: string;
-  presenter?: Speaker | Company | null;
-  type: string;
+  session: SINFOSession;
 }
 
-export function SessionTile({
-  img,
-  title,
-  time,
-  presenter,
-  type,
-}: SesionTileProps) {
+export function SessionTile({ session }: SesionTileProps) {
+  const speakersNames = session.speakers
+    ?.map((s) => s.name)
+    .sort()
+    .join(", ");
+
   return (
     <ListCard
-      title={title}
-      subtitle={presenter ? presenter.name : "Unknown"}
-      img={img}
-      headtext={time}
-      label={type}
+      title={session.name}
+      subtitle={session.company ? session.company.name : speakersNames}
+      img={session.img || session.company?.img || undefined}
+      headtext={generateTimeInterval(session.date, session.duration)}
+      label={session.kind}
+      link={`/sessions/${session.id}`}
     />
   );
 }

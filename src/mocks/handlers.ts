@@ -6,6 +6,8 @@ import {
   MOCK_SESSIONS,
   MOCK_EVENT,
   MOCK_SPEAKERS,
+  MOCK_SESSION,
+  MOCK_SPEAKER,
 } from "./data";
 
 const BACKEND_URL = process.env.CANNON_URL;
@@ -33,6 +35,10 @@ export const handlers = [
   http.get(`${BACKEND_URL}/company`, () => {
     return HttpResponse.json(MOCK_COMPANIES);
   }),
+  // get a specific speaker
+  http.get(`${BACKEND_URL}/speaker/*`, () => {
+    return HttpResponse.json(MOCK_SPEAKER);
+  }),
   // get all speakers for the edition
   http.get(`${BACKEND_URL}/speaker`, () => {
     return HttpResponse.json({
@@ -40,6 +46,10 @@ export const handlers = [
       speakers: MOCK_SPEAKERS,
       previousEdition: false,
     });
+  }),
+  // get a specific session
+  http.get(`${BACKEND_URL}/session/*`, () => {
+    return HttpResponse.json(MOCK_SESSION);
   }),
   // get all sessions for the edition
   http.get(`${BACKEND_URL}/session`, () => {

@@ -10,7 +10,8 @@ export function SpeakerTile({ speaker }: SpeakerTileProps) {
       title={speaker.name}
       img={speaker.img}
       imgAltText={`${speaker.name} picture`}
-      extraImage={speaker.companyImg}
+      extraImage={speaker.company?.img}
+      link={`/speakers/${speaker.id}`}
     />
   );
 }
