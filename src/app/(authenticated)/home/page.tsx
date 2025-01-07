@@ -4,7 +4,6 @@ import { SpeakerService } from "@/services/SpeakerService";
 import { CompanyTile } from "@/components/company";
 import { SpeakerTile } from "@/components/speaker";
 import { SessionTile } from "@/components/session";
-import { generateTimeInterval } from "@/utils/utils";
 import ListCard from "@/components/ListCard";
 import List from "@/components/List";
 import GridList from "@/components/GridList";
