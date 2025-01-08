@@ -30,15 +30,16 @@ export default function SpeakersList({ speakers }: SpeakersListProps) {
 
   return (
     <>
-      {/* TODO: Fix search width */}
-      <input
-        type="text"
-        placeholder="Search speakers"
-        className="w-[90%] p-2 border mt-4 mx-4 rounded-md shadow-md sticky top-4 border-box"
-        onChange={(e) => {
-          handleSearch(e.target.value);
-        }}
-      />
+      <div className="sticky top-0 pt-4 px-4">
+        <input
+          type="text"
+          placeholder="Search speakers"
+          className="w-full p-2 border rounded-md shadow-md"
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
+        />
+      </div>
       <GridList title="Speakers">
         {filteredSpeakers.length === 0 && <div>No speakers found</div>}
         {filteredSpeakers.map((c) => (

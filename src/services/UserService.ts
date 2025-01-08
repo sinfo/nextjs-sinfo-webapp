@@ -4,6 +4,16 @@ export const UserService = (() => {
   const usersEndpoint = process.env.CANNON_URL + "/users";
   const filesEndpoint = process.env.CANNON_URL + "/files";
 
+  const getUser = async (id: string): Promise<User | null> => {
+    const resp = await fetch(`${usersEndpoint}/${id}`, {
+      next: {
+        revalidate: 86400, // 1 day
+      },
+    });
+    if (resp.ok) return (await resp.json()) as User;
+    return null;
+  };
+
   const getMe = async (cannonToken: string): Promise<User | null> => {
     try {
       const resp = await fetch(usersEndpoint + "/me", {
@@ -109,5 +119,5 @@ export const UserService = (() => {
     return success;
   };
 
-  return { getMe, demoteMe, getCVInfo, uploadCV, deleteCV };
+  return { getUser, getMe, demoteMe, getCVInfo, uploadCV, deleteCV };
 })();

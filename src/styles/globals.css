@@ -3,6 +3,22 @@
 @tailwind utilities;
 
 .bg-blue-gradient {
-  background-image: url("../assets/images/bg-blue-gradient.png");
+  background-image: url("../assets/images/bg-blue-gradient.svg");
   background-size: cover;
+}
+
+.button {
+  @apply flex justify-center items-center gap-x-2;
+}
+
+.button-primary {
+  @apply button bg-blue-dark text-white px-4 py-2 rounded-md shadow-md;
+}
+
+.button-primary:hover {
+  @apply bg-sky-800;
+}
+
+.button-primary:focus {
+  @apply bg-sky-900 shadow-none;
 }
