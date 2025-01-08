@@ -1,4 +1,4 @@
-import { CompanyService } from '@/services/CompanyService';
+import { CompanyService } from "@/services/CompanyService";
 import CompaniesList from "./CompaniesList";
 
 export default async function Companies() {
@@ -12,9 +12,8 @@ export default async function Companies() {
   companies = companies.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="container m-auto h-full gap-y-4 text-black">
+    <div className="container m-auto h-full text-black">
       <CompaniesList companies={companies} />
     </div>
-  )
+  );
 }
-

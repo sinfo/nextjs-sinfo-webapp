@@ -1,7 +1,14 @@
 export const MOCK_USER: User = {
   id: "mock_user_id",
   name: "Bill Gates",
+  title: "CEO @ Microsoft",
   img: "https://media.licdn.com/dms/image/v2/D5603AQHv6LsdiUg1kw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1695167344576?e=1737590400&v=beta&t=U88-qdsyfBJ_2IjA08tPPNCpAAKXDQ9NbsI-rqoeiNo",
+  contacts: {
+    linkedin: "williamhgates",
+    email: "gatesybill@gmail.com",
+    github: "billgates",
+  },
+  achievements: [{}],
   role: "user",
   shareLinks: false,
   company: [],

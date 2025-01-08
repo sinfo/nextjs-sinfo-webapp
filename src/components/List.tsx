@@ -6,7 +6,10 @@ export interface ListProps {
   link?: string;
   linkText?: string;
   linkProps?: LinkProps;
-  children: React.ReactNode;
+  bottomLink?: string;
+  bottomLinkText?: string;
+  bottomLinkProps?: LinkProps;
+  children?: React.ReactNode;
 }
 
 export default function List({
@@ -15,6 +18,9 @@ export default function List({
   link,
   linkText,
   linkProps,
+  bottomLink,
+  bottomLinkText,
+  bottomLinkProps,
   children,
 }: ListProps) {
   return (
@@ -37,6 +43,15 @@ export default function List({
         )}
       </div>
       <div className="flex flex-col gap-y-2 min-w-0">{children}</div>
+      {bottomLinkText && (
+        <Link
+          className="text-blue-500 hover:underline active:text-blue-900"
+          href={bottomLink || "#"}
+          {...bottomLinkProps}
+        >
+          {bottomLinkText}
+        </Link>
+      )}
     </div>
   );
 }

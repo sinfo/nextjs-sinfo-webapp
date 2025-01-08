@@ -29,9 +29,9 @@ export default async function BottomNavbar() {
       ))}
       <Link
         href="/qr"
-        className="absolute -top-16 right-4 p-4 rounded-full bg-blue-dark"
+        className="absolute -top-20 right-4 p-4 rounded-full bg-blue-dark"
       >
-        <QrCode size={24} />
+        <QrCode size={32} />
       </Link>
     </div>
   );

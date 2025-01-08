@@ -30,15 +30,16 @@ export default function CompaniesList({ companies }: CompaniesListProps) {
 
   return (
     <>
-      {/* TODO: Fix search width */}
-      <input
-        type="text"
-        placeholder="Search companies"
-        className="w-[90%] p-2 border mt-4 mx-4 rounded-md shadow-md sticky top-4 border-box"
-        onChange={(e) => {
-          handleSearch(e.target.value);
-        }}
-      />
+      <div className="sticky top-0 pt-4 px-4">
+        <input
+          type="text"
+          placeholder="Search companies"
+          className="w-full p-2 border rounded-md shadow-md"
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
+        />
+      </div>
       <GridList title="Companies">
         {filteredCompanies.length === 0 && <div>No companies found</div>}
         {filteredCompanies.map((c) => (

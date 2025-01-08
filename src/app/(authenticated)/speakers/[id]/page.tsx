@@ -21,7 +21,7 @@ export default async function Speaker({ params }: { params: SpeakerParams }) {
   );
 
   return (
-    <div className="container m-auto h-full gap-y-4 text-black">
+    <div className="container m-auto h-full text-black">
       <div className="flex flex-col items-center gap-y-2 p-4 text-center">
         <h2 className="text-2xl font-bold">{speaker.name}</h2>
         <Image

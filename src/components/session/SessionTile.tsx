@@ -11,6 +11,11 @@ export function SessionTile({ session }: SesionTileProps) {
     .sort()
     .join(", ");
 
+  const startDate = new Date(session.date);
+  const endDate = new Date(startDate.getTime() + session.duration * 60000);
+
+  const pastSession = new Date() > endDate;
+
   return (
     <ListCard
       title={session.name}
@@ -19,6 +24,7 @@ export function SessionTile({ session }: SesionTileProps) {
       headtext={generateTimeInterval(session.date, session.duration)}
       label={session.kind}
       link={`/sessions/${session.id}`}
+      extraClassName={pastSession ? "bg-slate-200 hover:bg-slate-300" : ""}
     />
   );
 }
