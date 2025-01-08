@@ -44,7 +44,7 @@ export default async function Company({ params }: { params: CompanyParams }) {
   const user: User | null = await UserService.getMe(session!.cannonToken);
 
   return (
-    <div className="container m-auto h-full gap-y-4 text-black">
+    <div className="container m-auto h-full text-black">
       <div className="flex flex-col items-center gap-y-2 p-4 text-center">
         <h2 className="text-2xl font-bold">{company.name}</h2>
         <Image
@@ -54,6 +54,7 @@ export default async function Company({ params }: { params: CompanyParams }) {
           src={company.img}
           alt={`${company.name} logo`}
         />
+        {/* TODO: Add contacts to company */}
         {hereToday && (
           <span className="bg-blue-dark text-white rounded-md px-3 py-1 text-lg font-bold uppercase">
             Here Today
@@ -69,7 +70,7 @@ export default async function Company({ params }: { params: CompanyParams }) {
           {companyStands.map((s) => (
             <div
               key={`stand-day-${s.date}-${s.id}`}
-              className="flex flex-col items-center text-center pt-4"
+              className="flex flex-col items-center text-center gap-y-1 pt-4"
               title={getEventFullDate(s.date)}
             >
               <span className="flex items-center justify-center font-mono rounded-full w-10 h-10 bg-blue-dark text-white">

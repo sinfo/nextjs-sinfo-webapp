@@ -5,6 +5,12 @@ type User = {
   name: string;
   img: string;
   role: string;
+  title?: string;
+  contacts?: {
+    linkedin?: string;
+    email?: string;
+    github?: string;
+  };
   shareLinks: boolean;
   company:
     | []
@@ -61,6 +67,11 @@ type Company = {
   site?: string;
   advertisementLvl: string;
   img: string;
+  contacts?: {
+    linkedin?: string;
+    email?: string;
+    website?: string;
+  };
   sessions?: SINFOSession[];
   members?: CompanyMember[];
   stands?: Stand[];

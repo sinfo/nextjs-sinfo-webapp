@@ -11,7 +11,7 @@ export default function Toolbar() {
   const router = useRouter();
   const currPath = usePathname();
 
-  const showMenu: boolean = currPath === "/home";
+  const showMenu: boolean = currPath === "/home" || currPath === "/profile";
 
   async function handleExit() {
     await signOut();

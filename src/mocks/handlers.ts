@@ -19,6 +19,10 @@ export const handlers = [
       token: "some_cannon_token",
     });
   }),
+  // get a specific user
+  http.get(`${BACKEND_URL}/users/*`, () => {
+    return HttpResponse.json(MOCK_USER);
+  }),
   // get logged in user
   http.get(`${BACKEND_URL}/users/me`, () => {
     return HttpResponse.json(MOCK_USER);

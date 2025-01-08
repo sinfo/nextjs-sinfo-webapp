@@ -26,7 +26,7 @@ export default async function Session({ params }: SessionProps) {
   }
 
   return (
-    <div className="container m-auto h-full gap-y-4 text-black">
+    <div className="container m-auto h-full text-black">
       <div className="flex flex-col items-center gap-y-2 p-4 text-center text-sm">
         {session.company && (
           <span className="text-2xl text-gray-500">{session.company.name}</span>
