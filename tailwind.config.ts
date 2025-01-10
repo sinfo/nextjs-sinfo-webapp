@@ -9,6 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        sinfo: {
+          primary: "#323363",
+          secondary: "#A73939",
+        },
         blue: {
           DEFAULT: "#024D88",
           dark: "#083D77",

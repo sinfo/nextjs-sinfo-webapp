@@ -40,7 +40,7 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
     const searchParamDay = searchParams.get("day");
     const day = searchParamDay === "today" ? today : searchParamDay;
     setShowingDay(sortedDays.find((d) => day === d) || null);
-  }, [sortedDays]);
+  }, [sortedDays, searchParams]);
 
   return (
     <>
@@ -61,7 +61,7 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
         .map((d) => (
           <List key={d} title={getEventFullDate(d)}>
             {sessionsByDay[d].map((s) => (
-              <SessionTile key={s.id} session={s} />
+              <SessionTile key={s.id} session={s} onlyShowHours={true} />
             ))}
           </List>
         ))}

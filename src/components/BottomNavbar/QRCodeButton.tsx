@@ -12,7 +12,7 @@ export default function QRCodeButton() {
   return (
     <Link
       href="/qr"
-      className="absolute -top-20 right-4 p-4 rounded-full bg-blue-dark"
+      className="absolute -top-20 right-4 p-4 rounded-full bg-sinfo-primary"
     >
       <QrCode size={32} />
     </Link>

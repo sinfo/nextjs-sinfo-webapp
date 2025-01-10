@@ -3,9 +3,13 @@ import { generateTimeInterval } from "@/utils/utils";
 
 interface SesionTileProps {
   session: SINFOSession;
+  onlyShowHours?: boolean;
 }
 
-export function SessionTile({ session }: SesionTileProps) {
+export function SessionTile({
+  session,
+  onlyShowHours = false,
+}: SesionTileProps) {
   const speakersNames = session.speakers
     ?.map((s) => s.name)
     .sort()
@@ -21,10 +25,14 @@ export function SessionTile({ session }: SesionTileProps) {
       title={session.name}
       subtitle={session.company ? session.company.name : speakersNames}
       img={session.img || session.company?.img || undefined}
-      headtext={generateTimeInterval(session.date, session.duration)}
+      headtext={generateTimeInterval(session.date, session.duration, {
+        onlyHours: onlyShowHours,
+      })}
       label={session.kind}
       link={`/sessions/${session.id}`}
-      extraClassName={pastSession ? "!bg-slate-200 hover:!bg-slate-300" : ""}
+      extraClassName={
+        pastSession ? "!bg-neutral-200 hover:!bg-neutral-300" : ""
+      }
     />
   );
 }
