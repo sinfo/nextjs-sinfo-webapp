@@ -24,7 +24,7 @@ export function SessionTile({ session }: SesionTileProps) {
       headtext={generateTimeInterval(session.date, session.duration)}
       label={session.kind}
       link={`/sessions/${session.id}`}
-      extraClassName={pastSession ? "bg-slate-200 hover:bg-slate-300" : ""}
+      extraClassName={pastSession ? "!bg-slate-200 hover:!bg-slate-300" : ""}
     />
   );
 }

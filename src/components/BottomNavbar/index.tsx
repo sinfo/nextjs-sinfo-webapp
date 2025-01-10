@@ -2,9 +2,8 @@ import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { UserService } from "@/services/UserService";
 import { getServerSession } from "next-auth";
 import { convertToAppRole } from "@/utils/utils";
-import Link from "next/link";
 import NavbarItem, { NavbarItemKey } from "./NavbarItem";
-import { QrCode } from "lucide-react";
+import QRCodeButton from "./QRCodeButton";
 
 // to add a new bottom navbar item, just add the item details to "navbarItems"
 // and add the item key to the appropriate roles in "navbarItemKeysByRole"
@@ -27,12 +26,7 @@ export default async function BottomNavbar() {
       {navbarItemKeysByRole[convertToAppRole(user.role)].map((k) => (
         <NavbarItem key={k} name={k} />
       ))}
-      <Link
-        href="/qr"
-        className="absolute -top-20 right-4 p-4 rounded-full bg-blue-dark"
-      >
-        <QrCode size={32} />
-      </Link>
+      <QRCodeButton />
     </div>
   );
 }

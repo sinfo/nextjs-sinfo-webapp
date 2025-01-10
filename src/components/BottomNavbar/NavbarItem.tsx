@@ -29,7 +29,7 @@ const navbarItems = {
   connections: {
     title: "Connections",
     icon: Users,
-    route: "/connections",
+    route: "/profile/connections",
   },
   companies: {
     title: "Companies",

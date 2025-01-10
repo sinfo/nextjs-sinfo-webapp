@@ -1,24 +1,22 @@
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import GridList from "@/components/GridList";
 import List from "@/components/List";
-import ListCard from "@/components/ListCard";
 import { CompanyService } from "@/services/CompanyService";
 import { UserService } from "@/services/UserService";
 import { isHereToday } from "@/utils/company";
-import {
-  convertToAppRole,
-  generateTimeInterval,
-  getEventDay,
-  getEventFullDate,
-  getEventMonth,
-} from "@/utils/utils";
+import { convertToAppRole } from "@/utils/utils";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import StandDetails from "./StandDetails";
+import { UserTile } from "@/components/user/UserTile";
+import { SessionTile } from "@/components/session";
+import EventDayButton from "@/components/EventDayButton";
 
 interface CompanyParams {
   id: string;
 }
+
+const N_CONNECTIONS = 3;
 
 export default async function Company({ params }: { params: CompanyParams }) {
   const { id: companyID } = params;
@@ -43,6 +41,8 @@ export default async function Company({ params }: { params: CompanyParams }) {
   const session = await getServerSession(authOptions);
   const user: User | null = await UserService.getMe(session!.cannonToken);
 
+  const companyConnections = await CompanyService.getConnections(companyID);
+
   return (
     <div className="container m-auto h-full text-black">
       <div className="flex flex-col items-center gap-y-2 p-4 text-center">
@@ -65,21 +65,10 @@ export default async function Company({ params }: { params: CompanyParams }) {
       {companyStands?.length && (
         <GridList
           title="Days at the venue"
-          description="When they will be here"
+          description="When we will be at SINFO"
         >
           {companyStands.map((s) => (
-            <div
-              key={`stand-day-${s.date}-${s.id}`}
-              className="flex flex-col items-center text-center gap-y-1 pt-4"
-              title={getEventFullDate(s.date)}
-            >
-              <span className="flex items-center justify-center font-mono rounded-full w-10 h-10 bg-blue-dark text-white">
-                {getEventDay(s.date)}
-              </span>
-              <span className="text-xs text-gray-500">
-                {getEventMonth(s.date, true)}
-              </span>
-            </div>
+            <EventDayButton key={s.date} date={s.date} selected={true} />
           ))}
         </GridList>
       )}
@@ -87,21 +76,15 @@ export default async function Company({ params }: { params: CompanyParams }) {
       {companySessions?.length && (
         <List title="Sessions">
           {companySessions.map((s) => (
-            <ListCard
-              key={s.id}
-              title={s.name}
-              headtext={generateTimeInterval(s.date, s.duration)}
-              label={s.kind}
-              link={`/sessions/${s.id}`}
-            />
+            <SessionTile key={s.id} session={s} />
           ))}
         </List>
       )}
       {/* Company Members */}
       {companyMembers?.length && (
         <List title="Members" description="People who work here">
-          {companyMembers.map((m) => (
-            <ListCard key={m.id} title={m.name} img={m.img} subtitle={m.role} />
+          {companyMembers.map((u) => (
+            <UserTile key={u.id} user={u} />
           ))}
         </List>
       )}
@@ -110,6 +93,21 @@ export default async function Company({ params }: { params: CompanyParams }) {
         convertToAppRole(user.role) === "Member" &&
         company.standDetails && (
           <StandDetails standDetails={company.standDetails} />
+        )}
+      {/* Connections */}
+      {user &&
+        (convertToAppRole(user.role) === "Member" ||
+          convertToAppRole(user.role) === "Company") &&
+        companyConnections && (
+          <List
+            title="Company connections"
+            link={`/companies/${companyID}/connections`}
+            linkText="See all"
+          >
+            {companyConnections.slice(0, N_CONNECTIONS).map((u) => (
+              <UserTile key={u.id} user={u} />
+            ))}
+          </List>
         )}
     </div>
   );

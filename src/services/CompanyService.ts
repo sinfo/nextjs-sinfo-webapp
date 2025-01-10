@@ -21,5 +21,19 @@ export const CompanyService = (() => {
     return null;
   };
 
-  return { getCompany, getCompanies };
+  const getConnections = async (id: string): Promise<User[] | null> => {
+    try {
+      const resp = await fetch(`${companiesEndpoint}/${id}/connections`, {
+        next: {
+          revalidate: 86400, // 1 day
+        },
+      });
+      if (resp.ok) return (await resp.json()) as User[];
+    } catch (e) {
+      console.error(e);
+    }
+    return null;
+  };
+
+  return { getCompany, getCompanies, getConnections };
 })();

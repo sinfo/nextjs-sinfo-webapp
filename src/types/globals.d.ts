@@ -11,38 +11,11 @@ type User = {
     email?: string;
     github?: string;
   };
-  shareLinks: boolean;
-  company:
-    | []
-    | [
-        {
-          edition: string;
-          company: string;
-        },
-      ];
-  signatures:
-    | []
-    | [
-        {
-          day: string;
-          edition: string;
-          redeemed: boolean;
-          signatures: { companyId: string; date: Date }[];
-        },
-      ];
-  linkShared:
-    | []
-    | [
-        {
-          // edition: String,
-          // links:[{
-          //   id: String,
-          // }]
-          id: String;
-        },
-      ];
+  achievements?: Achievement[];
+  connections?: User[];
+  company?: Company;
   mail?: string;
-  bearer:
+  bearer?:
     | []
     | [
         {
@@ -57,8 +30,35 @@ type User = {
   google?: { id: string };
   fenix?: { id: string };
   points?: number;
-  registered: string;
-  updated: string;
+  registered?: string;
+  updated?: string;
+};
+
+type AchievementKind =
+  | "cv"
+  | "stand"
+  | "standDay"
+  | "secret"
+  | "session"
+  | "presentation"
+  | "workshop"
+  | "keynote"
+  | "other";
+
+type Achievement = {
+  id: string;
+  name: string;
+  description?: string;
+  img: string;
+  value: number;
+  kind: AchievementKind;
+  validity?: {
+    from: string;
+    to: string;
+  };
+  session?: Session;
+  company?: Company;
+  updated?: string;
 };
 
 type Company = {
@@ -73,16 +73,9 @@ type Company = {
     website?: string;
   };
   sessions?: SINFOSession[];
-  members?: CompanyMember[];
+  members?: User[];
   stands?: Stand[];
   standDetails?: StandDetails;
-};
-
-type CompanyMember = {
-  id: string;
-  name: string;
-  img?: string;
-  role?: string;
 };
 
 type Stand = {

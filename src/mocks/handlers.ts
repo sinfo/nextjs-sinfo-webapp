@@ -31,6 +31,16 @@ export const handlers = [
   http.put(`${BACKEND_URL}/users/me`, () => {
     return new Response(null, { status: 200 });
   }),
+  // get a specific company connections
+  http.get(`${BACKEND_URL}/company/*/connections`, () => {
+    return HttpResponse.json([
+      MOCK_USER,
+      MOCK_USER,
+      MOCK_USER,
+      MOCK_USER,
+      MOCK_USER,
+    ]);
+  }),
   // get a specific company
   http.get(`${BACKEND_URL}/company/*`, () => {
     return HttpResponse.json(MOCK_COMPANY);
