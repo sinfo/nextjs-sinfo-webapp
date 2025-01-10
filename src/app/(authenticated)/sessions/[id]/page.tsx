@@ -50,7 +50,7 @@ export default async function Session({ params }: SessionProps) {
             {session.place}
           </span>
         </div>
-        <span className="bg-blue-dark text-white rounded-md px-3 py-1 font-bold uppercase">
+        <span className="bg-sinfo-secondary text-white rounded-md px-3 py-1 font-bold uppercase">
           {session.kind}
         </span>
         <p className="font-light">{session.description}</p>

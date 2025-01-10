@@ -30,6 +30,7 @@ export function trimText(text: string, n: number): string {
 export function generateTimeInterval(
   timestamp: string,
   durationMinutes: number,
+  { onlyHours }: { onlyHours?: boolean } = {},
 ): string {
   // extract "HH:mm" from ISO string
   const formatTime = (date: Date) => date.toISOString().slice(11, 16);
@@ -37,14 +38,18 @@ export function generateTimeInterval(
   const startDate = new Date(timestamp);
   const endDate = new Date(startDate.getTime() + durationMinutes * 60000);
 
-  return `${startDate.toLocaleDateString("en-GB", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC",
-    hour: "numeric",
-    minute: "numeric",
-  })} - ${formatTime(endDate)}`;
+  return `${
+    onlyHours
+      ? formatTime(startDate)
+      : startDate.toLocaleDateString("en-GB", {
+          timeZone: "UTC",
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        })
+  } - ${formatTime(endDate)}`;
 }
 
 export function getEventDay(date: string): string {
@@ -56,6 +61,12 @@ export function getEventDay(date: string): string {
 export function getEventMonth(date: string, short: boolean = false): string {
   return new Date(date).toLocaleDateString("en-GB", {
     month: short ? "short" : "long",
+  });
+}
+
+export function getEventWeekday(date: string, short: boolean = false): string {
+  return new Date(date).toLocaleDateString("en-GB", {
+    weekday: short ? "short" : "long",
   });
 }
 

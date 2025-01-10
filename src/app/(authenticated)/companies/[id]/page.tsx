@@ -56,7 +56,7 @@ export default async function Company({ params }: { params: CompanyParams }) {
         />
         {/* TODO: Add contacts to company */}
         {hereToday && (
-          <span className="bg-blue-dark text-white rounded-md px-3 py-1 text-lg font-bold uppercase">
+          <span className="bg-sinfo-primary text-white rounded-md px-3 py-1 text-lg font-bold uppercase">
             Here Today
           </span>
         )}

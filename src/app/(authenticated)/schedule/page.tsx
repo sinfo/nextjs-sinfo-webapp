@@ -16,7 +16,7 @@ export default async function Schedule() {
           Checkout all the available sessions.
         </p>
       </div>
-      <ScheduleTable sessions={sessions} defaultToday />
+      <ScheduleTable sessions={sessions} />
     </div>
   );
 }
