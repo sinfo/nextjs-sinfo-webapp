@@ -1,7 +1,5 @@
-import List from "@/components/List";
-import { SessionTile } from "@/components/session";
 import { SessionService } from "@/services/SessionService";
-import { getEventFullDate } from "@/utils/utils";
+import ScheduleTable from "./ScheduleTable";
 
 export default async function Schedule() {
   const sessions = await SessionService.getSessions();
@@ -10,26 +8,15 @@ export default async function Schedule() {
     return <div>Sessions not found!</div>;
   }
 
-  const sortedSessions = sessions.sort((a, b) => a.date.localeCompare(b.date));
-  const sessionsByDay = sortedSessions.reduce(
-    (acc, s) => {
-      const day = s.date.split("T")[0];
-      const daySessions = [...(acc[day] || []), s];
-      return { ...acc, [day]: daySessions };
-    },
-    {} as Record<string, SINFOSession[]>,
-  );
-  const sortedDays = Object.keys(sessionsByDay).sort();
-
   return (
     <div className="container m-auto h-full text-black">
-      {sortedDays.map((d) => (
-        <List title={getEventFullDate(d)}>
-          {sessionsByDay[d].map((s) => (
-            <SessionTile key={s.id} session={s} />
-          ))}
-        </List>
-      ))}
+      <div className="flex flex-col items-start gap-y-2 p-4 text-start text-sm">
+        <h1 className="text-2xl font-bold">Schedule</h1>
+        <p className="text-sm text-gray-500">
+          Checkout all the available sessions.
+        </p>
+      </div>
+      <ScheduleTable sessions={sessions} defaultToday />
     </div>
   );
 }

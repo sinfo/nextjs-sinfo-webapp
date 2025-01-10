@@ -17,40 +17,57 @@ export default async function QR() {
   if (!user) return <UserSignOut />;
 
   let company: Company | null = null;
-  if (user.role === "company") {
+  if (convertToAppRole(user.role) === "Company") {
     // assumes that cannon api only provides the company associated with the current edition
-    if (user.company.length == 0) {
-      await demoteMe(session!.cannonToken);
+    if (user.company) {
+      company = await CompanyService.getCompany(user.company.id);
     } else {
-      company = await CompanyService.getCompany(user.company[0].company);
+      await demoteMe(session!.cannonToken);
     }
   }
 
   // this is undesirable as hex codes are hard to maintain, but the border color sometimes
   // doesn't work if you use tailwind colors like "pink-light" instead
   const borderColor = (() => {
-    switch (user.role) {
-      case "team":
-      case "admin":
+    switch (convertToAppRole(user.role)) {
+      case "Member":
+      case "Admin":
         return "#74C48A"; // green-light
-      case "company":
+      case "Company":
         return "#B17EC9"; // pink-light
-      case "attendee":
+      case "Attendee":
       default:
         return "#296CB2"; // blue
     }
   })();
 
   return (
-    <div className="h-full text-black flex flex-col items-center justify-center">
-      <Image className="w-48" src={hackyPeeking} alt="Hacky Peaking" />
-      <QRCode
-        className="w-72 h-auto p-4 border-[14px] bg-white rounded-lg"
-        style={{ borderColor }}
-        value={user.id}
-      />
-      <p className="mt-5 text-2xl text-center px-4">{user.name}</p>
-      <p className="mt-2 text-gray-600">{convertToAppRole(user.role)}</p>
+    <div className="container m-auto h-full text-black">
+      <div className="flex flex-col justify-center items-center text-center p-4 gap-y-4">
+        <div className="flex flex-col justify-center items-center">
+          <Image className="w-48" src={hackyPeeking} alt="Hacky Peaking" />
+          <QRCode
+            className="w-72 h-auto p-4 border-[14px] bg-white rounded-lg"
+            style={{ borderColor }}
+            value={user.id}
+          />
+        </div>
+        <div>
+          <p className="text-2xl text-center">{user.name}</p>
+          <p className="text-gray-600 uppercase">
+            {convertToAppRole(user.role)}
+          </p>
+        </div>
+        {user.company && (
+          <Image
+            className="object-contain"
+            width={100}
+            height={100}
+            src={user.company.img}
+            alt={`${user.company.name} logo`}
+          />
+        )}
+      </div>
     </div>
   );
 }

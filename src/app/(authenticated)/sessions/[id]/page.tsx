@@ -55,6 +55,14 @@ export default async function Session({ params }: SessionProps) {
         </span>
         <p className="font-light">{session.description}</p>
       </div>
+      {/* ExtraInformation */}
+      {session.extraInformation?.length && (
+        <List title="Information">
+          {session.extraInformation.map((e, idx) => (
+            <MessageCard key={`info-${idx}`} {...e} />
+          ))}
+        </List>
+      )}
       {/* Speakers */}
       {session.speakers && (
         <List title="Speakers">
@@ -69,12 +77,14 @@ export default async function Session({ params }: SessionProps) {
           ))}
         </List>
       )}
-      {/* ExtraInformation */}
-      {session.extraInformation?.length && (
-        <List title="Information">
-          {session.extraInformation.map((e, idx) => (
-            <MessageCard key={`info-${idx}`} {...e} />
-          ))}
+      {/* Company */}
+      {session.company && (
+        <List title="Company">
+          <ListCard
+            title={session.company.name}
+            img={session.company.img}
+            link={`/companies/${session.company.id}`}
+          />
         </List>
       )}
       {/* Prize */}

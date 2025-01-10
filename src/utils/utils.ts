@@ -12,6 +12,16 @@ export function convertToAppRole(role: string): UserRole {
   }
 }
 
+export function humanizeAchivementKind(kind: AchievementKind): string {
+  switch (kind) {
+    case "cv":
+      return "CV";
+    default:
+      const result = kind.replace(/([A-Z])/g, " $1");
+      return result.charAt(0).toUpperCase() + result.slice(1);
+  }
+}
+
 export function trimText(text: string, n: number): string {
   if (text.length <= n) return text;
   return text.slice(0, n) + "...";
