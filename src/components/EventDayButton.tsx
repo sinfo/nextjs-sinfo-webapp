@@ -1,4 +1,9 @@
-import { getEventDay, getEventFullDate, getEventMonth } from "@/utils/utils";
+import {
+  getEventDay,
+  getEventFullDate,
+  getEventMonth,
+  getEventWeekday,
+} from "@/utils/utils";
 
 interface EventDayButtonProps {
   date: string;
@@ -19,13 +24,16 @@ export default function EventDayButton({
       disabled={!onClick}
     >
       <span
-        className={`flex items-center justify-center font-mono rounded-full w-10 h-10 shadow-md focus:shadow-none ${selected ? "text-blue-dark outline outline-blue-dark" : "text-white bg-blue-dark"}`}
+        className={`flex items-center justify-center font-mono rounded-full w-10 h-10 shadow-md focus:shadow-none ${selected ? "text-sinfo-primary outline outline-sinfo-primary bg-white hover:bg-slate-50" : "text-white bg-sinfo-primary hover:bg-blue"}`}
       >
         {getEventDay(date)}
       </span>
-      <span className="text-xs text-gray-500">
-        {getEventMonth(date, false)}
-      </span>
+      <div className="flex flex-col items-center justify-center">
+        <span className="text-xs text-gray-500">{getEventMonth(date)}</span>
+        <span className="text-xs text-gray-400">
+          ({getEventWeekday(date, true)})
+        </span>
+      </div>
     </button>
   );
 }

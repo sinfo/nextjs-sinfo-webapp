@@ -47,7 +47,7 @@ export default function GridCard({
             />
           )}
           {label && (
-            <span className="m-auto bg-blue-dark text-white rounded-md px-2 py-1 uppercase">
+            <span className="m-auto bg-sinfo-primary text-white rounded-md px-2 py-1 uppercase">
               {label}
             </span>
           )}

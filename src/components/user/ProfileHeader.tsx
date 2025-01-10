@@ -9,7 +9,7 @@ interface ProfileHeaderProps {
 export default function ProfileHeader({ user }: ProfileHeaderProps) {
   return (
     <>
-      <header className="bg-blue-dark h-[150px] mb-6">
+      <header className="bg-sinfo-primary h-[150px] mb-6">
         <Image
           className="relative left-4 -bottom-8 rounded-full border-white border-4"
           width={150}

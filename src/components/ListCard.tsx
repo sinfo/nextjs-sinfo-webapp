@@ -55,7 +55,7 @@ export default function ListCard({
               </span>
             )}
             {label && (
-              <span className="bg-blue-dark text-white rounded-md px-2 py-0.5 uppercase">
+              <span className="bg-sinfo-secondary text-white rounded-md px-2 py-0.5 uppercase">
                 {label}
               </span>
             )}

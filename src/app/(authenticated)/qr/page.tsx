@@ -9,6 +9,7 @@ import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { UserService } from "@/services/UserService";
 import { CompanyService } from "@/services/CompanyService";
 import { convertToAppRole } from "@/utils/utils";
+import Link from "next/link";
 
 export default async function QR() {
   const session = await getServerSession(authOptions);
@@ -34,10 +35,10 @@ export default async function QR() {
       case "Admin":
         return "#74C48A"; // green-light
       case "Company":
-        return "#B17EC9"; // pink-light
+        return "#A73939"; // SINFO Secondary
       case "Attendee":
       default:
-        return "#296CB2"; // blue
+        return "#323363"; // SINFO Primary
     }
   })();
 
@@ -59,13 +60,15 @@ export default async function QR() {
           </p>
         </div>
         {user.company && (
-          <Image
-            className="object-contain"
-            width={100}
-            height={100}
-            src={user.company.img}
-            alt={`${user.company.name} logo`}
-          />
+          <Link href={`/companies/${user.company.id}`}>
+            <Image
+              className="object-contain"
+              width={100}
+              height={100}
+              src={user.company.img}
+              alt={`${user.company.name} logo`}
+            />
+          </Link>
         )}
       </div>
     </div>
