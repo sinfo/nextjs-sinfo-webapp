@@ -1,7 +1,9 @@
 export const SessionService = (() => {
-  const sessionsEndpoint = process.env.CANNON_URL + "/session";
+  const sessionsEndpoint = process.env.NEXT_PUBLIC_CANNON_URL + "/session";
 
-  const getSession = async (sessionId: string): Promise<SINFOSession | null> => {
+  const getSession = async (
+    sessionId: string,
+  ): Promise<SINFOSession | null> => {
     const resp = await fetch(`${sessionsEndpoint}/${sessionId}`, {
       next: {
         revalidate: 86400, // 1 day

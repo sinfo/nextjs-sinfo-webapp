@@ -12,6 +12,7 @@ interface MessageCardProps {
   type: MessageType;
   title?: string;
   content?: string;
+  onClick?: () => void;
 }
 
 interface MessageCustomization {
@@ -42,12 +43,14 @@ export default function MessageCard({
   type,
   title,
   content,
+  onClick,
 }: MessageCardProps) {
   const Icon = customizationByType[type].icon;
 
   return (
     <div
-      className={`flex justify-start items-center gap-x-4 px-4 py-2 bg-white border-l-4 rounded-md shadow-md text-sm ${customizationByType[type].class}`}
+      className={`flex justify-start items-center gap-x-4 px-4 py-2 bg-white border-l-4 rounded-md shadow-md text-sm ${customizationByType[type].class} ${onClick ? "cursor-pointer" : ""}`}
+      onClick={onClick}
     >
       <Icon size={32} />
       <div>

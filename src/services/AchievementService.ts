@@ -1,5 +1,6 @@
 export const AchievementService = (() => {
-  const achievementsEndpoint = process.env.CANNON_URL + "/achievements";
+  const achievementsEndpoint =
+    process.env.NEXT_PUBLIC_CANNON_URL + "/achievements";
 
   const getAchievements = async (): Promise<Achievement[] | null> => {
     const resp = await fetch(`${achievementsEndpoint}`, {

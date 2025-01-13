@@ -24,22 +24,22 @@ export default function GridCard({
 }: GridCardProps) {
   return (
     <Link href={link || "#"} {...linkProps}>
-      <div className="w-[160px] min-h-[240px] flex flex-col items-center justify-between px-4 py-4 gap-y-2 text-sm bg-white rounded-md shadow-md text-center overflow-hidden hover:bg-slate-50 hover:shadow-sm active:bg-gray-200 active:shadow-none">
+      <div className="w-[160px] min-h-[220px] flex flex-col items-center justify-between px-4 py-4 gap-y-2 text-sm bg-white rounded-md shadow-md text-center overflow-hidden hover:bg-slate-50 hover:shadow-sm active:bg-gray-200 active:shadow-none">
         {/* TODO: Fix large names! Truncate is not working */}
         <span title={title} className="truncate">
           {title}
         </span>
         <Image
-          className="h-full w-full object-contain"
-          width={100}
-          height={100}
+          className="w-[128px] h-[128px] object-contain"
+          width={128}
+          height={128}
           src={img}
           alt={imgAltText}
         />
         <div className="h-[32px]">
           {extraImage && (
             <Image
-              className="h-full w-full object-contain"
+              className="w-[100px] h-[32px] object-contain"
               width={100}
               height={32}
               src={extraImage}

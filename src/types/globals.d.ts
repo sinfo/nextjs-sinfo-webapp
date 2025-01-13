@@ -124,6 +124,8 @@ type SINFOSession = {
     title?: string;
     content?: string;
   }[];
+  participants?: User[];
+  unauthenticatedParticipants?: number;
 };
 
 type Prize = {
@@ -142,4 +144,15 @@ type SINFOEvent = {
   end?: string;
   isOcurring?: boolean;
   calendarUrl: string;
+};
+
+type SINFOFileKind = "cv";
+
+type SINFOFile = {
+  id: string;
+  kind: SINFOFileKind;
+  user: string;
+  name: string;
+  extension: string;
+  updated: string;
 };

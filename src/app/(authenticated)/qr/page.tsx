@@ -8,7 +8,7 @@ import UserSignOut from "@/components/UserSignOut";
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { UserService } from "@/services/UserService";
 import { CompanyService } from "@/services/CompanyService";
-import { convertToAppRole } from "@/utils/utils";
+import { convertToAppRole, isCompany } from "@/utils/utils";
 import Link from "next/link";
 
 export default async function QR() {
@@ -18,7 +18,7 @@ export default async function QR() {
   if (!user) return <UserSignOut />;
 
   let company: Company | null = null;
-  if (convertToAppRole(user.role) === "Company") {
+  if (isCompany(user.role)) {
     // assumes that cannon api only provides the company associated with the current edition
     if (user.company) {
       company = await CompanyService.getCompany(user.company.id);
