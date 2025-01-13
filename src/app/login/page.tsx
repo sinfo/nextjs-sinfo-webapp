@@ -10,7 +10,7 @@ import {
   linkedinIcon,
   microsoftIcon,
 } from "@/assets/icons";
-import { webappLogo } from "@/assets/images";
+import { sinfoLogo } from "@/assets/images";
 import AuthProviderButton from "./AuthProviderButton";
 
 export default function Login() {
@@ -25,8 +25,8 @@ export default function Login() {
     <div className="h-screen bg-sinfo-gradient flex flex-col">
       <Image
         className="w-48 mx-auto pt-8"
-        src={webappLogo}
-        alt="SINFO WebApp logo"
+        src={sinfoLogo}
+        alt="SINFO logo"
         quality={100}
       />
       <div className="flex flex-col items-center justify-center gap-5 flex-1">

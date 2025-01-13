@@ -14,11 +14,11 @@ const BACKEND_URL = process.env.CANNON_URL;
 
 export const handlers = [
   // get cannon_token for the user
-  http.post(`${BACKEND_URL}/auth/*`, () => {
-    return HttpResponse.json({
-      token: "some_cannon_token",
-    });
-  }),
+  // http.post(`${BACKEND_URL}/auth/*`, () => {
+  //   return HttpResponse.json({
+  //     token: "some_cannon_token",
+  //   });
+  // }),
   // get a specific user
   http.get(`${BACKEND_URL}/users/*`, () => {
     return HttpResponse.json(MOCK_USER);

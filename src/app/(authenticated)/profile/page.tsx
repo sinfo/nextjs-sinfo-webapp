@@ -4,20 +4,22 @@ import List from "@/components/List";
 import ListCard from "@/components/ListCard";
 import MessageCard from "@/components/MessageCard";
 import AchievementTile from "@/components/user/AchievementTile";
+import CurriculumVitae from "@/components/user/CurriculumVitae";
 import ProfileHeader from "@/components/user/ProfileHeader";
 import { UserTile } from "@/components/user/UserTile";
 import { UserService } from "@/services/UserService";
-import { convertToAppRole } from "@/utils/utils";
-import { UserPen } from "lucide-react";
+import { isCompany } from "@/utils/utils";
+import { Award, UserPen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { Suspense } from "react";
 
 const N_ACHIEVEMENTS = 5;
 const N_CONNECTIONS = 3;
 
 export default async function Profile() {
-  const session = await getServerSession(authOptions);
-  const user: User | null = await UserService.getMe(session!.cannonToken);
+  const session = (await getServerSession(authOptions))!;
+  const user: User | null = await UserService.getMe(session.cannonToken);
 
   if (!user) {
     return <div> Profile not found</div>;
@@ -26,9 +28,9 @@ export default async function Profile() {
   return (
     <div className="container m-auto h-full text-black">
       <ProfileHeader user={user} />
-      <div className="px-4">
+      <div className="px-4 py-2">
         <Link
-          className="button-primary text-sm font-bold uppercase w-full mt-2"
+          className="button-primary text-sm w-full mt-2"
           href="/profile/edit"
         >
           <UserPen size={16} />
@@ -36,25 +38,24 @@ export default async function Profile() {
         </Link>
       </div>
 
-      {/* Submit CV */}
-      {convertToAppRole(user.role) !== "Company" && (
+      {/* CV */}
+      {!isCompany(user.role) && (
         <List
           title="Curriculum Vitae (CV)"
           description="Submit your CV and get the chance to win a prize"
         >
-          <div className="bg-red-500 rounded-md">
-            {" "}
-            Upload CV (algo para aqui)
-          </div>
+          <Suspense fallback={<div>Loading</div>}>
+            <CurriculumVitae session={session} user={user} currentUser />
+          </Suspense>
         </List>
       )}
 
       {/* Academic information */}
-      {convertToAppRole(user.role) !== "Company" && (
+      {!isCompany(user.role) && (
         <List title="Academic Information">
           <MessageCard
             type="info"
-            content="This information only shows to companies that had scanned your QR-Code."
+            content="This information only shows to companies that scanned your QR code"
           />
           <ListCard
             title="Computer Science and Engineering"
@@ -78,13 +79,22 @@ export default async function Profile() {
         link="/profile/achievements"
         linkText="See all"
       >
-        {user.achievements
-          ?.slice(0, N_ACHIEVEMENTS)
-          .map((a) => <AchievementTile key={a.id} achievement={a} achieved />)}
+        {user.achievements?.length ? (
+          user.achievements
+            ?.slice(0, N_ACHIEVEMENTS)
+            .map((a) => <AchievementTile key={a.id} achievement={a} achieved />)
+        ) : (
+          <ListCard
+            title="Start winning achievements"
+            subtitle="Click here to know more"
+            link="/profile/achievements"
+            icon={Award}
+          />
+        )}
       </GridList>
 
       {/* Connections */}
-      {user.connections?.length && (
+      {user.connections?.length ? (
         <List
           title="Connections"
           link="/profile/connections"
@@ -94,6 +104,8 @@ export default async function Profile() {
             <UserTile key={u.id} user={u} />
           ))}
         </List>
+      ) : (
+        <></>
       )}
     </div>
   );

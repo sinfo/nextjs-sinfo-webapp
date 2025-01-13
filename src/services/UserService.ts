@@ -1,8 +1,8 @@
 import { revalidateTag } from "next/cache";
 
 export const UserService = (() => {
-  const usersEndpoint = process.env.CANNON_URL + "/users";
-  const filesEndpoint = process.env.CANNON_URL + "/files";
+  const usersEndpoint = process.env.NEXT_PUBLIC_CANNON_URL + "/users";
+  const filesEndpoint = process.env.NEXT_PUBLIC_CANNON_URL + "/files";
 
   const getUser = async (id: string): Promise<User | null> => {
     const resp = await fetch(`${usersEndpoint}/${id}`, {
@@ -54,21 +54,51 @@ export const UserService = (() => {
     return success;
   };
 
-  const getCVInfo = async (cannonToken: string) => {
+  const getCVInfo = async (
+    cannonToken: string,
+    userID?: string,
+  ): Promise<SINFOFile | {} | null> => {
     try {
-      const resp = await fetch(filesEndpoint + "/me", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${cannonToken}`,
-        },
-        next: {
-          revalidate: 86400, // 1 day
-          tags: ["modified-cv"],
-        },
-      });
-      if (resp.ok) return resp.json();
+      if (userID) {
+        const resp = await fetch(filesEndpoint + `/users/${userID}/cv`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${cannonToken}`,
+          },
+          next: {
+            revalidate: 86400, // 1 day
+            tags: ["modified-cv"],
+          },
+        });
+        if (resp.ok) return resp.json();
+      } else {
+        const resp = await fetch(filesEndpoint + "/me", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${cannonToken}`,
+          },
+          next: {
+            revalidate: 86400, // 1 day
+            tags: ["modified-cv"],
+          },
+        });
+        if (resp.ok) return resp.json();
+      }
     } catch (error) {
       console.log(error);
+    }
+    return null;
+  };
+
+  const getDownloadURL = async (
+    cannonToken: string,
+    fileID: string,
+  ): Promise<string | null> => {
+    try {
+      /* TODO: Implement this */
+      return `${filesEndpoint}/me/download?access_token=${cannonToken}`;
+    } catch (error) {
+      console.error(error);
     }
     return null;
   };
@@ -119,5 +149,13 @@ export const UserService = (() => {
     return success;
   };
 
-  return { getUser, getMe, demoteMe, getCVInfo, uploadCV, deleteCV };
+  return {
+    getUser,
+    getMe,
+    demoteMe,
+    getCVInfo,
+    getDownloadURL,
+    uploadCV,
+    deleteCV,
+  };
 })();

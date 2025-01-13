@@ -96,20 +96,23 @@ export const MOCK_COMPANY: Company = {
     {
       id: "member_1",
       name: "Dani Rodrigues",
+      role: "company",
       img: "https://media.licdn.com/dms/image/v2/D4D03AQE4q8YE9OJowg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1727827743994?e=1741824000&v=beta&t=a5j9_5zhhhh-Pj3MAk3R_6uvyduHHnu_vBhOqerDt7E",
-      role: "University Programs",
+      title: "University Programs",
     },
     {
       id: "member_2",
+      role: "company",
       name: "João Borges",
       img: "https://media.licdn.com/dms/image/v2/D4D03AQFMjDv5-DKq5A/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1700582933178?e=1741824000&v=beta&t=2T23_6w92MXWxMsy3Y3-RNyVPVgDys7qirQJ0grII4Q",
-      role: "Systems Engineer",
+      title: "Systems Engineer",
     },
     {
       id: "member_2",
+      role: "company",
       name: "Anees Asghar",
       img: "https://media.licdn.com/dms/image/v2/D4D03AQF1FzOQusxcDw/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1680626784682?e=1741824000&v=beta&t=pKhCswHukDEYb6Bl1nyYFbprmx5P04GXfRal577brhs",
-      role: "Systems Engineer",
+      title: "Systems Engineer",
     },
   ],
   sessions: [

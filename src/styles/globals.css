@@ -12,5 +12,9 @@
 }
 
 .button-primary {
-  @apply button bg-sinfo-primary text-white px-4 py-2 rounded-md shadow-md;
+  @apply button bg-sinfo-primary text-white px-4 py-2 rounded-md shadow-md disabled:opacity-75;
+}
+
+.text-link {
+  @apply text-blue-500 hover:underline active:text-blue-900;
 }

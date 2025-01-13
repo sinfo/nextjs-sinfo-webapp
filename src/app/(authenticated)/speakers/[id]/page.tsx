@@ -44,12 +44,14 @@ export default async function Speaker({ params }: { params: SpeakerParams }) {
         <p className="text-sm font-light">{speaker.description}</p>
       </div>
       {/* Company Sessions */}
-      {speakerSessions?.length && (
+      {speakerSessions?.length ? (
         <List title="Sessions">
           {speakerSessions.map((s) => (
             <SessionTile key={s.id} session={s} />
           ))}
         </List>
+      ) : (
+        <></>
       )}
     </div>
   );

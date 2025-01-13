@@ -1,3 +1,4 @@
+import { MOCK_USER } from ".";
 import { MOCK_COMPANIES } from "./company";
 import { MOCK_SPEAKERS } from "./speaker";
 

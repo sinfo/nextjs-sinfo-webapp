@@ -4,7 +4,7 @@ import List from "@/components/List";
 import { CompanyService } from "@/services/CompanyService";
 import { UserService } from "@/services/UserService";
 import { isHereToday } from "@/utils/company";
-import { convertToAppRole } from "@/utils/utils";
+import { isCompany, isMember } from "@/utils/utils";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import StandDetails from "./StandDetails";
@@ -62,7 +62,7 @@ export default async function Company({ params }: { params: CompanyParams }) {
         )}
       </div>
       {/* Days at the event */}
-      {companyStands?.length && (
+      {companyStands?.length ? (
         <GridList
           title="Days at the venue"
           description="When we will be at SINFO"
@@ -71,33 +71,36 @@ export default async function Company({ params }: { params: CompanyParams }) {
             <EventDayButton key={s.date} date={s.date} selected={true} />
           ))}
         </GridList>
+      ) : (
+        <></>
       )}
       {/* Company Sessions */}
-      {companySessions?.length && (
+      {companySessions?.length ? (
         <List title="Sessions">
           {companySessions.map((s) => (
             <SessionTile key={s.id} session={s} />
           ))}
         </List>
+      ) : (
+        <></>
       )}
       {/* Company Members */}
-      {companyMembers?.length && (
+      {companyMembers?.length ? (
         <List title="Members" description="People who work here">
           {companyMembers.map((u) => (
             <UserTile key={u.id} user={u} />
           ))}
         </List>
+      ) : (
+        <></>
       )}
       {/* Stand Details */}
-      {user &&
-        convertToAppRole(user.role) === "Member" &&
-        company.standDetails && (
-          <StandDetails standDetails={company.standDetails} />
-        )}
+      {user && isMember(user.role) && company.standDetails && (
+        <StandDetails standDetails={company.standDetails} />
+      )}
       {/* Connections */}
       {user &&
-        (convertToAppRole(user.role) === "Member" ||
-          convertToAppRole(user.role) === "Company") &&
+        (isCompany(user.role) || isMember(user.role)) &&
         companyConnections && (
           <List
             title="Company connections"

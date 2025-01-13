@@ -1,5 +1,5 @@
 export const SpeakerService = (() => {
-  const speakersEndpoint = process.env.CANNON_URL + "/speaker";
+  const speakersEndpoint = process.env.NEXT_PUBLIC_CANNON_URL + "/speaker";
 
   const getSpeaker = async (id: string): Promise<Speaker | null> => {
     const resp = await fetch(`${speakersEndpoint}/${id}`, {
