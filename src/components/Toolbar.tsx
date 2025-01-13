@@ -1,10 +1,10 @@
 "use client";
 
 import { Image } from "next/dist/client/image-component";
-import { webappLogo } from "@/assets/images";
+import { sinfoLogo } from "@/assets/images";
 import { signOut, useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowLeft, LogOut, Menu } from "lucide-react";
+import { ArrowLeft, LogOut, Menu, RefreshCcw } from "lucide-react";
 
 export default function Toolbar() {
   const { data: session } = useSession();
@@ -36,13 +36,14 @@ export default function Toolbar() {
         <div className="flex-1">
           <Image
             className="w-32 mx-auto"
-            src={webappLogo}
-            alt="SINFO WebApp logo"
+            src={sinfoLogo}
+            alt="SINFO logo"
             quality={100}
           />
         </div>
-        <div className="w-1/6 flex justify-end items-center">
+        <div className="w-1/6 flex justify-end items-center gap-x-2">
           {/* potentially temporary until we have an alternative way to logout */}
+          <RefreshCcw size={32} onClick={() => window.location.reload()} />
           <LogOut size={32} onClick={handleExit} />
         </div>
       </nav>

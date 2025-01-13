@@ -38,7 +38,7 @@ export default function ListCard({
       >
         {img && (
           <Image
-            className="rounded-full"
+            className="w-[40px] h-[40px] object-contain rounded-full"
             width={40}
             height={40}
             src={img}

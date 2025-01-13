@@ -33,11 +33,7 @@ export default function List({
           )}
         </div>
         {linkText && (
-          <Link
-            className="text-blue-500 hover:underline active:text-blue-900"
-            href={link || "#"}
-            {...linkProps}
-          >
+          <Link className="text-link" href={link || "#"} {...linkProps}>
             {linkText}
           </Link>
         )}
@@ -45,7 +41,7 @@ export default function List({
       <div className="flex flex-col gap-y-2 min-w-0">{children}</div>
       {bottomLinkText && (
         <Link
-          className="text-sm text-blue-500 hover:underline active:text-blue-900"
+          className="text-link"
           href={bottomLink || "#"}
           {...bottomLinkProps}
         >

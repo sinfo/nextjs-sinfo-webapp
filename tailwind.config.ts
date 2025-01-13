@@ -8,6 +8,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      animation: {
+        "pick-winner": "scrolling 5s ease-in",
+      },
+      keyframes: {
+        scrolling: {
+          "0%": {
+            transform: "translateX(0)",
+          },
+          "100%": {
+            transform: "translateX(-100%)",
+          },
+        },
+      },
       colors: {
         sinfo: {
           primary: "#323363",

@@ -12,6 +12,16 @@ export function convertToAppRole(role: string): UserRole {
   }
 }
 
+export function isMember(role: string): boolean {
+  const appRole = convertToAppRole(role);
+  return appRole === "Member" || appRole === "Admin";
+}
+
+export function isCompany(role: string): boolean {
+  const appRole = convertToAppRole(role);
+  return appRole === "Company";
+}
+
 export function humanizeAchivementKind(kind: AchievementKind): string {
   switch (kind) {
     case "cv":
