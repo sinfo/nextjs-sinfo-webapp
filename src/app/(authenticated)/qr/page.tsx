@@ -17,6 +17,11 @@ export default async function QR() {
   const user: User | null = await UserService.getMe(session?.cannonToken ?? "");
   if (!user) return <UserSignOut />;
 
+  const userQRCode: string | null = await UserService.getQRCode(
+    session!.cannonToken,
+  );
+  if (!userQRCode) return <div>Unable to get QR-Code</div>;
+
   let company: Company | null = null;
   if (isCompany(user.role)) {
     // assumes that cannon api only provides the company associated with the current edition
@@ -50,7 +55,7 @@ export default async function QR() {
           <QRCode
             className="w-72 h-auto p-4 border-[14px] bg-white rounded-lg"
             style={{ borderColor }}
-            value={user.id}
+            value={userQRCode}
           />
         </div>
         <div>

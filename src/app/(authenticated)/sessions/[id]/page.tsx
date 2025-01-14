@@ -7,19 +7,16 @@ import { PrizeTile } from "@/components/prize";
 import { SessionService } from "@/services/SessionService";
 import { UserService } from "@/services/UserService";
 import { generateTimeInterval, isMember } from "@/utils/utils";
-import { CalendarClock, MapPin } from "lucide-react";
+import { CalendarClock, MapPin, Scan } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
+import Link from "next/link";
 
 interface SessionParams {
   id: string;
 }
 
-interface SessionProps {
-  params: SessionParams;
-}
-
-export default async function Session({ params }: SessionProps) {
+export default async function Session({ params }: { params: SessionParams }) {
   const { id: sessionID } = params;
 
   const sinfoSession = await SessionService.getSession(sessionID);
@@ -62,6 +59,15 @@ export default async function Session({ params }: SessionProps) {
           {sinfoSession.kind}
         </span>
         <p className="font-light">{sinfoSession.description}</p>
+      </div>
+      <div className="p-4">
+        <Link
+          className="button button-primary text-sm"
+          href={`/sessions/${sessionID}/check-in`}
+        >
+          <Scan size={16} />
+          Check-in
+        </Link>
       </div>
       {/* ExtraInformation */}
       {sinfoSession.extraInformation?.length ? (

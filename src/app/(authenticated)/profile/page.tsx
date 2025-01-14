@@ -22,7 +22,7 @@ export default async function Profile() {
   const user: User | null = await UserService.getMe(session.cannonToken);
 
   if (!user) {
-    return <div> Profile not found</div>;
+    return <div>Profile not found</div>;
   }
 
   return (

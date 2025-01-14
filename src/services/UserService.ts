@@ -34,6 +34,25 @@ export const UserService = (() => {
     return null;
   };
 
+  const getQRCode = async (cannonToken: string): Promise<string | null> => {
+    try {
+      const resp = await fetch(usersEndpoint + "/qr-code", {
+        headers: {
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        next: {
+          revalidate: 300, // 5 mins
+          tags: ["modified-me"],
+        },
+      });
+
+      if (resp.ok) return (await resp.json()).data;
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  };
+
   const demoteMe = async (cannonToken: string): Promise<boolean> => {
     let success = false;
 
@@ -152,6 +171,7 @@ export const UserService = (() => {
   return {
     getUser,
     getMe,
+    getQRCode,
     demoteMe,
     getCVInfo,
     getDownloadURL,
