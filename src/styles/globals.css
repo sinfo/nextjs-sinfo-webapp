@@ -18,3 +18,7 @@
 .text-link {
   @apply text-blue-500 hover:underline active:text-blue-900;
 }
+
+#scan-container .scan-region-highlight-svg {
+  @apply !stroke-sinfo-secondary;
+}

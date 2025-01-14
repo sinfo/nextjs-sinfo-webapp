@@ -7,7 +7,13 @@ import { usePathname } from "next/navigation";
 export default function QRCodeButton() {
   const currPath = usePathname();
 
-  if (currPath === "/qr") return <></>;
+  // Using ReactContexts might be better than this
+  if (
+    currPath === "/qr" ||
+    currPath.endsWith("/check-in") ||
+    currPath.endsWith("/promote")
+  )
+    return <></>;
 
   return (
     <Link

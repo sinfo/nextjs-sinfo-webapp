@@ -57,19 +57,19 @@ export function PrizeTile({
           <span className="text-sm">{winner.name}</span>
         </div>
       )}
-      {pickWinner && !winner && (
-        <button
-          className={`button button-primary text-sm w-full`}
-          onClick={handlePickWinner}
-        >
-          <Trophy size={16} />
-          Pick a winner
-        </button>
-      )}
-      {participants && (
-        <span className="text-xs text-gray-500">
-          Participants available to the prize: {participants.length}
-        </span>
+      {pickWinner && participants && !winner && (
+        <>
+          <button
+            className={`button button-primary text-sm w-full`}
+            onClick={handlePickWinner}
+          >
+            <Trophy size={16} />
+            Pick a winner
+          </button>
+          <span className="text-xs text-gray-500">
+            Participants available to the prize: {participants.length}
+          </span>
+        </>
       )}
     </div>
   );
