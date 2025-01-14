@@ -1,3 +1,5 @@
+import jwt, { JwtPayload, VerifyOptions } from "jsonwebtoken";
+
 export function convertToAppRole(role: string): UserRole {
   switch (role) {
     case "company":
@@ -87,4 +89,18 @@ export function getEventFullDate(date: string): string {
     day: "numeric",
     year: "numeric",
   });
+}
+
+// TODO: Implement this correctly
+export function isValidQRCode(
+  data: string,
+  jwtOptions?: VerifyOptions,
+): boolean {
+  return data.startsWith("sinfo://");
+}
+
+// TODO: Implement this correctly
+export function getUserFromQRCode(data: string): User | null {
+  if (!isValidQRCode(data, { subject: "user" })) return null;
+  return (jwt.decode(data.split("sinfo://")[1]) as JwtPayload).user as User;
 }

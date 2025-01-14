@@ -128,6 +128,12 @@ type SINFOSession = {
   unauthenticatedParticipants?: number;
 };
 
+type SINFOSessionStatus = {
+  status: "success" | "already" | "failed";
+  participantsNumber: number;
+  unauthenticatedParticipantsNumber: number;
+};
+
 type Prize = {
   name: string;
   img: string;
@@ -155,4 +161,15 @@ type SINFOFile = {
   name: string;
   extension: string;
   updated: string;
+};
+
+type QRCodeKind = "user" | "achievement";
+
+type QRCode = {
+  kind: QRCodeKind;
+};
+
+type QRCode = {
+  kind: "user";
+  user: User;
 };

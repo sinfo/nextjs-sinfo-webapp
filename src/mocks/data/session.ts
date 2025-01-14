@@ -164,3 +164,9 @@ export const MOCK_SESSION_KEYNOTE: SINFOSession = {
 };
 
 export const MOCK_SESSION: SINFOSession = MOCK_SESSION_KEYNOTE;
+
+export const MOCK_SESSION_STATUS: SINFOSessionStatus = {
+  status: "success",
+  participantsNumber: 25,
+  unauthenticatedParticipantsNumber: 12,
+};
