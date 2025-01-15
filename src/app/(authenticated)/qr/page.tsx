@@ -38,7 +38,7 @@ export default async function QR() {
     switch (convertToAppRole(user.role)) {
       case "Member":
       case "Admin":
-        return "#74C48A"; // green-light
+        return "#DB836E"; // Sinfo Tertiary
       case "Company":
         return "#A73939"; // SINFO Secondary
       case "Attendee":
@@ -48,14 +48,14 @@ export default async function QR() {
   })();
 
   return (
-    <div className="container m-auto h-full text-black">
+    <div className="container m-auto h-full">
       <div className="flex flex-col justify-center items-center text-center p-4 gap-y-4">
         <div className="flex flex-col justify-center items-center">
           <Image className="w-48" src={hackyPeeking} alt="Hacky Peaking" />
           <QRCode
             className="w-72 h-auto p-4 border-[14px] bg-white rounded-lg"
             style={{ borderColor }}
-            value={userQRCode}
+            value={`sinfo://${btoa(JSON.stringify({ kind: "user", user: { id: user.id, name: user.name, img: user.img, role: user.role } }))}`}
           />
         </div>
         <div>

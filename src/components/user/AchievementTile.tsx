@@ -2,7 +2,7 @@
 
 import Modal from "@/components/Modal";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 interface AchievementTileProps {
   achievement: Achievement;

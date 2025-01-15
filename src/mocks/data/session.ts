@@ -161,6 +161,8 @@ export const MOCK_SESSION_KEYNOTE: SINFOSession = {
     name: "Corsair Keyboard",
     img: "https://assets.corsair.com/image/upload/c_pad,q_auto,h_1024,w_1024,f_auto/products/Gaming-Keyboards/CH-910941A-NA/Gallery/K70_PRO_OPX_PBT_01.webp",
   },
+  participants: [MOCK_USER],
+  unauthenticatedParticipants: 3,
 };
 
 export const MOCK_SESSION: SINFOSession = MOCK_SESSION_KEYNOTE;

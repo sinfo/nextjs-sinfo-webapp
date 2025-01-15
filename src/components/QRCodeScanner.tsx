@@ -19,7 +19,7 @@ export default function QRCodeScanner({
   const scannerRef = useRef<QrScanner>();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [failedToRender, setFailedToRender] = useState<boolean>(false);
-  const [scanning, setScanning] = useState<boolean>(true);
+  const scanning = useRef<boolean>(true);
 
   useEffect(() => {
     if (videoRef.current && !scannerRef.current) {
@@ -27,8 +27,8 @@ export default function QRCodeScanner({
         videoRef.current,
         (result) => {
           if (result.data && scanning) {
-            setScanning(false);
-            setTimeout(() => setScanning(true), TIMEOUT_SCAN);
+            scanning.current = false;
+            setTimeout(() => (scanning.current = true), TIMEOUT_SCAN);
             onQRCodeScanned(result.data);
           }
         },
@@ -50,7 +50,6 @@ export default function QRCodeScanner({
     }
 
     return () => {
-      console.log("QR Code scanner stopped");
       if (!videoRef.current) scannerRef.current?.stop();
     };
   }, [scanning, onQRCodeScanned]);
@@ -72,14 +71,14 @@ export default function QRCodeScanner({
       className="relative h-full w-full bg-black overflow-hidden"
     >
       {topCard && (
-        <div className="absolute top-4 left-4 right-4 z-50">{topCard}</div>
+        <div className="absolute top-2 left-4 right-4 z-50">{topCard}</div>
       )}
       <video
         ref={videoRef}
         className="h-full w-full object-cover overflow-hidden"
       />
       {bottomCard && (
-        <div className="absolute bottom-4 left-4 right-4 z-50">
+        <div className="absolute bottom-2 left-4 right-4 z-50">
           {bottomCard}
         </div>
       )}

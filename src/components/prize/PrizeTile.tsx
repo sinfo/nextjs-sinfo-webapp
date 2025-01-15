@@ -1,7 +1,8 @@
 "use client";
 
-import { Trophy } from "lucide-react";
+import { Mail, Trophy } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
@@ -40,7 +41,7 @@ export function PrizeTile({
         alt={`${prize.name} prize.`}
       />
       {winner && (
-        <div className="flex flex-col justify-center items-center text-center">
+        <div className="flex flex-col justify-center items-center text-center gap-y-2 w-full">
           <Confetti
             width={windowWidth}
             height={windowHeight}
@@ -54,7 +55,14 @@ export function PrizeTile({
             src={winner.img}
             alt={winner.name}
           />
-          <span className="text-sm">{winner.name}</span>
+          <span className="">{winner.name}</span>
+          <Link
+            className="button button-primary text-sm w-full"
+            href={`mailto:${winner.mail}?subject=%5BSINFO%5D%20-%20Prize%20winner`}
+          >
+            <Mail size={16} />
+            Send email
+          </Link>
         </div>
       )}
       {pickWinner && participants && !winner && (
@@ -62,6 +70,7 @@ export function PrizeTile({
           <button
             className={`button button-primary text-sm w-full`}
             onClick={handlePickWinner}
+            disabled={participants.length === 0}
           >
             <Trophy size={16} />
             Pick a winner

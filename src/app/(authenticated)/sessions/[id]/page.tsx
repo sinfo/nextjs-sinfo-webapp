@@ -7,7 +7,7 @@ import { PrizeTile } from "@/components/prize";
 import { SessionService } from "@/services/SessionService";
 import { UserService } from "@/services/UserService";
 import { generateTimeInterval, isMember } from "@/utils/utils";
-import { CalendarClock, MapPin, Scan } from "lucide-react";
+import { CalendarClock, MapPin, Scan, Users } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,10 +29,10 @@ export default async function Session({ params }: { params: SessionParams }) {
   const user: User | null = await UserService.getMe(session!.cannonToken);
 
   return (
-    <div className="container m-auto h-full text-black">
+    <div className="container m-auto h-full">
       <div className="flex flex-col items-center gap-y-2 p-4 text-center text-sm">
         {sinfoSession.company && (
-          <span className="text-2xl text-gray-500">
+          <span className="text-2xl text-gray-600">
             {sinfoSession.company.name}
           </span>
         )}
@@ -44,7 +44,7 @@ export default async function Session({ params }: { params: SessionParams }) {
           alt="Session image."
         />
         <h3 className="text-xl font-bold">{sinfoSession.name}</h3>
-        <div className="flex items-center justify-center gap-x-2 text-sm text-gray-500">
+        <div className="flex items-center justify-center gap-x-2 text-sm text-gray-600">
           <span className="flex items-center justify-center gap-x-1">
             <CalendarClock size={16} strokeWidth={1} />
             {generateTimeInterval(sinfoSession.date, sinfoSession.duration)}
@@ -60,15 +60,25 @@ export default async function Session({ params }: { params: SessionParams }) {
         </span>
         <p className="font-light">{sinfoSession.description}</p>
       </div>
-      <div className="p-4">
-        <Link
-          className="button button-primary text-sm"
-          href={`/sessions/${sessionID}/check-in`}
-        >
-          <Scan size={16} />
-          Check-in
-        </Link>
-      </div>
+      {/* Members section */}
+      {user && isMember(user.role) && (
+        <div className="flex justify-center items-center p-4 gap-2">
+          <Link
+            className="button button-primary text-sm flex-1"
+            href={`/sessions/${sessionID}/participants`}
+          >
+            <Users size={16} />
+            Participants
+          </Link>
+          <Link
+            className="button button-primary text-sm flex-1"
+            href={`/sessions/${sessionID}/check-in`}
+          >
+            <Scan size={16} />
+            Check-in
+          </Link>
+        </div>
+      )}
       {/* ExtraInformation */}
       {sinfoSession.extraInformation?.length ? (
         <List title="Information">
