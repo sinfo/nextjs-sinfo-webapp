@@ -75,11 +75,12 @@ export const UserService = (() => {
 
   const getCVInfo = async (
     cannonToken: string,
-    userID?: string,
+    id?: string,
   ): Promise<SINFOFile | {} | null> => {
     try {
-      if (userID) {
-        const resp = await fetch(filesEndpoint + `/users/${userID}/cv`, {
+      const resp = await fetch(
+        id ? filesEndpoint + `/users/${id}/cv` : filesEndpoint + "/me",
+        {
           method: "GET",
           headers: {
             Authorization: `Bearer ${cannonToken}`,
@@ -88,21 +89,9 @@ export const UserService = (() => {
             revalidate: 86400, // 1 day
             tags: ["modified-cv"],
           },
-        });
-        if (resp.ok) return resp.json();
-      } else {
-        const resp = await fetch(filesEndpoint + "/me", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${cannonToken}`,
-          },
-          next: {
-            revalidate: 86400, // 1 day
-            tags: ["modified-cv"],
-          },
-        });
-        if (resp.ok) return resp.json();
-      }
+        },
+      );
+      if (resp.ok) return resp.json();
     } catch (error) {
       console.log(error);
     }
@@ -168,6 +157,58 @@ export const UserService = (() => {
     return success;
   };
 
+  type PromoteOptions =
+    | {
+        role: "company";
+        company: {
+          company: string;
+          edition: string;
+        };
+      }
+    | {
+        role: "team" | "admin";
+      };
+
+  const promote = async (
+    cannonToken: string,
+    id: string,
+    options: PromoteOptions,
+  ): Promise<boolean> => {
+    try {
+      const resp = await fetch(usersEndpoint + `/users/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        body: JSON.stringify(options),
+      });
+
+      if (resp.ok) return true;
+    } catch (error) {
+      console.error(error);
+    }
+    return false;
+  };
+
+  const demote = async (cannonToken: string, id: string): Promise<boolean> => {
+    try {
+      const resp = await fetch(usersEndpoint + `/users/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        body: JSON.stringify({ role: "user" }),
+      });
+
+      if (resp.ok) return true;
+    } catch (error) {
+      console.error(error);
+    }
+    return false;
+  };
+
   return {
     getUser,
     getMe,
@@ -177,5 +218,7 @@ export const UserService = (() => {
     getDownloadURL,
     uploadCV,
     deleteCV,
+    promote,
+    demote,
   };
 })();

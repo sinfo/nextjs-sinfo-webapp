@@ -11,6 +11,8 @@ import StandDetails from "./StandDetails";
 import { UserTile } from "@/components/user/UserTile";
 import { SessionTile } from "@/components/session";
 import EventDayButton from "@/components/EventDayButton";
+import { Scan } from "lucide-react";
+import Link from "next/link";
 
 interface CompanyParams {
   id: string;
@@ -44,7 +46,7 @@ export default async function Company({ params }: { params: CompanyParams }) {
   const companyConnections = await CompanyService.getConnections(companyID);
 
   return (
-    <div className="container m-auto h-full text-black">
+    <div className="container m-auto h-full">
       <div className="flex flex-col items-center gap-y-2 p-4 text-center">
         <h2 className="text-2xl font-bold">{company.name}</h2>
         <Image
@@ -61,6 +63,18 @@ export default async function Company({ params }: { params: CompanyParams }) {
           </span>
         )}
       </div>
+      {/* Members section */}
+      {user && isMember(user.role) && (
+        <div className="flex justify-center items-center p-4 gap-2">
+          <Link
+            className="button button-primary text-sm flex-1"
+            href={`/companies/${companyID}/promote`}
+          >
+            <Scan size={16} />
+            Promote
+          </Link>
+        </div>
+      )}
       {/* Days at the event */}
       {companyStands?.length ? (
         <GridList

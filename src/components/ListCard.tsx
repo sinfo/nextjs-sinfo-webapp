@@ -1,6 +1,7 @@
 import { LucideIcon, LucideProps } from "lucide-react";
 import Image, { ImageProps } from "next/image";
 import Link, { LinkProps } from "next/link";
+import { ReactNode } from "react";
 
 interface ListCardProps {
   img?: string;
@@ -12,9 +13,11 @@ interface ListCardProps {
   subtitle?: string;
   headtext?: string;
   label?: string;
+  labelExtraClassName?: string;
   link?: string;
   linkProps?: LinkProps;
   extraClassName?: string;
+  extraComponent?: ReactNode;
 }
 
 export default function ListCard({
@@ -25,7 +28,9 @@ export default function ListCard({
   subtitle,
   headtext,
   label,
+  labelExtraClassName,
   link,
+  extraComponent,
   imgProps,
   iconProps,
   linkProps,
@@ -55,7 +60,9 @@ export default function ListCard({
               </span>
             )}
             {label && (
-              <span className="bg-sinfo-secondary text-white rounded-md px-2 py-0.5 uppercase">
+              <span
+                className={`bg-sinfo-secondary text-white rounded-md px-2 py-0.5 uppercase ${labelExtraClassName ?? ""}`}
+              >
                 {label}
               </span>
             )}
@@ -69,6 +76,7 @@ export default function ListCard({
             </span>
           )}
         </div>
+        {extraComponent}
       </div>
     </Link>
   );

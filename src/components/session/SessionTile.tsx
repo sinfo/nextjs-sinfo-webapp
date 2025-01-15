@@ -6,6 +6,18 @@ interface SesionTileProps {
   onlyShowHours?: boolean;
 }
 
+export function getLabelClassName(text: string): string {
+  switch (text) {
+    case "Presentation":
+      return "!bg-sinfo-tertiary";
+    case "Workshop":
+      return "!bg-sinfo-quaternary";
+    case "Keynote":
+    default:
+      return ""; // Use default label color
+  }
+}
+
 export function SessionTile({
   session,
   onlyShowHours = false,
@@ -29,6 +41,7 @@ export function SessionTile({
         onlyHours: onlyShowHours,
       })}
       label={session.kind}
+      labelExtraClassName={getLabelClassName(session.kind)}
       link={`/sessions/${session.id}`}
       extraClassName={
         pastSession ? "!bg-neutral-200 hover:!bg-neutral-300" : ""

@@ -29,7 +29,7 @@ export default function List({
         <div className="flex flex-col">
           {title && <span className="text-lg font-bold">{title}</span>}
           {description && (
-            <span className="text-sm text-gray-500">{description}</span>
+            <span className="text-sm text-gray-600">{description}</span>
           )}
         </div>
         {linkText && (

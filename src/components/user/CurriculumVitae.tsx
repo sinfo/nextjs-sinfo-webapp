@@ -6,7 +6,7 @@ import { Session } from "next-auth";
 import Link from "next/link";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import MessageCard from "../MessageCard";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface CurriculumVitaeProps {
   user: User;
@@ -89,7 +89,7 @@ export default function CurriculumVitae({
   // If there is no file and is not supo
   if (!file && !currentUser) {
     return (
-      <div className="flex flex-col justify-center items-center text-center text-gray-500">
+      <div className="flex flex-col justify-center items-center text-center text-gray-600">
         <FileUser size={100} strokeWidth={1} />
         <span>No CV has been uploaded by this user</span>
       </div>
@@ -114,7 +114,7 @@ export default function CurriculumVitae({
             Delete
           </button>
         )}
-        <span className="text-gray-500 text-xs">
+        <span className="text-gray-600 text-xs">
           Updated at: {new Date(file.updated).toLocaleString()}
         </span>
       </div>

@@ -102,5 +102,6 @@ export function isValidQRCode(
 // TODO: Implement this correctly
 export function getUserFromQRCode(data: string): User | null {
   if (!isValidQRCode(data, { subject: "user" })) return null;
-  return (jwt.decode(data.split("sinfo://")[1]) as JwtPayload).user as User;
+  //return (jwt.decode(data.split("sinfo://")[1]) as JwtPayload).user as User;
+  return JSON.parse(atob(data.split("sinfo://")[1])).user as User;
 }
