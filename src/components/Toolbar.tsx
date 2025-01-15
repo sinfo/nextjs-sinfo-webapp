@@ -4,8 +4,10 @@ import { Image } from "next/dist/client/image-component";
 import { sinfoLogo } from "@/assets/images";
 import { signOut, useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft, LogOut, Menu, RefreshCcw } from "lucide-react";
+import { UserService } from "@/services/UserService";
+import { convertToAppRole } from "@/utils/utils";
 import BurgerBar from "@/components/BurgerBar";
 
 export default function Toolbar() {
@@ -13,12 +15,26 @@ export default function Toolbar() {
   const router = useRouter();
   const currPath = usePathname();
   const [showBurgerBar, setShowBurgerBar] = useState(false);
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
 
   const showMenu: boolean = currPath === "/home" || currPath === "/profile";
 
   async function handleExit() {
     await signOut();
   }
+
+  useEffect(() => {
+    async function fetchUserRole() {
+      if (session?.user) {
+        const user = await UserService.getMe(session.cannonToken);
+        if (user) {
+          const role = convertToAppRole(user.role);
+          setUserRole(role);
+        }
+      }
+    }
+    fetchUserRole();
+  }, [session]);
 
   return (
     <div className="bg-sinfo-primary">
@@ -57,7 +73,7 @@ export default function Toolbar() {
           </div>
         )}
       </div>
-      {showBurgerBar && <BurgerBar onCloseAction={() => setShowBurgerBar(false)} />}
+      {showBurgerBar && userRole && <BurgerBar userRole={userRole} onCloseAction={() => setShowBurgerBar(false)} />}
     </div>
   );
 }
