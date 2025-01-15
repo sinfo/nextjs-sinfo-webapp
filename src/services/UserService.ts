@@ -1,10 +1,20 @@
 import { revalidateTag } from "next/cache";
 
 export const UserService = (() => {
-  const usersEndpoint = process.env.CANNON_URL + "/users";
-  const filesEndpoint = process.env.CANNON_URL + "/files";
+  const usersEndpoint = process.env.NEXT_PUBLIC_CANNON_URL + "/users";
+  const filesEndpoint = process.env.NEXT_PUBLIC_CANNON_URL + "/files";
 
-  const getMe = async (cannonToken: string) => {
+  const getUser = async (id: string): Promise<User | null> => {
+    const resp = await fetch(`${usersEndpoint}/${id}`, {
+      next: {
+        revalidate: 86400, // 1 day
+      },
+    });
+    if (resp.ok) return (await resp.json()) as User;
+    return null;
+  };
+
+  const getMe = async (cannonToken: string): Promise<User | null> => {
     try {
       const resp = await fetch(usersEndpoint + "/me", {
         headers: {
@@ -17,15 +27,33 @@ export const UserService = (() => {
         },
       });
 
-      if (resp.ok) return resp.json();
-
+      if (resp.ok) return (await resp.json()) as User;
     } catch (error) {
       console.error(error);
     }
     return null;
   };
 
-  const demoteMe = async (cannonToken: string) => {
+  const getQRCode = async (cannonToken: string): Promise<string | null> => {
+    try {
+      const resp = await fetch(usersEndpoint + "/qr-code", {
+        headers: {
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        next: {
+          revalidate: 300, // 5 mins
+          tags: ["modified-me"],
+        },
+      });
+
+      if (resp.ok) return (await resp.json()).data;
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  };
+
+  const demoteMe = async (cannonToken: string): Promise<boolean> => {
     let success = false;
 
     try {
@@ -39,29 +67,46 @@ export const UserService = (() => {
       });
 
       if (resp.ok) success = true;
-
     } catch (error) {
       console.error(error);
     }
     return success;
   };
 
-  const getCVInfo = async (cannonToken: string) => {
+  const getCVInfo = async (
+    cannonToken: string,
+    id?: string,
+  ): Promise<SINFOFile | {} | null> => {
     try {
-      const resp = await fetch(filesEndpoint + "/me", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${cannonToken}`,
+      const resp = await fetch(
+        id ? filesEndpoint + `/users/${id}/cv` : filesEndpoint + "/me",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${cannonToken}`,
+          },
+          next: {
+            revalidate: 86400, // 1 day
+            tags: ["modified-cv"],
+          },
         },
-        next: {
-          revalidate: 86400, // 1 day
-          tags: ["modified-cv"],
-        },
-      });
+      );
       if (resp.ok) return resp.json();
-
     } catch (error) {
       console.log(error);
+    }
+    return null;
+  };
+
+  const getDownloadURL = async (
+    cannonToken: string,
+    fileID: string,
+  ): Promise<string | null> => {
+    try {
+      /* TODO: Implement this */
+      return `${filesEndpoint}/me/download?access_token=${cannonToken}`;
+    } catch (error) {
+      console.error(error);
     }
     return null;
   };
@@ -85,7 +130,6 @@ export const UserService = (() => {
         revalidateTag("modified-cv");
         success = true;
       }
-
     } catch (error) {
       console.error(error);
     }
@@ -107,12 +151,74 @@ export const UserService = (() => {
         revalidateTag("modified-cv");
         success = true;
       }
-
     } catch (error) {
       console.log(error);
     }
     return success;
   };
 
-  return { getMe, demoteMe, getCVInfo, uploadCV, deleteCV };
+  type PromoteOptions =
+    | {
+        role: "company";
+        company: {
+          company: string;
+          edition: string;
+        };
+      }
+    | {
+        role: "team" | "admin";
+      };
+
+  const promote = async (
+    cannonToken: string,
+    id: string,
+    options: PromoteOptions,
+  ): Promise<boolean> => {
+    try {
+      const resp = await fetch(usersEndpoint + `/users/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        body: JSON.stringify(options),
+      });
+
+      if (resp.ok) return true;
+    } catch (error) {
+      console.error(error);
+    }
+    return false;
+  };
+
+  const demote = async (cannonToken: string, id: string): Promise<boolean> => {
+    try {
+      const resp = await fetch(usersEndpoint + `/users/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        body: JSON.stringify({ role: "user" }),
+      });
+
+      if (resp.ok) return true;
+    } catch (error) {
+      console.error(error);
+    }
+    return false;
+  };
+
+  return {
+    getUser,
+    getMe,
+    getQRCode,
+    demoteMe,
+    getCVInfo,
+    getDownloadURL,
+    uploadCV,
+    deleteCV,
+    promote,
+    demote,
+  };
 })();

@@ -8,18 +8,17 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      spacing: {
+        navbar: "70px",
+      },
       colors: {
-        blue: {
-          DEFAULT: "#00509A",
-          dark: "#083D77"
+        sinfo: {
+          primary: "#323363",
+          secondary: "#A8381B",
+          tertiary: "#DB836E",
+          quaternary: "#E0B485",
         },
-        pink: {
-          light: "#B17EC9"
-        },
-        green: {
-          light: "#74C48A"
-        }
-      }
+      },
     },
   },
   plugins: [],

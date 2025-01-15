@@ -1,0 +1,153 @@
+export const MOCK_COMPANIES: Company[] = [
+  {
+    id: "company_1",
+    name: "Hitachi Consulting",
+    advertisementLvl: "none",
+    img: "https://echoboomer.pt/wp-content/uploads/2018/07/hitachiconsulting-destaque-echoboomer.jpg",
+  },
+  {
+    id: "company_2",
+    name: "Randstad Technologies",
+    advertisementLvl: "none",
+    img: "https://sinfo.ams3.digitaloceanspaces.com/static/23-sinfo/companies/randstadtechnologies.png",
+  },
+  {
+    id: "company_3",
+    name: "Vodafone",
+    advertisementLvl: "none",
+    img: "https://sinfo.ams3.cdn.digitaloceanspaces.com/static/27-sinfo/sponsors/sponsors_vodafone.png",
+  },
+  {
+    id: "company_4",
+    name: "Microsoft",
+    advertisementLvl: "none",
+    img: "https://sinfo.ams3.cdn.digitaloceanspaces.com/static/25-sinfo/companies/microsoft.png",
+  },
+  {
+    id: "company_5",
+    name: "Google",
+    advertisementLvl: "none",
+    img: "http://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png",
+  },
+  {
+    id: "company_6",
+    name: "TAP",
+    advertisementLvl: "other",
+    img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2Ftap_air_portugal.webp",
+  },
+  {
+    id: "company_7",
+    name: "Bliss Applications",
+    advertisementLvl: "none",
+    img: "https://sinfo.ams3.cdn.digitaloceanspaces.com/static/24-sinfo/companies/bliss.png",
+  },
+  {
+    id: "company_8",
+    name: "Adnovum",
+    site: "www.adnovum.com",
+    advertisementLvl: "none",
+    img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2Fadnovum.webp",
+  },
+  {
+    id: "company_9",
+    name: "Bar da AEIST",
+    advertisementLvl: "other",
+    img: "https://sinfo.ams3.cdn.digitaloceanspaces.com/static/27-sinfo/partners/bar-da-ae.png",
+  },
+  {
+    id: "company_10",
+    name: "Cloudflare",
+    site: "https://www.cloudflare.com",
+    advertisementLvl: "max",
+    img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2FCloudFlare-01.webp",
+  },
+  {
+    id: "company_11",
+    name: "atSistemas",
+    site: "https://www.atsistemas.pt",
+    advertisementLvl: "none",
+    img: "https://www.atsistemas.pt/media/logo-white.svg",
+  },
+  {
+    id: "company_12",
+    name: "Noesis",
+    advertisementLvl: "none",
+    img: "https://sinfo.ams3.cdn.digitaloceanspaces.com/static/24-sinfo/companies/noesis.png",
+  },
+];
+
+export const MOCK_COMPANY: Company = {
+  id: "company_10",
+  name: "Cloudflare",
+  site: "https://www.cloudflare.com",
+  advertisementLvl: "max",
+  img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2FCloudFlare-01.webp",
+  stands: [
+    { id: "13", date: "2025-02-15" },
+    { id: "13", date: "2025-02-16" },
+    { id: "13", date: "2025-02-17" },
+  ],
+  standDetails: {
+    chairs: 0,
+    table: false,
+    lettering: true,
+  },
+  members: [
+    {
+      id: "member_1",
+      name: "Dani Rodrigues",
+      role: "company",
+      img: "https://media.licdn.com/dms/image/v2/D4D03AQE4q8YE9OJowg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1727827743994?e=1741824000&v=beta&t=a5j9_5zhhhh-Pj3MAk3R_6uvyduHHnu_vBhOqerDt7E",
+      title: "University Programs",
+    },
+    {
+      id: "member_2",
+      role: "company",
+      name: "João Borges",
+      img: "https://media.licdn.com/dms/image/v2/D4D03AQFMjDv5-DKq5A/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1700582933178?e=1741824000&v=beta&t=2T23_6w92MXWxMsy3Y3-RNyVPVgDys7qirQJ0grII4Q",
+      title: "Systems Engineer",
+    },
+    {
+      id: "member_2",
+      role: "company",
+      name: "Anees Asghar",
+      img: "https://media.licdn.com/dms/image/v2/D4D03AQF1FzOQusxcDw/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1680626784682?e=1741824000&v=beta&t=pKhCswHukDEYb6Bl1nyYFbprmx5P04GXfRal577brhs",
+      title: "Systems Engineer",
+    },
+  ],
+  sessions: [
+    {
+      id: "session_6",
+      name: "Introducing Cloudflare",
+      kind: "Presentation",
+      img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2FCloudFlare-01.webp",
+      place: "Room 1",
+      description:
+        "Learn about Cloudflare's mission, services, and how it's shaping the future of the internet.",
+      company: MOCK_COMPANIES[9],
+      date: "2025-02-19T11:00:00Z",
+      duration: 20,
+      event: "31",
+      tickets: {},
+    },
+    {
+      id: "session_3",
+      name: "Deploy a Node.js App with Cloudflare Workers",
+      kind: "Workshop",
+      img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2FCloudFlare-01.webp",
+      place: "Room 1",
+      description:
+        "Hands-on session to learn how to deploy a scalable Node.js application using Cloudflare Workers.",
+      company: MOCK_COMPANIES[9],
+      date: "2025-02-18T09:00:00Z",
+      duration: 90,
+      event: "31",
+      tickets: {
+        needed: true,
+        start: "2024-04-07T22:00:00Z",
+        end: "2024-04-08T10:00:00Z",
+        max: 31,
+      },
+    },
+  ],
+};

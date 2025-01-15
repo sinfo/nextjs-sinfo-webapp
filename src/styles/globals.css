@@ -2,7 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-.bg-cloudy {
-  background-image: url("../assets/images/bg-cloudy.png");
-  background-size: cover;
+.button {
+  @apply flex justify-center items-center gap-x-2;
+}
+
+.button-primary {
+  @apply button bg-sinfo-primary text-white px-4 py-2 rounded-md shadow-md disabled:opacity-75;
+}
+
+.text-link {
+  @apply text-blue-600 hover:underline active:text-blue-900;
+}
+
+#scan-container .scan-region-highlight-svg {
+  @apply !stroke-sinfo-secondary;
 }
