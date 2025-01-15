@@ -4,7 +4,6 @@ import ListCard from "@/components/ListCard";
 import MessageCard from "@/components/MessageCard";
 import QRCodeScanner from "@/components/QRCodeScanner";
 import { SessionTile } from "@/components/session";
-import { MOCK_SESSION_STATUS } from "@/mocks/data";
 import { SessionService } from "@/services/SessionService";
 import { getUserFromQRCode } from "@/utils/utils";
 import { Ghost, UserMinus, UserPlus, Users } from "lucide-react";
@@ -20,12 +19,13 @@ export default function SessionCheckInScanner({
   sinfoSession,
 }: SessionCheckInScannerProps) {
   const [status, setStatus] = useState({
-    participantsNumber: 0,
-    unauthenticatedParticipantsNumber: 0,
+    participantsNumber: sinfoSession.participants?.length || 0,
+    unauthenticatedParticipantsNumber:
+      sinfoSession.unauthenticatedParticipants || 0,
   });
+  const [topCard, setTopCard] = useState<ReactNode | undefined>();
   const [bottomCard, setBottomCard] = useState<ReactNode | undefined>();
   const [statusCard, setStatusCard] = useState<ReactNode | undefined>();
-  const [topCard, setTopCard] = useState<ReactNode | undefined>();
   let cardsTimeout: NodeJS.Timeout;
 
   async function handleQRCodeScanned(data: string) {
@@ -112,12 +112,10 @@ export default function SessionCheckInScanner({
   }, [status, sinfoSession]);
 
   return (
-    <div className="container m-auto h-full text-black">
-      <QRCodeScanner
-        onQRCodeScanned={handleQRCodeScanned}
-        topCard={topCard}
-        bottomCard={bottomCard}
-      />
-    </div>
+    <QRCodeScanner
+      onQRCodeScanned={handleQRCodeScanned}
+      topCard={topCard}
+      bottomCard={bottomCard}
+    />
   );
 }

@@ -8,33 +8,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      animation: {
-        "pick-winner": "scrolling 5s ease-in",
-      },
-      keyframes: {
-        scrolling: {
-          "0%": {
-            transform: "translateX(0)",
-          },
-          "100%": {
-            transform: "translateX(-100%)",
-          },
-        },
+      spacing: {
+        navbar: "70px",
       },
       colors: {
         sinfo: {
           primary: "#323363",
-          secondary: "#A73939",
-        },
-        blue: {
-          DEFAULT: "#024D88",
-          dark: "#083D77",
-        },
-        pink: {
-          light: "#B17EC9",
-        },
-        green: {
-          light: "#74C48A",
+          secondary: "#A8381B",
+          tertiary: "#DB836E",
+          quaternary: "#E0B485",
         },
       },
     },

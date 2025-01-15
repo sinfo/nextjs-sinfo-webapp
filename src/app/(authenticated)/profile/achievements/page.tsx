@@ -28,10 +28,10 @@ export default async function Achievements() {
   ).sort() as AchievementKind[];
 
   return (
-    <div className="container m-auto h-full text-bold">
+    <div className="container m-auto h-full">
       <div className="flex flex-col items-start gap-y-2 p-4 text-start text-sm">
         <h1 className="text-2xl font-bold">Achievements</h1>
-        <span className="text-gray-500">
+        <span className="text-gray-600">
           Total points:{" "}
           {user?.achievements?.reduce((acc, a) => acc + a.value, 0) || 0}
         </span>

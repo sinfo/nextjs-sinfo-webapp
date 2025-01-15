@@ -24,13 +24,13 @@ export default function EventDayButton({
       disabled={!onClick}
     >
       <span
-        className={`flex items-center justify-center font-mono rounded-full w-10 h-10 shadow-md focus:shadow-none ${selected ? "text-sinfo-primary outline outline-sinfo-primary hover:bg-slate-50" : "text-white bg-sinfo-primary hover:bg-blue"}`}
+        className={`flex items-center justify-center font-mono rounded-full w-10 h-10 shadow-md focus:shadow-none ${selected ? "text-sinfo-primary outline outline-sinfo-primary hover:bg-slate-50" : "text-white bg-sinfo-primary"}`}
       >
         {getEventDay(date)}
       </span>
       <div className="flex flex-col items-center justify-center">
-        <span className="text-xs text-gray-500">{getEventMonth(date)}</span>
-        <span className="text-xs text-gray-400">
+        <span className="text-xs">{getEventMonth(date)}</span>
+        <span className="text-xs text-gray-600">
           ({getEventWeekday(date, true)})
         </span>
       </div>

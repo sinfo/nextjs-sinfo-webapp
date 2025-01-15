@@ -20,7 +20,7 @@ export default async function CompanyConnections({
   }
 
   return (
-    <div className="container m-auto h-full text-black">
+    <div className="container m-auto h-full">
       <List title="Company connections">
         {connections.map((u) => (
           <UserTile key={u.id} user={u} />

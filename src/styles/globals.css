@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.bg-sinfo-gradient {
-  background-image: url("../assets/images/bg-sinfo-gradient.svg");
-  background-size: cover;
-}
-
 .button {
   @apply flex justify-center items-center gap-x-2;
 }
@@ -16,7 +11,7 @@
 }
 
 .text-link {
-  @apply text-blue-500 hover:underline active:text-blue-900;
+  @apply text-blue-600 hover:underline active:text-blue-900;
 }
 
 #scan-container .scan-region-highlight-svg {

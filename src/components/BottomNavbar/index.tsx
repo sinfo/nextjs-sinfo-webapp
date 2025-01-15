@@ -22,11 +22,13 @@ export default async function BottomNavbar() {
   if (!user) return <></>;
 
   return (
-    <div className="container m-auto flex h-[70px] flex-row relative">
-      {navbarItemKeysByRole[convertToAppRole(user.role)].map((k) => (
-        <NavbarItem key={k} name={k} />
-      ))}
-      <QRCodeButton />
+    <div className="fixed z-100 bottom-0 left-0 right-0 bg-sinfo-primary">
+      <div className="relative container m-auto flex h-navbar flex-row">
+        {navbarItemKeysByRole[convertToAppRole(user.role)].map((k) => (
+          <NavbarItem key={k} name={k} />
+        ))}
+        <QRCodeButton />
+      </div>
     </div>
   );
 }

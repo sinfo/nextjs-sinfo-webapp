@@ -12,7 +12,6 @@ import { isCompany } from "@/utils/utils";
 import { Award, UserPen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { Suspense } from "react";
 
 const N_ACHIEVEMENTS = 5;
 const N_CONNECTIONS = 3;
@@ -26,7 +25,7 @@ export default async function Profile() {
   }
 
   return (
-    <div className="container m-auto h-full text-black">
+    <div className="container m-auto h-full">
       <ProfileHeader user={user} />
       <div className="px-4 py-2">
         <Link
@@ -44,9 +43,7 @@ export default async function Profile() {
           title="Curriculum Vitae (CV)"
           description="Submit your CV and get the chance to win a prize"
         >
-          <Suspense fallback={<div>Loading</div>}>
-            <CurriculumVitae session={session} user={user} currentUser />
-          </Suspense>
+          <CurriculumVitae session={session} user={user} currentUser />
         </List>
       )}
 
@@ -89,6 +86,7 @@ export default async function Profile() {
             subtitle="Click here to know more"
             link="/profile/achievements"
             icon={Award}
+            extraClassName="!bg-sinfo-primary !text-white"
           />
         )}
       </GridList>

@@ -13,7 +13,7 @@ export default async function Connections() {
   }
 
   return (
-    <div className="container m-auto h-full text-black">
+    <div className="container m-auto h-full">
       <List title="Connections">
         {user.connections.map((u) => (
           <UserTile key={u.id} user={u} />

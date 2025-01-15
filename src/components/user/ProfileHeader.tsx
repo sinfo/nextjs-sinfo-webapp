@@ -19,11 +19,11 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
         />
       </header>
       <div className="p-4">
-        <span className="text-gray-500 uppercase text-xs">
+        <span className="text-gray-600 uppercase text-xs">
           {convertToAppRole(user.role)}
         </span>
         <h5 className="text-lg font-bold">{user.name}</h5>
-        {user.title && <p className="text-gray-500">{user.title}</p>}
+        {user.title && <p className="text-gray-600">{user.title}</p>}
         {user.contacts && (
           <div className="flex items-center gap-x-2 py-2">
             {user.contacts.email && (
