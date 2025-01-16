@@ -64,14 +64,9 @@ type Achievement = {
 type Company = {
   id: string;
   name: string;
-  site?: string;
-  advertisementLvl: string;
   img: string;
-  contacts?: {
-    linkedin?: string;
-    email?: string;
-    website?: string;
-  };
+  site?: string;
+  advertisementLvl?: string; // TODO: This might not be a string
   sessions?: SINFOSession[];
   members?: User[];
   stands?: Stand[];
@@ -96,7 +91,7 @@ type Speaker = {
   title: string;
   img: string;
   company?: {
-    name: string;
+    name?: string;
     img?: string;
   };
   sessions?: SINFOSession[];
@@ -106,37 +101,39 @@ type Speaker = {
 type SINFOSession = {
   id: string;
   name: string;
-  kind: string;
-  img?: string;
-  place: string;
   description: string;
-  company?: Company;
-  speakers?: Speaker[];
+  kind: string;
+  event: string;
   date: string;
   duration: int; // minutes
+  place: string;
+  img?: string;
+  company?: Company;
+  speakers?: Speaker[];
   updated?: string;
-  event: string;
-  tickets: { needed?: boolean; start?: string; end?: string; max?: number };
+  tickets?: { needed?: boolean; start?: string; end?: string; max?: number };
   prize?: Prize;
-  breakfast?: bool;
   extraInformation?: {
     type: "info" | "warning" | "danger";
     title?: string;
     content?: string;
   }[];
   participants?: User[];
-  unauthenticatedParticipants?: number;
+  unregisteredParticipants?: number;
 };
 
 type SINFOSessionStatus = {
   status: "success" | "already" | "failed";
   participantsNumber: number;
-  unauthenticatedParticipantsNumber: number;
+  unregisteredParticipantsNumber: number;
 };
 
 type Prize = {
+  id: string;
+  edition: string;
   name: string;
   img: string;
+  sessions?: SINFOSession[];
 };
 
 type SINFOEvent = {

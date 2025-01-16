@@ -4,10 +4,12 @@ import List from "@/components/List";
 import ListCard from "@/components/ListCard";
 import MessageCard from "@/components/MessageCard";
 import { PrizeTile } from "@/components/prize";
+import AddToCalendarButton from "@/components/session/AddToCalendarButton";
+import { CalendarButton } from "@/components/session/CalendarButton";
 import { SessionService } from "@/services/SessionService";
 import { UserService } from "@/services/UserService";
 import { generateTimeInterval, isMember } from "@/utils/utils";
-import { CalendarClock, MapPin, Scan, Users } from "lucide-react";
+import { Calendar, CalendarClock, MapPin, Scan, Users } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -79,6 +81,15 @@ export default async function Session({ params }: { params: SessionParams }) {
           </Link>
         </div>
       )}
+      <div className="flex justify-center items-center p-4 gap-2">
+        <AddToCalendarButton
+          name={`[SINFO 32] - ${sinfoSession.name} (${sinfoSession.kind})`}
+          startDate={sinfoSession.date}
+          duration={sinfoSession.duration}
+          location={sinfoSession.place}
+          description={sinfoSession.description}
+        />
+      </div>
       {/* ExtraInformation */}
       {sinfoSession.extraInformation?.length ? (
         <List title="Information">

@@ -127,6 +127,8 @@ export const MOCK_SESSION_WORKSHOP: SINFOSession = {
     max: 31,
   },
   prize: {
+    id: "prize_1",
+    edition: "31",
     name: "FNAC Gift Card - 25€",
     img: "https://storemedia.repsolmove.com/s3fs-public/images/IMAGENS%20CATREPSOL%20MOVE-22.jpg?VersionId=84cwT8GJSRgvMaVlhCHB1uQh5riQSq9d",
   },
@@ -158,11 +160,13 @@ export const MOCK_SESSION_KEYNOTE: SINFOSession = {
     max: 20,
   },
   prize: {
+    id: "prize_2",
+    edition: "31",
     name: "Corsair Keyboard",
     img: "https://assets.corsair.com/image/upload/c_pad,q_auto,h_1024,w_1024,f_auto/products/Gaming-Keyboards/CH-910941A-NA/Gallery/K70_PRO_OPX_PBT_01.webp",
   },
   participants: [MOCK_USER],
-  unauthenticatedParticipants: 3,
+  unregisteredParticipants: 3,
 };
 
 export const MOCK_SESSION: SINFOSession = MOCK_SESSION_KEYNOTE;
@@ -170,5 +174,5 @@ export const MOCK_SESSION: SINFOSession = MOCK_SESSION_KEYNOTE;
 export const MOCK_SESSION_STATUS: SINFOSessionStatus = {
   status: "success",
   participantsNumber: 25,
-  unauthenticatedParticipantsNumber: 12,
+  unregisteredParticipantsNumber: 12,
 };
