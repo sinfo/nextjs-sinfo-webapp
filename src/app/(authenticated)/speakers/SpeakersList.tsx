@@ -21,7 +21,7 @@ export default function SpeakersList({ speakers }: SpeakersListProps) {
           speakers.filter(
             (speaker) =>
               speaker.name.toLowerCase().includes(text.toLowerCase()) ||
-              speaker.company?.name.toLowerCase().includes(text.toLowerCase()),
+              speaker.company?.name?.toLowerCase().includes(text.toLowerCase()),
           ),
         );
       }

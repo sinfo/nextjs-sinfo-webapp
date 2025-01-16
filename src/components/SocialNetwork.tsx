@@ -1,6 +1,11 @@
 import { SocialIcon } from "react-social-icons";
 
-type SocialNetworkType = "linkedin" | "email" | "github" | "website";
+type SocialNetworkType =
+  | "linkedin"
+  | "linkedinCompany"
+  | "email"
+  | "github"
+  | "website";
 
 interface SocialNetworkProps {
   text: string;
@@ -9,6 +14,7 @@ interface SocialNetworkProps {
 
 const baseHref: Record<SocialNetworkType, string> = {
   linkedin: "https://linkedin.com/in/",
+  linkedinCompany: "https://linkdein.com/company/",
   email: "mailto:",
   github: "https://github.com/",
   website: "",

@@ -20,8 +20,7 @@ export default function SessionCheckInScanner({
 }: SessionCheckInScannerProps) {
   const [status, setStatus] = useState({
     participantsNumber: sinfoSession.participants?.length || 0,
-    unauthenticatedParticipantsNumber:
-      sinfoSession.unauthenticatedParticipants || 0,
+    unregisteredParticipantsNumber: sinfoSession.unregisteredParticipants || 0,
   });
   const [topCard, setTopCard] = useState<ReactNode | undefined>();
   const [bottomCard, setBottomCard] = useState<ReactNode | undefined>();
@@ -64,8 +63,8 @@ export default function SessionCheckInScanner({
             <MessageCard type="danger" content="Invalid QR-Code" />,
           );
         setStatus({
-          unauthenticatedParticipantsNumber:
-            sessionStatus.unauthenticatedParticipantsNumber,
+          unregisteredParticipantsNumber:
+            sessionStatus.unregisteredParticipantsNumber,
           participantsNumber: sessionStatus.participantsNumber,
         });
       }
@@ -101,7 +100,7 @@ export default function SessionCheckInScanner({
             <span>{status.participantsNumber}</span>
             /
             <Ghost size={16} />
-            <span>{status.unauthenticatedParticipantsNumber}</span>
+            <span>{status.unregisteredParticipantsNumber}</span>
           </div>
           <button className="button button-primary flex-1">
             <UserPlus size={32} strokeWidth={1} />

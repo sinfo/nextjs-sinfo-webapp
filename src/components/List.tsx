@@ -1,6 +1,7 @@
 import Link, { LinkProps } from "next/link";
 
 export interface ListProps {
+  id?: string;
   title?: string;
   description?: string;
   link?: string;
@@ -13,6 +14,7 @@ export interface ListProps {
 }
 
 export default function List({
+  id,
   title,
   description,
   link,
@@ -24,7 +26,7 @@ export default function List({
   children,
 }: ListProps) {
   return (
-    <div className="flex flex-col gap-y-2 p-4">
+    <div className="flex flex-col gap-y-2 p-4" id={id}>
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           {title && <span className="text-lg font-bold">{title}</span>}
