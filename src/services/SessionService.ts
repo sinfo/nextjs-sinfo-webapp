@@ -29,13 +29,13 @@ export const SessionService = (() => {
     sessionId: string,
     {
       users = [],
-      unauthenticatedUsers = 0,
-    }: { users?: string[]; unauthenticatedUsers?: number },
+      unregisteredUsers = 0,
+    }: { users?: string[]; unregisteredUsers?: number },
   ): Promise<SINFOSessionStatus | null> => {
     try {
       const data = {
         users,
-        unauthenticatedUsers,
+        unregisteredUsers,
       };
       const resp = await fetch(`${sessionsEndpoint}/${sessionId}/check-in`, {
         method: "POST",

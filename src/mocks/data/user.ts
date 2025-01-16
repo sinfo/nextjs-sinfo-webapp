@@ -10,7 +10,7 @@ export const MOCK_USER: User = {
   },
   achievements: [],
   connections: [],
-  role: "team",
+  role: "user",
   bearer: [],
   mail: "gatesybill@gmail.com",
   registered: "2024-07-21T23:02:19.167Z",
