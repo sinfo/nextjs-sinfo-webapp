@@ -3,6 +3,7 @@ import { hackyPeeking } from "@/assets/images";
 import List from "@/components/List";
 import ListCard from "@/components/ListCard";
 import MessageCard from "@/components/MessageCard";
+import { ShowMore } from "@/components/ShowMore";
 import { PrizeTile } from "@/components/prize";
 import AddToCalendarButton from "@/components/session/AddToCalendarButton";
 import { CalendarButton } from "@/components/session/CalendarButton";
@@ -60,7 +61,9 @@ export default async function Session({ params }: { params: SessionParams }) {
         <span className="bg-sinfo-secondary text-white rounded-md px-3 py-1 font-bold uppercase">
           {sinfoSession.kind}
         </span>
-        <p className="font-light">{sinfoSession.description}</p>
+        <ShowMore lines={5} className="font-light">
+          {sinfoSession.description}
+        </ShowMore>
       </div>
       {/* Members section */}
       {user && isMember(user.role) && (

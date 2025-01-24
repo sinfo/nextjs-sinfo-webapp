@@ -1,4 +1,5 @@
 import List from "@/components/List";
+import { ShowMore } from "@/components/ShowMore";
 import { SessionTile } from "@/components/session";
 import { SpeakerService } from "@/services/SpeakerService";
 import Image from "next/image";
@@ -41,7 +42,9 @@ export default async function Speaker({ params }: { params: SpeakerParams }) {
             alt={`${speaker.company.name} logo`}
           />
         )}
-        <p className="text-sm font-light">{speaker.description}</p>
+        <ShowMore lines={5} className="text-sm font-light">
+          {speaker.description}
+        </ShowMore>
       </div>
       {/* Company Sessions */}
       {speakerSessions?.length ? (

@@ -18,7 +18,7 @@ export default function EventDayButton({
 }: EventDayButtonProps) {
   return (
     <button
-      className="flex flex-col items-center text-center gap-y-1 py-2"
+      className="flex flex-col items-center text-center gap-y-1 py-1"
       title={getEventFullDate(date)}
       onClick={onClick}
       disabled={!onClick}
