@@ -162,7 +162,7 @@ export const UserService = (() => {
         role: "company";
         company: {
           company: string;
-          edition: string;
+          edition?: string;
         };
       }
     | {

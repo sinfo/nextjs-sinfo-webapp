@@ -25,7 +25,6 @@ export default function GridCard({
   return (
     <Link href={link || "#"} {...linkProps}>
       <div className="w-[160px] min-h-[240px] flex flex-col items-center justify-between px-4 py-4 gap-y-2 text-sm bg-white rounded-md shadow-md text-center overflow-hidden hover:bg-slate-50 hover:shadow-sm active:bg-gray-200 active:shadow-none">
-        {/* TODO: Fix large names! Truncate is not working */}
         <span title={title} className="h-12 w-full line-clamp-2">
           {title}
         </span>

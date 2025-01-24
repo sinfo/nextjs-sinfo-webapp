@@ -1,4 +1,4 @@
-import { SocialIcon } from "react-social-icons";
+import { SocialIcon, SocialIconProps } from "react-social-icons";
 
 type SocialNetworkType =
   | "linkedin"
@@ -12,15 +12,37 @@ interface SocialNetworkProps {
   type: SocialNetworkType;
 }
 
-const baseHref: Record<SocialNetworkType, string> = {
-  linkedin: "https://linkedin.com/in/",
-  linkedinCompany: "https://linkdein.com/company/",
-  email: "mailto:",
-  github: "https://github.com/",
-  website: "",
+type SocialNetwork = {
+  baseHref: string;
+  extraProps?: SocialIconProps;
+  transform?(t: string, baseHref: string): string;
+};
+
+const socialNetworks: Record<SocialNetworkType, SocialNetwork> = {
+  linkedin: { baseHref: "https://linkedin.com/in/" },
+  linkedinCompany: { baseHref: "https://linkdein.com/company/" },
+  email: { baseHref: "mailto:" },
+  github: { baseHref: "https://github.com/" },
+  website: {
+    baseHref: "",
+    transform: (text) => {
+      if (!text.startsWith("http")) return `https://${text}`;
+      return text;
+    },
+    extraProps: { bgColor: "#323363" },
+  },
 };
 
 export function SocialNetwork({ text, type }: SocialNetworkProps) {
-  const url = `${baseHref[type]}${text}`;
-  return <SocialIcon url={url} style={{ height: 32, width: 32 }} />;
+  const socialNetwork = socialNetworks[type];
+  const url = socialNetwork.transform
+    ? socialNetwork.transform(text, socialNetwork.baseHref)
+    : `${socialNetwork.baseHref}${text}`;
+  return (
+    <SocialIcon
+      url={url}
+      style={{ height: 32, width: 32 }}
+      {...(socialNetwork.extraProps ?? {})}
+    />
+  );
 }

@@ -31,10 +31,7 @@ export default function CompanyPromoteScanner({
       if (
         await UserService.promote(cannonToken, scannedUser.id, {
           role: "company",
-          company: {
-            company: company.id,
-            edition: "32", // FIXME: Use dynamic value
-          },
+          company: { company: company.id },
         })
       ) {
         setStatusCard(

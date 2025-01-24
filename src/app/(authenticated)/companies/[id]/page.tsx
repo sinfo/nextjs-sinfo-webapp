@@ -13,6 +13,7 @@ import { SessionTile } from "@/components/session";
 import EventDayButton from "@/components/EventDayButton";
 import { Scan } from "lucide-react";
 import Link from "next/link";
+import { SocialNetwork } from "@/components/SocialNetwork";
 
 interface CompanyParams {
   id: string;
@@ -56,12 +57,12 @@ export default async function Company({ params }: { params: CompanyParams }) {
           src={company.img}
           alt={`${company.name} logo`}
         />
-        {/* TODO: Add contacts to company */}
         {hereToday && (
           <span className="bg-sinfo-primary text-white rounded-md px-3 py-1 text-lg font-bold uppercase">
             Here Today
           </span>
         )}
+        {company.site && <SocialNetwork type="website" text={company.site} />}
       </div>
       {/* Members section */}
       {user && isMember(user.role) && (
