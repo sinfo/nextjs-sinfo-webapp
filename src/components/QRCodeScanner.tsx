@@ -26,7 +26,7 @@ export default function QRCodeScanner({
       scannerRef.current = new QrScanner(
         videoRef.current,
         (result) => {
-          if (result.data && scanning) {
+          if (result.data && scanning.current) {
             scanning.current = false;
             setTimeout(() => (scanning.current = true), TIMEOUT_SCAN);
             onQRCodeScanned(result.data);

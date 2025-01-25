@@ -11,7 +11,8 @@ export default function QRCodeButton() {
   if (
     currPath === "/qr" ||
     currPath.endsWith("/check-in") ||
-    currPath.endsWith("/promote")
+    currPath.endsWith("/promote") ||
+    currPath.endsWith("/scan")
   )
     return <></>;
 

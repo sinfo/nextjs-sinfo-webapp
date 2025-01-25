@@ -10,6 +10,7 @@ import { UserService } from "@/services/UserService";
 import { CompanyService } from "@/services/CompanyService";
 import { convertToAppRole, isCompany } from "@/utils/utils";
 import Link from "next/link";
+import { ScanQrCode } from "lucide-react";
 
 export default async function QR() {
   const session = await getServerSession(authOptions);
@@ -25,8 +26,8 @@ export default async function QR() {
   let company: Company | null = null;
   if (isCompany(user.role)) {
     // assumes that cannon api only provides the company associated with the current edition
-    if (user.company) {
-      company = await CompanyService.getCompany(user.company.id);
+    if (user.company?.length) {
+      company = await CompanyService.getCompany(user.company[0].company);
     } else {
       await demoteMe(session!.cannonToken);
     }
@@ -49,13 +50,15 @@ export default async function QR() {
 
   return (
     <div className="container m-auto h-full">
-      <div className="flex flex-col justify-center items-center text-center p-4 gap-y-4">
+      <div className="h-full flex flex-col justify-center items-center text-center p-4 gap-y-4">
         <div className="flex flex-col justify-center items-center">
-          <Image className="w-48" src={hackyPeeking} alt="Hacky Peaking" />
+          {!isCompany(user.role) && (
+            <Image className="w-48" src={hackyPeeking} alt="Hacky Peaking" />
+          )}
           <QRCode
             className="w-72 h-auto p-4 border-[14px] bg-white rounded-lg"
             style={{ borderColor }}
-            value={`sinfo://${btoa(JSON.stringify({ kind: "user", user: { id: user.id, name: user.name, img: user.img, role: user.role } }))}`}
+            value={userQRCode}
           />
         </div>
         <div>
@@ -64,17 +67,25 @@ export default async function QR() {
             {convertToAppRole(user.role)}
           </p>
         </div>
-        {user.company && (
-          <Link href={`/companies/${user.company.id}`}>
+        {company && (
+          <Link href={`/companies/${company.id}`}>
             <Image
               className="object-contain"
               width={100}
               height={100}
-              src={user.company.img}
-              alt={`${user.company.name} logo`}
+              src={company.img}
+              alt={`${company.name} logo`}
             />
           </Link>
         )}
+        <Link
+          href="/qr/scan"
+          className="button button-primary text-lg w-full"
+          style={{ backgroundColor: borderColor }}
+        >
+          <ScanQrCode size={24} />
+          Scan
+        </Link>
       </div>
     </div>
   );

@@ -35,5 +35,24 @@ export const CompanyService = (() => {
     return null;
   };
 
-  return { getCompany, getCompanies, getConnections };
+  const sign = async (
+    cannonToken: string,
+    id: string,
+    userId: string,
+  ): Promise<User | null> => {
+    try {
+      const resp = await fetch(`${companiesEndpoint}/${id}/sign/${userId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${cannonToken}`,
+        },
+      });
+      if (resp.ok) return (await resp.json()) as User;
+    } catch (e) {
+      console.error(e);
+    }
+    return null;
+  };
+
+  return { getCompany, getCompanies, getConnections, sign };
 })();
