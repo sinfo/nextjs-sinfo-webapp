@@ -4,8 +4,14 @@ export const UserService = (() => {
   const usersEndpoint = process.env.NEXT_PUBLIC_CANNON_URL + "/users";
   const filesEndpoint = process.env.NEXT_PUBLIC_CANNON_URL + "/files";
 
-  const getUser = async (id: string): Promise<User | null> => {
+  const getUser = async (
+    cannonToken: string,
+    id: string,
+  ): Promise<User | null> => {
     const resp = await fetch(`${usersEndpoint}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${cannonToken}`,
+      },
       next: {
         revalidate: 86400, // 1 day
       },
