@@ -1,4 +1,4 @@
-import jwt, { JwtPayload, VerifyOptions } from "jsonwebtoken";
+import { VerifyOptions } from "jsonwebtoken";
 
 export function convertToAppRole(role: string): UserRole {
   switch (role) {
@@ -24,7 +24,7 @@ export function isCompany(role: string): boolean {
   return appRole === "Company";
 }
 
-export function humanizeAchivementKind(kind: AchievementKind): string {
+export function formatAchievementKind(kind: AchievementKind): string {
   switch (kind) {
     case "cv":
       return "CV";
@@ -42,7 +42,7 @@ export function trimText(text: string, n: number): string {
 export function generateTimeInterval(
   timestamp: string,
   durationMinutes: number,
-  { onlyHours }: { onlyHours?: boolean } = {},
+  { onlyHours }: { onlyHours?: boolean } = {}
 ): string {
   // extract "HH:mm" from ISO string
   const formatTime = (date: Date) => date.toISOString().slice(11, 16);
@@ -94,7 +94,7 @@ export function getEventFullDate(date: string): string {
 // TODO: Implement this correctly
 export function isValidQRCode(
   data: string,
-  jwtOptions?: VerifyOptions,
+  jwtOptions?: VerifyOptions
 ): boolean {
   return data.startsWith("sinfo://");
 }

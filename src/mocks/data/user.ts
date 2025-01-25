@@ -1,3 +1,5 @@
+import { MOCK_ACHIEVEMENTS } from "./achievement";
+
 export const MOCK_USER: User = {
   id: "mock_user_id",
   name: "Bill Gates",
@@ -8,7 +10,7 @@ export const MOCK_USER: User = {
     email: "gatesybill@gmail.com",
     github: "billgates",
   },
-  achievements: [],
+  editionAchievements: [MOCK_ACHIEVEMENTS[0], MOCK_ACHIEVEMENTS[3]],
   connections: [],
   role: "user",
   bearer: [],

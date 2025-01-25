@@ -11,7 +11,7 @@ type User = {
     email?: string;
     github?: string;
   };
-  achievements?: Achievement[];
+  editionAchievements?: Achievement[];
   connections?: User[];
   company?: Company;
   mail?: string;

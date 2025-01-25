@@ -3,29 +3,37 @@ import GridList from "@/components/GridList";
 import AchievementTile from "@/components/user/AchievementTile";
 import { AchievementService } from "@/services/AchievementService";
 import { UserService } from "@/services/UserService";
-import { humanizeAchivementKind } from "@/utils/utils";
+import { formatAchievementKind } from "@/utils/utils";
 import { getServerSession } from "next-auth";
 
 export default async function Achievements() {
-  const achievements = await AchievementService.getAchievements();
-
-  if (!achievements) {
-    return <div>Achievements not found.</div>;
-  }
-
   const session = await getServerSession(authOptions);
   const user: User | null = await UserService.getMe(session!.cannonToken);
+
+  let achievements = await AchievementService.getAchievements();
+  if (!achievements || achievements.length == 0) {
+    return (
+      <div className="text-gray-600 text-center mt-5">
+        Achievements not available yet.
+      </div>
+    );
+  }
 
   const achievementsByKind = achievements.reduce(
     (acc, a) => {
       const kindAchievements = [...(acc[a.kind] || []), a];
       return { ...acc, [a.kind]: kindAchievements };
     },
-    {} as Record<AchievementKind, Achievement[]>,
+    {} as Record<AchievementKind, Achievement[]>
   );
+
   const sortedKinds = Object.keys(
-    achievementsByKind,
+    achievementsByKind
   ).sort() as AchievementKind[];
+
+  const userAchievementIds = new Set(
+    user?.editionAchievements?.map((a) => a.id) || []
+  );
 
   return (
     <div className="container m-auto h-full">
@@ -33,21 +41,17 @@ export default async function Achievements() {
         <h1 className="text-2xl font-bold">Achievements</h1>
         <span className="text-gray-600">
           Total points:{" "}
-          {user?.achievements?.reduce((acc, a) => acc + a.value, 0) || 0}
+          {user?.editionAchievements?.reduce((acc, a) => acc + a.value, 0) || 0}
         </span>
         {/* TODO: Add bullshit text, ask ChatGPT or Copilot */}
       </div>
       {sortedKinds.map((k) => (
-        <GridList key={k} title={humanizeAchivementKind(k)}>
-          {achievementsByKind[k].slice(0, 30).map((a) => (
+        <GridList key={k} title={formatAchievementKind(k)}>
+          {achievementsByKind[k].map((a) => (
             <AchievementTile
               key={a.id}
               achievement={a}
-              achieved={
-                !!user?.achievements?.find(
-                  (achievement) => achievement.id === a.id,
-                )
-              }
+              achieved={userAchievementIds.has(a.id)}
             />
           ))}
         </GridList>
