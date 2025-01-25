@@ -11,9 +11,18 @@ type User = {
     email?: string;
     github?: string;
   };
+  signatures?: {
+    edition: string;
+    day: string;
+    redeemed: boolean;
+    signatures: SINFOSignature[];
+  }[];
   achievements?: Achievement[];
   connections?: User[];
-  company?: Company;
+  company?: {
+    edition: string;
+    company: string;
+  }[];
   mail?: string;
   bearer?:
     | []
@@ -59,6 +68,12 @@ type Achievement = {
   session?: Session;
   company?: Company;
   updated?: string;
+};
+
+type SINFOSignature = {
+  companyId: string;
+  date: string;
+  _id: string;
 };
 
 type Company = {

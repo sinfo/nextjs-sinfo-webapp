@@ -46,7 +46,7 @@ export const UserService = (() => {
         },
       });
 
-      if (resp.ok) return (await resp.json()).data;
+      if (resp.ok) return (await resp.json()).token;
     } catch (error) {
       console.error(error);
     }
@@ -175,7 +175,7 @@ export const UserService = (() => {
     options: PromoteOptions,
   ): Promise<boolean> => {
     try {
-      const resp = await fetch(usersEndpoint + `/users/${id}`, {
+      const resp = await fetch(usersEndpoint + `/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -193,7 +193,7 @@ export const UserService = (() => {
 
   const demote = async (cannonToken: string, id: string): Promise<boolean> => {
     try {
-      const resp = await fetch(usersEndpoint + `/users/${id}`, {
+      const resp = await fetch(usersEndpoint + `/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
