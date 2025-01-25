@@ -67,6 +67,8 @@ type Achievement = {
   };
   session?: Session;
   company?: Company;
+  users?: string[];
+  unregisteredUsers?: number;
   updated?: string;
 };
 

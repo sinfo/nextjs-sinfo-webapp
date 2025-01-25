@@ -1,3 +1,5 @@
+import { revalidatePath } from "next/cache";
+
 export const SessionService = (() => {
   const sessionsEndpoint = process.env.NEXT_PUBLIC_CANNON_URL + "/session";
 
@@ -37,7 +39,7 @@ export const SessionService = (() => {
         users,
         unregisteredUsers,
       };
-      const resp = await fetch(`${sessionsEndpoint}/${sessionId}/check-in`, {
+      const resp = await fetch(`${sessionsEndpoint}s/${sessionId}/check-in`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +47,15 @@ export const SessionService = (() => {
         },
         body: JSON.stringify(data),
       });
-      if (resp.ok) (await resp.json()) as SINFOSessionStatus;
+      if (resp.ok) {
+        // TODO: Revalidate achievements path
+        const achievementData = (await resp.json()) as Achievement;
+        return {
+          status: "success",
+          participantsNumber: achievementData.users?.length,
+          unregisteredParticipantsNumber: achievementData.unregisteredUsers,
+        } as SINFOSessionStatus;
+      }
     } catch (error) {
       console.error(error);
     }

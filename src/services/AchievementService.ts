@@ -12,5 +12,23 @@ export const AchievementService = (() => {
     return null;
   };
 
-  return { getAchievements };
+  const getAchievementBySession = async (
+    cannonToken: string,
+    sessionId: string,
+  ): Promise<Achievement | null> => {
+    try {
+      const resp = await fetch(`${achievementsEndpoint}/session/${sessionId}`, {
+        headers: {
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        next: { revalidate: 5 },
+      });
+      if (resp.ok) return (await resp.json()) as Achievement;
+    } catch (e) {
+      console.error(e);
+    }
+    return null;
+  };
+
+  return { getAchievements, getAchievementBySession };
 })();
