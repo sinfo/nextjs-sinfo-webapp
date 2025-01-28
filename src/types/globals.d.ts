@@ -11,7 +11,11 @@ type User = {
     email?: string;
     github?: string;
   };
-  editionAchievements?: Achievement[];
+  editionAchievements?: {
+    achievement: Achievement;
+    achieved: string;
+  }[];
+  lastSpin?: string;
   connections?: User[];
   company?: Company;
   mail?: string;

@@ -105,3 +105,35 @@ export function getUserFromQRCode(data: string): User | null {
   //return (jwt.decode(data.split("sinfo://")[1]) as JwtPayload).user as User;
   return JSON.parse(atob(data.split("sinfo://")[1])).user as User;
 }
+
+export function isToday(date: Date): boolean {
+  const today = new Date();
+
+  return (
+    date.getFullYear() === today.getFullYear() &&
+    date.getMonth() === today.getMonth() &&
+    date.getDate() === today.getDate()
+  );
+}
+
+export function extractSpinWheelAchievements(user: User) {
+  return (
+    user.editionAchievements?.filter((a) => {
+      // reject if not stand achievement
+      if (a.achievement.kind != "stand" || a.achievement.company === undefined)
+        return false;
+
+      // reject if not achieved today
+      const achievedTime = new Date(a.achieved);
+      if (isNaN(achievedTime.getTime()) || !isToday(achievedTime)) return false;
+
+      // accept if no spins yet
+      if (user.lastSpin === undefined) return true;
+      const lastSpinTime = new Date(user.lastSpin);
+      if (isNaN(lastSpinTime.getTime())) return true;
+
+      // accept if achieved after last spin
+      return achievedTime > lastSpinTime;
+    }) || []
+  );
+}

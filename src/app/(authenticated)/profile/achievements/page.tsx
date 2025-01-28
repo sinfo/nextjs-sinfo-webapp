@@ -32,7 +32,7 @@ export default async function Achievements() {
   ).sort() as AchievementKind[];
 
   const userAchievementIds = new Set(
-    user?.editionAchievements?.map((a) => a.id) || []
+    user?.editionAchievements?.map((a) => a.achievement.id) || []
   );
 
   return (
@@ -40,8 +40,11 @@ export default async function Achievements() {
       <div className="flex flex-col items-start gap-y-2 p-4 text-start text-sm">
         <h1 className="text-2xl font-bold">Achievements</h1>
         <span className="text-gray-600">
-          Total points:{" "}
-          {user?.editionAchievements?.reduce((acc, a) => acc + a.value, 0) || 0}
+          Total points:&nbsp;
+          {user?.editionAchievements?.reduce(
+            (acc, a) => acc + a.achievement.value,
+            0
+          ) || 0}
         </span>
         {/* TODO: Add bullshit text, ask ChatGPT or Copilot */}
       </div>

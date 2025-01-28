@@ -1,3 +1,5 @@
+import { MOCK_COMPANIES } from "./company";
+
 export const MOCK_ACHIEVEMENTS: Achievement[] = [
   {
     id: "achievement_cv_1",
@@ -9,35 +11,39 @@ export const MOCK_ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: "achievement_stand_1",
-    name: "Visit Mercedez Benz",
+    name: "Visit Microsoft",
     img: "https://sinfo.ams3.cdn.digitaloceanspaces.com/static/27-sinfo/achievements/stands/stands_mercedes-benz_1.png",
     value: 50,
     kind: "stand",
-    description: "Visit Mercedez Benz.",
+    description: "Visit Microsoft.",
+    company: MOCK_COMPANIES[3],
   },
   {
     id: "achievement_stand_2",
-    name: "Visit Freiheit",
+    name: "Visit Google",
     img: "https://sinfo.ams3.cdn.digitaloceanspaces.com/static/27-sinfo/achievements/stands/stands_freiheit.com-technologies-gmbh_1.png",
     value: 50,
     kind: "stand",
-    description: "Visit Cloudflare.",
+    description: "Visit Google.",
+    company: MOCK_COMPANIES[4],
   },
   {
     id: "achievement_stand_3",
-    name: "Visit Talkdesk",
+    name: "Visit Bliss Applications",
     img: "https://sinfo.ams3.cdn.digitaloceanspaces.com/static/27-sinfo/achievements/stands/stands_talkdesk_1.png",
     value: 50,
     kind: "stand",
-    description: "Visit Talkdesk.",
+    description: "Visit Bliss Applications.",
+    company: MOCK_COMPANIES[6],
   },
   {
     id: "achievement_stand_4",
-    name: "Visit Deloitte",
+    name: "Visit Cloudflare",
     img: "https://sinfo.ams3.cdn.digitaloceanspaces.com/static/27-sinfo/achievements/stands/stands_deloitte_1.png",
     value: 50,
     kind: "stand",
-    description: "Visit Deloitte.",
+    description: "Visit Cloudflare.",
+    company: MOCK_COMPANIES[9],
   },
   {
     id: "achievement_presentation_1",
