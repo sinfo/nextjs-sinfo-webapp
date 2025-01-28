@@ -21,15 +21,15 @@ export const MOCK_USER: User = {
     },
     {
       achievement: MOCK_ACHIEVEMENTS[2],
-      achieved: "2025-01-21T10:33:23.822Z",
+      achieved: "2025-02-21T10:33:23.822Z",
     },
     {
       achievement: MOCK_ACHIEVEMENTS[3],
-      achieved: "2025-01-21T10:56:23.822Z",
+      achieved: "2025-02-21T10:56:23.822Z",
     },
     {
       achievement: MOCK_ACHIEVEMENTS[4],
-      achieved: "2025-01-21T11:07:23.822Z",
+      achieved: "2025-02-21T11:07:23.822Z",
     },
   ],
   connections: [],
@@ -38,7 +38,7 @@ export const MOCK_USER: User = {
   mail: "gatesybill@gmail.com",
   registered: "2024-07-21T23:02:19.167Z",
   updated: "2024-11-16T23:02:19.167Z",
-  lastSpin: "2025-01-21T10:41:09.822Z",
+  lastSpin: "2025-02-21T10:41:09.822Z",
 };
 
 export const MOCK_USER_QR_CODE: string =
