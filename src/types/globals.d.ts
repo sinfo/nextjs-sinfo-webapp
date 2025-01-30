@@ -91,7 +91,7 @@ type Company = {
 };
 
 type Stand = {
-  id: string;
+  standId: string;
   date: string;
 };
 
