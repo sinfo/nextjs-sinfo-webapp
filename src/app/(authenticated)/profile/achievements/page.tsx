@@ -16,6 +16,9 @@ export default async function Achievements() {
   const session = await getServerSession(authOptions);
   const user: User | null = await UserService.getMe(session!.cannonToken);
 
+  const userAchievements =
+    user && achievements?.filter((a) => a.users?.includes(user.id));
+
   const achievementsByKind = achievements.reduce(
     (acc, a) => {
       const kindAchievements = [...(acc[a.kind] || []), a];
@@ -33,7 +36,7 @@ export default async function Achievements() {
         <h1 className="text-2xl font-bold">Achievements</h1>
         <span className="text-gray-600">
           Total points:{" "}
-          {user?.achievements?.reduce((acc, a) => acc + a.value, 0) || 0}
+          {userAchievements?.reduce((acc, a) => acc + a.value, 0) || 0}
         </span>
         {/* TODO: Add bullshit text, ask ChatGPT or Copilot */}
       </div>
@@ -43,11 +46,7 @@ export default async function Achievements() {
             <AchievementTile
               key={a.id}
               achievement={a}
-              achieved={
-                !!user?.achievements?.find(
-                  (achievement) => achievement.id === a.id,
-                )
-              }
+              achieved={!!user && a.users?.includes(user.id)}
             />
           ))}
         </GridList>

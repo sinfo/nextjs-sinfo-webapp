@@ -35,7 +35,7 @@ export default async function Speaker({ params }: { params: SpeakerParams }) {
         <h4>{speaker.title}</h4>
         {speaker.company?.img && (
           <Image
-            className="h-12 w-16 object-contain"
+            className="h-16 w-16 object-contain"
             width={64}
             height={64}
             src={speaker.company.img}

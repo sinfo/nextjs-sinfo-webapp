@@ -49,7 +49,7 @@ export default function MessageCard({
 
   return (
     <div
-      className={`flex justify-start items-center gap-x-4 px-4 py-2 bg-white border-l-4 rounded-md shadow-md text-sm ${customizationByType[type].class} ${onClick ? "cursor-pointer" : ""}`}
+      className={`flex w-full justify-start items-center gap-x-4 px-4 py-2 bg-white border-l-4 rounded-md shadow-md text-sm ${customizationByType[type].class} ${onClick ? "cursor-pointer" : ""}`}
       onClick={onClick}
     >
       <Icon size={32} />

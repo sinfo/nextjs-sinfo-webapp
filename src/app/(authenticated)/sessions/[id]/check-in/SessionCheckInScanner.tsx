@@ -6,7 +6,7 @@ import QRCodeScanner from "@/components/QRCodeScanner";
 import { SessionTile } from "@/components/session";
 import { SessionService } from "@/services/SessionService";
 import { getUserFromQRCode } from "@/utils/utils";
-import { Ghost, ScanEye, UserMinus, UserPlus, Users } from "lucide-react";
+import { Ghost, UserMinus, UserPlus, Users } from "lucide-react";
 import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 interface SessionCheckInScannerProps {
@@ -19,14 +19,16 @@ export default function SessionCheckInScanner({
   sinfoSession,
 }: SessionCheckInScannerProps) {
   const [status, setStatus] = useState({
-    participantsNumber: sinfoSession.participants?.length || 0,
-    unregisteredParticipantsNumber: sinfoSession.unregisteredParticipants || 0,
+    participants: [] as string[],
+    unregisteredParticipants: 0,
   });
   const [topCard, setTopCard] = useState<ReactNode | undefined>();
   const [bottomCard, setBottomCard] = useState<ReactNode | undefined>();
   const [statusCard, setStatusCard] = useState<ReactNode | undefined>();
-  const [unregisteredUsersCounter, setUnregisteredUsersCounter] =
-    useState<number>(0);
+  const [
+    unregisteredUsersSubmittedCounter,
+    setUnregisteredUsersSubmittedCounter,
+  ] = useState<number>(0);
   const cardsTimeout = useRef<NodeJS.Timeout>();
   const updateSessionStatusTimeout = useRef<NodeJS.Timeout>();
 
@@ -45,9 +47,8 @@ export default function SessionCheckInScanner({
           5 * 1000,
         ); // Update every 5 seconds
         setStatus({
-          participantsNumber: sessionStatus.participantsNumber,
-          unregisteredParticipantsNumber:
-            sessionStatus.unregisteredParticipantsNumber,
+          participants: sessionStatus.participants,
+          unregisteredParticipants: sessionStatus.unregisteredParticipants,
         });
       }
       return sessionStatus;
@@ -100,7 +101,7 @@ export default function SessionCheckInScanner({
 
   const handleUnregisteredUser = useCallback(
     async (count: number) => {
-      const sessionStatus = sessionUpdate({ unregisteredUsers: count });
+      const sessionStatus = await sessionUpdate({ unregisteredUsers: count });
       if (!sessionStatus) {
         setBottomCard(
           <MessageCard
@@ -119,7 +120,7 @@ export default function SessionCheckInScanner({
             }
           />,
         );
-        setUnregisteredUsersCounter((c) => c + count);
+        setUnregisteredUsersSubmittedCounter((c) => c + count);
       }
     },
     [sessionUpdate],
@@ -142,19 +143,16 @@ export default function SessionCheckInScanner({
           <button
             className="button button-primary !bg-sinfo-secondary flex-1"
             onClick={() => handleUnregisteredUser(-1)}
-            disabled={unregisteredUsersCounter <= 0}
+            disabled={unregisteredUsersSubmittedCounter <= 0}
           >
             <UserMinus size={32} strokeWidth={1} />
           </button>
           <div className="flex justify-center items-center bg-white rounded-md text-sm flex-1 p-4 gap-x-2">
             <Users size={16} />
-            <span>{status.participantsNumber}</span>
+            <span>{status.participants?.length ?? 0}</span>
             /
             <Ghost size={16} />
-            <span>{status.unregisteredParticipantsNumber}</span>
-            /
-            <ScanEye size={16} />
-            <span>{unregisteredUsersCounter}</span>
+            <span>{status.unregisteredParticipants}</span>
           </div>
           <button
             className="button button-primary flex-1"
@@ -165,7 +163,12 @@ export default function SessionCheckInScanner({
         </div>
       </div>,
     );
-  }, [status, sinfoSession, handleUnregisteredUser, unregisteredUsersCounter]);
+  }, [
+    status,
+    sinfoSession,
+    handleUnregisteredUser,
+    unregisteredUsersSubmittedCounter,
+  ]);
 
   useEffect(() => {
     sessionUpdate();

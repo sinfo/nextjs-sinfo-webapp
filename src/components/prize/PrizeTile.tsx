@@ -1,5 +1,6 @@
 "use client";
 
+import { UserService } from "@/services/UserService";
 import { Mail, Trophy } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,26 +8,52 @@ import { useState } from "react";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 
+type PrizeParticipant = {
+  userId: string;
+  entries?: number;
+};
+
 interface PrizeTileProps {
   prize: Prize;
-  participants?: User[];
+  participants?: PrizeParticipant[];
   pickWinner?: boolean;
+  cannonToken?: string;
 }
 
 export function PrizeTile({
   prize,
   participants,
+  cannonToken,
   pickWinner = false,
 }: PrizeTileProps) {
-  const [winner, setWinner] = useState<User | null>(null);
+  const [winner, setWinner] = useState<User>();
   const { width: windowWidth, height: windowHeight } = useWindowSize();
 
-  function handlePickWinner() {
-    if (participants) {
-      const winnerIndex = Math.floor(
-        Math.random() * (participants.length || 0),
+  async function handlePickWinner() {
+    if (participants?.length && cannonToken) {
+      // All the participants should at least have one entry
+      const totalEntries = participants.reduce(
+        (acc, p) => acc + (p.entries || 1),
+        0,
       );
-      setWinner(participants[winnerIndex]);
+      let selectedEntry = Math.floor(Math.random() * totalEntries);
+
+      // This function finds the winner by summing the entries
+      // of each participant until the random number belongs
+      // to the selected participant.
+      const winner = participants.find((p) => {
+        const participantEntries = p.entries || 1;
+        selectedEntry -= participantEntries;
+        return selectedEntry < 0;
+      })!;
+
+      const user = await UserService.getUser(cannonToken, winner.userId);
+      if (!user) {
+        console.error("Failed to get prize winner", winner.userId);
+        return;
+      }
+
+      setWinner(user);
     }
   }
 
