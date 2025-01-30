@@ -134,8 +134,9 @@ export default async function Session({ params }: { params: SessionParams }) {
         >
           <PrizeTile
             prize={sinfoSession.prize}
-            participants={sinfoSession.participants || []}
+            participants={sinfoSession.users?.map((u) => ({ userId: u }))}
             pickWinner={!!user && isMember(user.role)}
+            cannonToken={session?.cannonToken}
           />
         </List>
       )}

@@ -20,6 +20,26 @@ export const UserService = (() => {
     return null;
   };
 
+  const getActiveUsersByDay = async (
+    cannonToken: string,
+    day: string,
+  ): Promise<User[] | null> => {
+    try {
+      const resp = await fetch(`${usersEndpoint}?date=${day}`, {
+        headers: {
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        next: {
+          revalidate: 86400, // 1 day
+        },
+      });
+      if (resp.ok) return (await resp.json()) as User[];
+    } catch (err) {
+      console.error(err);
+    }
+    return null;
+  };
+
   const getMe = async (cannonToken: string): Promise<User | null> => {
     try {
       const resp = await fetch(usersEndpoint + "/me", {
@@ -217,6 +237,7 @@ export const UserService = (() => {
 
   return {
     getUser,
+    getActiveUsersByDay,
     getMe,
     getQRCode,
     demoteMe,

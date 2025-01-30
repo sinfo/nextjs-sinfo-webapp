@@ -70,7 +70,7 @@ export default async function QR() {
         {company && (
           <Link href={`/companies/${company.id}`}>
             <Image
-              className="object-contain"
+              className="h-[100px] w-[100px] object-contain"
               width={100}
               height={100}
               src={company.img}
