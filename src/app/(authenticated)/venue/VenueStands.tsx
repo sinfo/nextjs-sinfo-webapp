@@ -62,7 +62,6 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
   };
 
   const sortedDays = getAllUniqueDates(companies);
-  console.log(sortedDays);
 
   const companiesForSelectedDay = useMemo(() => {
     if (!showingDay) return [];
