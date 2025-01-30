@@ -6,7 +6,7 @@ import MessageCard from "@/components/MessageCard";
 import AchievementTile from "@/components/user/AchievementTile";
 import CurriculumVitae from "@/components/user/CurriculumVitae";
 import ProfileHeader from "@/components/user/ProfileHeader";
-import { UserTile } from "@/components/user/UserTile";
+import { AchievementService } from "@/services/AchievementService";
 import { UserService } from "@/services/UserService";
 import { isCompany } from "@/utils/utils";
 import { Award, UserPen } from "lucide-react";
@@ -14,7 +14,7 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 const N_ACHIEVEMENTS = 5;
-const N_CONNECTIONS = 3;
+// const N_CONNECTIONS = 3;
 
 export default async function Profile() {
   const session = (await getServerSession(authOptions))!;
@@ -23,6 +23,11 @@ export default async function Profile() {
   if (!user) {
     return <div>Profile not found</div>;
   }
+
+  const achievements = await AchievementService.getAchievements();
+  const userAchievements = achievements?.filter((a) =>
+    a.users?.includes(user.id),
+  );
 
   return (
     <div className="container m-auto h-full">
@@ -72,12 +77,12 @@ export default async function Profile() {
       {/* Achievements */}
       <GridList
         title="Achievements"
-        description={`Total points: ${user.achievements?.reduce((acc, a) => acc + a.value, 0) || 0}`}
+        description={`Total points: ${userAchievements?.reduce((acc, a) => acc + a.value, 0) || 0}`}
         link="/profile/achievements"
         linkText="See all"
       >
-        {user.achievements?.length ? (
-          user.achievements
+        {userAchievements?.length ? (
+          userAchievements
             ?.slice(0, N_ACHIEVEMENTS)
             .map((a) => <AchievementTile key={a.id} achievement={a} achieved />)
         ) : (
@@ -92,7 +97,7 @@ export default async function Profile() {
       </GridList>
 
       {/* Connections */}
-      {user.connections?.length ? (
+      {/* user.connections?.length ? (
         <List
           title="Connections"
           link="/profile/connections"
@@ -104,7 +109,7 @@ export default async function Profile() {
         </List>
       ) : (
         <></>
-      )}
+      ) */}
     </div>
   );
 }
