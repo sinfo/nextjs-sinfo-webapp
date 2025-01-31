@@ -19,6 +19,8 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
   const [showingDay, setShowingDay] = useState<string | null>(null);
 
   const dayParam = searchParams.get("day");
+  const kindParam = searchParams.get("kind");
+  const placeParam = searchParams.get("place");
 
   const sessionsByDay = useMemo(() => {
     const sortedSessions = sessions.sort((a, b) =>
@@ -48,6 +50,11 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
 
   const updateSearchParam = (newDay: string) => {
     const params = new URLSearchParams(searchParams.toString());
+    // Remove kind and place params
+    params.delete("kind");
+    params.delete("place");
+
+    // Update day param
     params.set("day", newDay);
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
@@ -77,9 +84,15 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
         .filter((d) => !showingDay || d === showingDay)
         .map((d) => (
           <List key={d} title={getEventFullDate(d)}>
-            {sessionsByDay[d].map((s) => (
-              <SessionTile key={s.id} session={s} onlyShowHours={true} />
-            ))}
+            {sessionsByDay[d]
+              .filter(
+                (s) =>
+                  (!kindParam || s.kind === kindParam) &&
+                  (!placeParam || s.place === placeParam) // Filter by kind and place
+              )
+              .map((s) => (
+                <SessionTile key={s.id} session={s} onlyShowHours={true} />
+              ))}
           </List>
         ))}
     </>
