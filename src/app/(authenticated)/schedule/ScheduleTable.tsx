@@ -50,12 +50,14 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
 
   const updateSearchParam = (newDay: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    // Remove kind and place params
     params.delete("kind");
     params.delete("place");
 
-    // Update day param
-    params.set("day", newDay);
+    if (newDay === dayParam) {
+      params.delete("day");
+    } else {
+      params.set("day", newDay);
+    }
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
@@ -72,10 +74,7 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
           <EventDayButton
             key={`event-day-${d}`}
             date={d}
-            onClick={() => {
-              setShowingDay((currentDay) => (currentDay === d ? null : d));
-              updateSearchParam(d);
-            }}
+            onClick={() => updateSearchParam(d)}
             selected={showingDay === d}
           />
         ))}
@@ -88,7 +87,7 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
               .filter(
                 (s) =>
                   (!kindParam || s.kind === kindParam) &&
-                  (!placeParam || s.place === placeParam) // Filter by kind and place
+                  (!placeParam || s.place === placeParam)
               )
               .map((s) => (
                 <SessionTile key={s.id} session={s} onlyShowHours={true} />
