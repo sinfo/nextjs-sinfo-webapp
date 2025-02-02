@@ -13,7 +13,7 @@ export default async function AuthenticatedLayout({
   if (!session) redirect("/login");
 
   return (
-    <div className="h-screen text-white flex flex-col">
+    <div className="h-screen text-white flex flex-col relative">
       <Toolbar />
       <div className="flex-1 overflow-y-scroll bg-gray-100 text-black mb-navbar">
         {children}
