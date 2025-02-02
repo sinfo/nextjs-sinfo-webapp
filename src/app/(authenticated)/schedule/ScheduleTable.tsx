@@ -8,6 +8,19 @@ import { getEventFullDate } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
+function getPageHeading(kind: string | null) {
+  switch (kind) {
+    case "keynote":
+      return "Keynotes";
+    case "presentation":
+      return "Presentations";
+    case "workshop":
+      return "Workshops";
+    default:
+      return "Schedule";
+  }
+}
+
 interface ScheduleTableProps {
   sessions: SINFOSession[];
 }
@@ -23,10 +36,15 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
   const placeParam = searchParams.get("place");
 
   const sessionsByDay = useMemo(() => {
-    const sortedSessions = sessions.sort((a, b) =>
-      a.date.localeCompare(b.date)
-    );
-    return sortedSessions.reduce(
+    const sessionsCleaned = sessions
+      .filter(
+        (s) =>
+          (!kindParam || s.kind.toLowerCase() === kindParam) &&
+          (!placeParam || s.place.toLowerCase() === placeParam)
+      )
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    return sessionsCleaned.reduce(
       (acc, s) => {
         const day = s.date.split("T")[0];
         const daySessions = [...(acc[day] || []), s];
@@ -50,8 +68,6 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
 
   const updateSearchParam = (newDay: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.delete("kind");
-    params.delete("place");
 
     if (newDay === dayParam) {
       params.delete("day");
@@ -69,6 +85,12 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
 
   return (
     <>
+      <div className="flex flex-col items-start gap-y-2 p-4 text-start text-sm">
+        <h1 className="text-2xl font-bold">{getPageHeading(kindParam)}</h1>
+        <p className="text-sm text-gray-600">
+          Checkout all the available sessions.
+        </p>
+      </div>
       <GridList>
         {sortedDays.map((d) => (
           <EventDayButton
@@ -83,15 +105,9 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
         .filter((d) => !showingDay || d === showingDay)
         .map((d) => (
           <List key={d} title={getEventFullDate(d)}>
-            {sessionsByDay[d]
-              .filter(
-                (s) =>
-                  (!kindParam || s.kind === kindParam) &&
-                  (!placeParam || s.place === placeParam)
-              )
-              .map((s) => (
-                <SessionTile key={s.id} session={s} onlyShowHours={true} />
-              ))}
+            {sessionsByDay[d].map((s) => (
+              <SessionTile key={s.id} session={s} onlyShowHours={true} />
+            ))}
           </List>
         ))}
     </>

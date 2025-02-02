@@ -22,7 +22,7 @@ export default async function BottomNavbar() {
   if (!user) return <></>;
 
   return (
-    <div className="fixed z-100 bottom-0 left-0 right-0 bg-sinfo-primary">
+    <div className="fixed z-10 bottom-0 left-0 right-0 bg-sinfo-primary">
       <div className="relative container m-auto flex h-navbar flex-row">
         {navbarItemKeysByRole[convertToAppRole(user.role)].map((k) => (
           <NavbarItem key={k} name={k} />
