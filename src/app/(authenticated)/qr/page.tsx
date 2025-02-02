@@ -3,7 +3,6 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { revalidateTag } from "next/cache";
-import { hackyPeeking } from "@/assets/images";
 import UserSignOut from "@/components/UserSignOut";
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { UserService } from "@/services/UserService";
@@ -52,11 +51,8 @@ export default async function QR() {
     <div className="container m-auto h-full">
       <div className="h-full flex flex-col justify-center items-center text-center p-4 gap-y-4">
         <div className="flex flex-col justify-center items-center">
-          {!isCompany(user.role) && (
-            <Image className="w-48" src={hackyPeeking} alt="Hacky Peaking" />
-          )}
           <QRCode
-            className="w-72 h-auto p-4 border-[14px] bg-white rounded-lg"
+            className="w-72 h-72 p-4 border-[14px] bg-white rounded-lg"
             style={{ borderColor }}
             value={userQRCode}
           />
