@@ -5,7 +5,7 @@ import GridList from "@/components/GridList";
 import List from "@/components/List";
 import { SessionTile } from "@/components/session";
 import { getEventFullDate } from "@/utils/utils";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 interface ScheduleTableProps {
@@ -14,11 +14,17 @@ interface ScheduleTableProps {
 
 export default function ScheduleTable({ sessions }: ScheduleTableProps) {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
   const [showingDay, setShowingDay] = useState<string | null>(null);
+
+  const dayParam = searchParams.get("day");
+  const kindParam = searchParams.get("kind");
+  const placeParam = searchParams.get("place");
 
   const sessionsByDay = useMemo(() => {
     const sortedSessions = sessions.sort((a, b) =>
-      a.date.localeCompare(b.date),
+      a.date.localeCompare(b.date)
     );
     return sortedSessions.reduce(
       (acc, s) => {
@@ -26,13 +32,13 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
         const daySessions = [...(acc[day] || []), s];
         return { ...acc, [day]: daySessions };
       },
-      {} as Record<string, SINFOSession[]>,
+      {} as Record<string, SINFOSession[]>
     );
   }, [sessions]);
 
   const sortedDays = useMemo(
     () => Object.keys(sessionsByDay).sort(),
-    [sessionsByDay],
+    [sessionsByDay]
   );
 
   useEffect(() => {
@@ -42,6 +48,25 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
     setShowingDay(sortedDays.find((d) => day === d) || null);
   }, [sortedDays, searchParams]);
 
+  const updateSearchParam = (newDay: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("kind");
+    params.delete("place");
+
+    if (newDay === dayParam) {
+      params.delete("day");
+    } else {
+      params.set("day", newDay);
+    }
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  useEffect(() => {
+    if (dayParam && sortedDays.includes(dayParam)) {
+      setShowingDay(dayParam);
+    }
+  }, [dayParam, sortedDays]);
+
   return (
     <>
       <GridList>
@@ -49,9 +74,7 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
           <EventDayButton
             key={`event-day-${d}`}
             date={d}
-            onClick={() =>
-              setShowingDay((currentDay) => (currentDay === d ? null : d))
-            }
+            onClick={() => updateSearchParam(d)}
             selected={showingDay === d}
           />
         ))}
@@ -60,9 +83,15 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
         .filter((d) => !showingDay || d === showingDay)
         .map((d) => (
           <List key={d} title={getEventFullDate(d)}>
-            {sessionsByDay[d].map((s) => (
-              <SessionTile key={s.id} session={s} onlyShowHours={true} />
-            ))}
+            {sessionsByDay[d]
+              .filter(
+                (s) =>
+                  (!kindParam || s.kind === kindParam) &&
+                  (!placeParam || s.place === placeParam)
+              )
+              .map((s) => (
+                <SessionTile key={s.id} session={s} onlyShowHours={true} />
+              ))}
           </List>
         ))}
     </>
