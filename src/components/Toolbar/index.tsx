@@ -23,8 +23,8 @@ export default function Toolbar() {
   return (
     <>
       <Sidebar show={isExpanded} onClose={() => setIsExpanded(false)} />
-      <div className="bg-sinfo-primary">
-        <div className="container m-auto p-4 pb-2 flex flex-col gap-4">
+      <div className="sticky top-0 z-10 bg-sinfo-primary">
+        <div className="container m-auto p-4 flex flex-col gap-4">
           <nav className="flex flex-row items-center">
             <div className="w-1/6 flex justify-start items-center">
               {showMenu ? (
