@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { ExternalLink, LogOut, X } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 
@@ -55,19 +55,40 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
       <div className="flex-1" />
 
       {/* Secondary Options */}
-      <div className="flex flex-col gap-2 text-xl">
-        <Link href="https://sinfo.org/">Website</Link>
-        <Link href="https://github.com/sinfo/nextjs-sinfo-webapp/issues/new">
+      <div className="flex flex-col gap-2 text-lg">
+        <Link
+          href="https://sinfo.org/"
+          target="_blank"
+          className="flex items-center gap-x-2"
+        >
+          Website
+          <ExternalLink size={16} />
+        </Link>
+        <Link
+          href="https://github.com/sinfo/nextjs-sinfo-webapp/issues/new"
+          target="_blank"
+          className="flex items-center gap-x-2"
+        >
           Report a Bug
+          <ExternalLink size={16} />
         </Link>
         {/* todo: the pages below dont exist */}
         <Link href="#" onClick={onClose}>
           Privacy Policy
         </Link>
-        <Link href="#" onClick={onClose}>
+        <Link
+          href="https://sinfo.org/code-of-conduct"
+          target="_blank"
+          className="flex items-center gap-x-2"
+        >
           Code of Conduct
+          <ExternalLink size={16} />
         </Link>
-        <button className="text-start" onClick={handleLogout}>
+        <button
+          className="flex items-center gap-x-2 text-red-500"
+          onClick={handleLogout}
+        >
+          <LogOut size={16} />
           Logout
         </button>
       </div>
