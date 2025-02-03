@@ -38,9 +38,9 @@ export default async function QR() {
     switch (convertToAppRole(user.role)) {
       case "Member":
       case "Admin":
-        return "#DB836E"; // Sinfo Tertiary
-      case "Company":
         return "#A73939"; // SINFO Secondary
+      case "Company":
+        return "#DB836E"; // SINFO Tertiary
       case "Attendee":
       default:
         return "#323363"; // SINFO Primary
@@ -66,9 +66,9 @@ export default async function QR() {
         {company && (
           <Link href={`/companies/${company.id}`}>
             <Image
-              className="h-[100px] w-[100px] object-contain"
-              width={100}
-              height={100}
+              className="h-[80px] w-[80px] object-contain"
+              width={80}
+              height={80}
               src={company.img}
               alt={`${company.name} logo`}
             />
