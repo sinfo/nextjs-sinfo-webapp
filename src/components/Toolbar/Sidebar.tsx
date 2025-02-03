@@ -14,7 +14,7 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
 
   return (
     <div
-      className={`z-20 fixed top-0 left-0 h-full w-full bg-sinfo-primary p-10 flex flex-col gap-6 transition-transform duration-300 ${
+      className={`overflow-y-auto z-50 fixed inset-0 bg-sinfo-primary p-10 mb-safe flex flex-col gap-6 transition-transform duration-300 ${
         show ? "translate-x-0" : "-translate-x-full"
       }`}
     >
