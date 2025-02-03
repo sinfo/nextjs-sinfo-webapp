@@ -2,10 +2,10 @@ import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import GridList from "@/components/GridList";
 import List from "@/components/List";
 import ListCard from "@/components/ListCard";
-import MessageCard from "@/components/MessageCard";
 import AchievementTile from "@/components/user/AchievementTile";
 import CurriculumVitae from "@/components/user/CurriculumVitae";
 import ProfileHeader from "@/components/user/ProfileHeader";
+import ProfileInformations from "@/components/user/ProfileInformations";
 import { AchievementService } from "@/services/AchievementService";
 import { UserService } from "@/services/UserService";
 import { isCompany } from "@/utils/utils";
@@ -52,27 +52,8 @@ export default async function Profile() {
         </List>
       )}
 
-      {/* Academic information */}
-      {!isCompany(user.role) && (
-        <List title="Academic Information">
-          <MessageCard
-            type="info"
-            content="This information only shows to companies that scanned your QR code"
-          />
-          <ListCard
-            title="Computer Science and Engineering"
-            subtitle="Instituto Superior Técnico"
-            headtext="Master degree"
-            label="In progress"
-          />
-          <ListCard
-            title="Computer Science and Engineering"
-            subtitle="Instituto Superior Técnico"
-            headtext="Bachelors degree"
-            label="Finished"
-          />
-        </List>
-      )}
+      {/* User informations */}
+      <ProfileInformations user={user} />
 
       {/* Achievements */}
       <GridList
@@ -97,7 +78,7 @@ export default async function Profile() {
       </GridList>
 
       {/* Connections */}
-      {/* user.connections?.length ? (
+      {/* !!user.connections?.length && (
         <List
           title="Connections"
           link="/profile/connections"
@@ -107,8 +88,6 @@ export default async function Profile() {
             <UserTile key={u.id} user={u} />
           ))}
         </List>
-      ) : (
-        <></>
       ) */}
     </div>
   );

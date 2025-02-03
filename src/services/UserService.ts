@@ -105,7 +105,7 @@ export const UserService = (() => {
   ): Promise<SINFOFile | {} | null> => {
     try {
       const resp = await fetch(
-        id ? filesEndpoint + `/users/${id}/cv` : filesEndpoint + "/me",
+        id ? filesEndpoint + `/users/${id}` : filesEndpoint + "/me",
         {
           method: "GET",
           headers: {
@@ -129,8 +129,7 @@ export const UserService = (() => {
     fileID: string,
   ): Promise<string | null> => {
     try {
-      /* TODO: Implement this */
-      return `${filesEndpoint}/me/download?access_token=${cannonToken}`;
+      return `${filesEndpoint}/${fileID || "me"}/download?access_token=${cannonToken}`;
     } catch (error) {
       console.error(error);
     }

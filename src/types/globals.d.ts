@@ -21,6 +21,17 @@ type User = {
     edition: string;
     company: string;
   }[];
+  skills?: string[];
+  interestedIn?: string[];
+  lookingFor?: string[];
+  academicInformation?: {
+    school: string;
+    degree: string;
+    field: string;
+    grade?: string;
+    start?: string;
+    end?: string;
+  }[];
   mail?: string;
   bearer?:
     | []

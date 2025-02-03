@@ -40,7 +40,7 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
       .filter(
         (s) =>
           (!kindParam || s.kind.toLowerCase() === kindParam) &&
-          (!placeParam || s.place.toLowerCase() === placeParam)
+          (!placeParam || s.place.toLowerCase() === placeParam),
       )
       .sort((a, b) => a.date.localeCompare(b.date));
 
@@ -50,13 +50,13 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
         const daySessions = [...(acc[day] || []), s];
         return { ...acc, [day]: daySessions };
       },
-      {} as Record<string, SINFOSession[]>
+      {} as Record<string, SINFOSession[]>,
     );
   }, [sessions]);
 
   const sortedDays = useMemo(
     () => Object.keys(sessionsByDay).sort(),
-    [sessionsByDay]
+    [sessionsByDay],
   );
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
     } else {
       params.set("day", newDay);
     }
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   useEffect(() => {
