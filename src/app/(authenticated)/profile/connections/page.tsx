@@ -8,7 +8,7 @@ export default async function Connections() {
   const user: User | null = await UserService.getMe(session!.cannonToken);
 
   return (
-    <div className="container m-auto h-full">
+    <div className="container mx-auto h-full">
       <List title="Connections"></List>
     </div>
   );

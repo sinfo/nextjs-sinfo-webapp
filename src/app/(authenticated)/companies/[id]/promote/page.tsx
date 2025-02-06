@@ -23,7 +23,7 @@ export default async function CompanyPromote({
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="container m-auto h-full">
+    <div className="container mx-auto h-full">
       <CompanyPromoteScanner
         company={company}
         cannonToken={session!.cannonToken}

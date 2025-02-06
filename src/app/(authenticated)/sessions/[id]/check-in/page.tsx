@@ -23,7 +23,7 @@ export default async function SessionCheckIn({
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="container m-auto h-full">
+    <div className="container mx-auto h-full">
       <SessionCheckInScanner
         sinfoSession={sinfoSession}
         cannonToken={session!.cannonToken}

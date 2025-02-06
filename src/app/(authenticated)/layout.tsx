@@ -15,7 +15,7 @@ export default async function AuthenticatedLayout({
   return (
     <div className="min-h-screen text-white flex flex-col">
       <Toolbar />
-      <div className="flex-1 bg-gray-100 text-black pb-navbar">{children}</div>
+      <div className="flex-1 bg-gray-100 text-black pb-navbar flex flex-col">{children}</div>
       <BottomNavbar />
     </div>
   );
