@@ -47,7 +47,7 @@ export default async function Company({ params }: { params: CompanyParams }) {
   const companyConnections = await CompanyService.getConnections(companyID);
 
   return (
-    <div className="container m-auto h-full">
+    <div className="container mx-auto h-full">
       <div className="flex flex-col items-center gap-y-2 p-4 text-center">
         <h2 className="text-2xl font-bold">{company.name}</h2>
         <Image

@@ -31,7 +31,7 @@ export default async function Achievements() {
   ).sort() as AchievementKind[];
 
   return (
-    <div className="container m-auto h-full">
+    <div className="container mx-auto h-full">
       <div className="flex flex-col items-start gap-y-2 p-4 text-start text-sm">
         <h1 className="text-2xl font-bold">Achievements</h1>
         <span className="text-gray-600">

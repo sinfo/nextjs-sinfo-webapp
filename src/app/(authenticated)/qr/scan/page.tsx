@@ -11,7 +11,7 @@ export default async function ScanQRCode() {
   if (!user) return <UserSignOut />;
 
   return (
-    <div className="container m-auto h-full">
+    <div className="container mx-auto h-full">
       <QRScanner user={user} cannonToken={session!.cannonToken} />
     </div>
   );
