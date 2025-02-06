@@ -74,11 +74,9 @@ export default function QRScanner({ user, cannonToken }: QRScannerProps) {
   }, [statusCard]);
 
   return (
-    <div className="container mx-auto h-full">
-      <QRCodeScanner
-        onQRCodeScanned={handleQRCodeScanned}
-        bottomCard={bottomCard}
-      />
-    </div>
+    <QRCodeScanner
+      onQRCodeScanned={handleQRCodeScanned}
+      bottomCard={bottomCard}
+    />
   );
 }
