@@ -52,7 +52,7 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
       },
       {} as Record<string, SINFOSession[]>,
     );
-  }, [sessions]);
+  }, [sessions, kindParam, placeParam]);
 
   const sortedDays = useMemo(
     () => Object.keys(sessionsByDay).sort(),

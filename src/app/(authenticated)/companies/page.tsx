@@ -12,7 +12,7 @@ export default async function Companies() {
   companies = companies.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="container mx-auto h-full">
+    <div className="container mx-auto">
       <CompaniesList companies={companies} />
     </div>
   );

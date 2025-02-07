@@ -44,7 +44,7 @@ export default async function SessionParticipants({
     (sessionAchievement.users?.length ?? 0) + unregisteredUsers;
 
   return (
-    <div className="container mx-auto h-full">
+    <div className="container mx-auto">
       <List
         title="Participants"
         description={`Total ${totalUsers} participants (${unregisteredUsers} unregistered users)`}

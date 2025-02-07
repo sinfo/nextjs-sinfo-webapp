@@ -37,7 +37,7 @@ export default async function Prizes() {
   }
 
   return (
-    <div className="container mx-auto h-full">
+    <div className="container mx-auto">
       <div className="flex flex-col items-start gap-y-2 p-4 text-start text-sm">
         <h1 className="text-2xl font-bold">Prizes</h1>
         {user && isCompany(user.role) && (
