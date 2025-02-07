@@ -49,6 +49,9 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
           <Link href="/companies" onClick={onClose}>
             Companies
           </Link>
+          <Link href="/venue" onClick={onClose}>
+            Venue
+          </Link>
         </div>
         <div></div>
       </div>
