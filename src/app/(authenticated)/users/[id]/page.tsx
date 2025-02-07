@@ -38,7 +38,7 @@ export default async function UserProfile({
   );
 
   return (
-    <div className="container mx-auto h-full">
+    <div className="container mx-auto">
       <ProfileHeader user={userProfile} />
       {!isMyself && (
         <div className="px-4 py-2">

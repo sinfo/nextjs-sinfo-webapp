@@ -12,7 +12,7 @@ export default async function Speakers() {
   speakers = speakers.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="container mx-auto h-full">
+    <div className="container mx-auto">
       <SpeakersList speakers={speakers} />
     </div>
   );

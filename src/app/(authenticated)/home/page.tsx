@@ -36,7 +36,7 @@ export default async function Home() {
     : [];
 
   return (
-    <div className="container mx-auto h-full">
+    <div className="container mx-auto">
       {/* Upcoming Sessions */}
       <List title="Next Up" link="/schedule?day=today" linkText="See all">
         {upcomingSessions.length > 0 ? (

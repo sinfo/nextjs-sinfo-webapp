@@ -30,7 +30,7 @@ export default async function Profile() {
   );
 
   return (
-    <div className="container mx-auto h-full">
+    <div className="container mx-auto">
       <ProfileHeader user={user} />
       <div className="px-4 py-2">
         <Link

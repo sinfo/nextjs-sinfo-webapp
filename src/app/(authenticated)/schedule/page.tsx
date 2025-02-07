@@ -9,7 +9,7 @@ export default async function Schedule() {
   }
 
   return (
-    <div className="container mx-auto h-full">
+    <div className="container mx-auto">
       <ScheduleTable sessions={sessions} />
     </div>
   );
