@@ -30,7 +30,7 @@ export default function CompaniesList({ companies }: CompaniesListProps) {
 
   return (
     <>
-      <div className="sticky top-0 pt-4 px-4">
+      <div className="sticky top-16 pt-4 px-4 z-20">
         <input
           type="text"
           placeholder="Search companies"

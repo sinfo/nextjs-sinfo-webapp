@@ -5,8 +5,21 @@ import GridList from "@/components/GridList";
 import List from "@/components/List";
 import { SessionTile } from "@/components/session";
 import { getEventFullDate } from "@/utils/utils";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+
+function getPageHeading(kind: string | null) {
+  switch (kind) {
+    case "keynote":
+      return "Keynotes";
+    case "presentation":
+      return "Presentations";
+    case "workshop":
+      return "Workshops";
+    default:
+      return "Schedule";
+  }
+}
 
 interface ScheduleTableProps {
   sessions: SINFOSession[];
@@ -14,13 +27,24 @@ interface ScheduleTableProps {
 
 export default function ScheduleTable({ sessions }: ScheduleTableProps) {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
   const [showingDay, setShowingDay] = useState<string | null>(null);
 
+  const dayParam = searchParams.get("day");
+  const kindParam = searchParams.get("kind");
+  const placeParam = searchParams.get("place");
+
   const sessionsByDay = useMemo(() => {
-    const sortedSessions = sessions.sort((a, b) =>
-      a.date.localeCompare(b.date),
-    );
-    return sortedSessions.reduce(
+    const sessionsCleaned = sessions
+      .filter(
+        (s) =>
+          (!kindParam || s.kind.toLowerCase() === kindParam) &&
+          (!placeParam || s.place.toLowerCase() === placeParam),
+      )
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    return sessionsCleaned.reduce(
       (acc, s) => {
         const day = s.date.split("T")[0];
         const daySessions = [...(acc[day] || []), s];
@@ -42,16 +66,37 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
     setShowingDay(sortedDays.find((d) => day === d) || null);
   }, [sortedDays, searchParams]);
 
+  const updateSearchParam = (newDay: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (newDay === dayParam) {
+      params.delete("day");
+    } else {
+      params.set("day", newDay);
+    }
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  useEffect(() => {
+    if (dayParam && sortedDays.includes(dayParam)) {
+      setShowingDay(dayParam);
+    }
+  }, [dayParam, sortedDays]);
+
   return (
     <>
+      <div className="flex flex-col items-start gap-y-2 p-4 text-start text-sm">
+        <h1 className="text-2xl font-bold">{getPageHeading(kindParam)}</h1>
+        <p className="text-sm text-gray-600">
+          Checkout all the available sessions.
+        </p>
+      </div>
       <GridList>
         {sortedDays.map((d) => (
           <EventDayButton
             key={`event-day-${d}`}
             date={d}
-            onClick={() =>
-              setShowingDay((currentDay) => (currentDay === d ? null : d))
-            }
+            onClick={() => updateSearchParam(d)}
             selected={showingDay === d}
           />
         ))}

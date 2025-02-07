@@ -2,11 +2,11 @@ import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import GridList from "@/components/GridList";
 import List from "@/components/List";
 import ListCard from "@/components/ListCard";
-import MessageCard from "@/components/MessageCard";
 import AchievementTile from "@/components/user/AchievementTile";
 import CurriculumVitae from "@/components/user/CurriculumVitae";
 import ProfileHeader from "@/components/user/ProfileHeader";
-import { UserTile } from "@/components/user/UserTile";
+import ProfileInformations from "@/components/user/ProfileInformations";
+import { AchievementService } from "@/services/AchievementService";
 import { UserService } from "@/services/UserService";
 import { isCompany } from "@/utils/utils";
 import { Award, UserPen } from "lucide-react";
@@ -14,7 +14,7 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 const N_ACHIEVEMENTS = 5;
-const N_CONNECTIONS = 3;
+// const N_CONNECTIONS = 3;
 
 export default async function Profile() {
   const session = (await getServerSession(authOptions))!;
@@ -24,8 +24,13 @@ export default async function Profile() {
     return <div>Profile not found</div>;
   }
 
+  const achievements = await AchievementService.getAchievements();
+  const userAchievements = achievements?.filter((a) =>
+    a.users?.includes(user.id),
+  );
+
   return (
-    <div className="container m-auto h-full">
+    <div className="container mx-auto h-full">
       <ProfileHeader user={user} />
       <div className="px-4 py-2">
         <Link
@@ -47,37 +52,18 @@ export default async function Profile() {
         </List>
       )}
 
-      {/* Academic information */}
-      {!isCompany(user.role) && (
-        <List title="Academic Information">
-          <MessageCard
-            type="info"
-            content="This information only shows to companies that scanned your QR code"
-          />
-          <ListCard
-            title="Computer Science and Engineering"
-            subtitle="Instituto Superior Técnico"
-            headtext="Master degree"
-            label="In progress"
-          />
-          <ListCard
-            title="Computer Science and Engineering"
-            subtitle="Instituto Superior Técnico"
-            headtext="Bachelors degree"
-            label="Finished"
-          />
-        </List>
-      )}
+      {/* User informations */}
+      <ProfileInformations user={user} />
 
       {/* Achievements */}
       <GridList
         title="Achievements"
-        description={`Total points: ${user.achievements?.reduce((acc, a) => acc + a.value, 0) || 0}`}
+        description={`Total points: ${userAchievements?.reduce((acc, a) => acc + a.value, 0) || 0}`}
         link="/profile/achievements"
         linkText="See all"
       >
-        {user.achievements?.length ? (
-          user.achievements
+        {userAchievements?.length ? (
+          userAchievements
             ?.slice(0, N_ACHIEVEMENTS)
             .map((a) => <AchievementTile key={a.id} achievement={a} achieved />)
         ) : (
@@ -92,7 +78,7 @@ export default async function Profile() {
       </GridList>
 
       {/* Connections */}
-      {user.connections?.length ? (
+      {/* !!user.connections?.length && (
         <List
           title="Connections"
           link="/profile/connections"
@@ -102,9 +88,7 @@ export default async function Profile() {
             <UserTile key={u.id} user={u} />
           ))}
         </List>
-      ) : (
-        <></>
-      )}
+      ) */}
     </div>
   );
 }

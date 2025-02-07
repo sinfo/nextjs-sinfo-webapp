@@ -20,6 +20,19 @@ interface ListCardProps {
   extraComponent?: ReactNode;
 }
 
+interface ConditionalLinkProps extends Partial<LinkProps> {
+  children: ReactNode;
+}
+
+function ConditionalLink({ children, href, ...props }: ConditionalLinkProps) {
+  if (!href) return children;
+  return (
+    <Link href={href} {...props}>
+      {children}
+    </Link>
+  );
+}
+
 export default function ListCard({
   title,
   img,
@@ -37,7 +50,7 @@ export default function ListCard({
   extraClassName,
 }: ListCardProps) {
   return (
-    <Link href={link || "#"} {...linkProps}>
+    <ConditionalLink href={link} {...linkProps}>
       <div
         className={`min-w-[340px] min-h-[74px] px-4 py-2 flex items-center justify-start gap-x-4 bg-white rounded-md shadow-md text-sm overflow-hidden hover:bg-slate-50 hover:shadow-sm active:bg-gray-200 active:shadow-none ${extraClassName || ""}`}
       >
@@ -78,6 +91,6 @@ export default function ListCard({
         </div>
         {extraComponent}
       </div>
-    </Link>
+    </ConditionalLink>
   );
 }

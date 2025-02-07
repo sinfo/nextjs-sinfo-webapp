@@ -3,7 +3,6 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { revalidateTag } from "next/cache";
-import { hackyPeeking } from "@/assets/images";
 import UserSignOut from "@/components/UserSignOut";
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { UserService } from "@/services/UserService";
@@ -39,9 +38,9 @@ export default async function QR() {
     switch (convertToAppRole(user.role)) {
       case "Member":
       case "Admin":
-        return "#DB836E"; // Sinfo Tertiary
-      case "Company":
         return "#A73939"; // SINFO Secondary
+      case "Company":
+        return "#DB836E"; // SINFO Tertiary
       case "Attendee":
       default:
         return "#323363"; // SINFO Primary
@@ -50,13 +49,10 @@ export default async function QR() {
 
   return (
     <div className="container m-auto h-full">
-      <div className="h-full flex flex-col justify-center items-center text-center p-4 gap-y-4">
+      <div className="flex flex-col justify-center items-center text-center p-4 gap-y-4">
         <div className="flex flex-col justify-center items-center">
-          {!isCompany(user.role) && (
-            <Image className="w-48" src={hackyPeeking} alt="Hacky Peaking" />
-          )}
           <QRCode
-            className="w-72 h-auto p-4 border-[14px] bg-white rounded-lg"
+            className="w-72 h-72 p-4 border-[14px] bg-white rounded-lg"
             style={{ borderColor }}
             value={userQRCode}
           />
@@ -70,9 +66,9 @@ export default async function QR() {
         {company && (
           <Link href={`/companies/${company.id}`}>
             <Image
-              className="object-contain"
-              width={100}
-              height={100}
+              className="h-[80px] w-[80px] object-contain"
+              width={80}
+              height={80}
               src={company.img}
               alt={`${company.name} logo`}
             />

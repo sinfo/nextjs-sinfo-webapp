@@ -1,5 +1,3 @@
-import { revalidatePath } from "next/cache";
-
 export const SessionService = (() => {
   const sessionsEndpoint = process.env.NEXT_PUBLIC_CANNON_URL + "/session";
 
@@ -52,9 +50,9 @@ export const SessionService = (() => {
         const achievementData = (await resp.json()) as Achievement;
         return {
           status: "success",
-          participantsNumber: achievementData.users?.length,
-          unregisteredParticipantsNumber: achievementData.unregisteredUsers,
-        } as SINFOSessionStatus;
+          participants: achievementData.users || [],
+          unregisteredParticipants: achievementData.unregisteredUsers || 0,
+        };
       }
     } catch (error) {
       console.error(error);

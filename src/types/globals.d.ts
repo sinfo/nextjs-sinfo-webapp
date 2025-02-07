@@ -17,11 +17,20 @@ type User = {
     redeemed: boolean;
     signatures: SINFOSignature[];
   }[];
-  achievements?: Achievement[];
-  connections?: User[];
   company?: {
     edition: string;
     company: string;
+  }[];
+  skills?: string[];
+  interestedIn?: string[];
+  lookingFor?: string[];
+  academicInformation?: {
+    school: string;
+    degree: string;
+    field: string;
+    grade?: string;
+    start?: string;
+    end?: string;
   }[];
   mail?: string;
   bearer?:
@@ -135,14 +144,14 @@ type SINFOSession = {
     title?: string;
     content?: string;
   }[];
-  participants?: User[];
-  unregisteredParticipants?: number;
+  users?: string[];
+  unregisteredUsers?: number;
 };
 
 type SINFOSessionStatus = {
   status: "success" | "already" | "failed";
-  participantsNumber: number;
-  unregisteredParticipantsNumber: number;
+  participants: string[];
+  unregisteredParticipants: number;
 };
 
 type Prize = {
@@ -150,7 +159,9 @@ type Prize = {
   edition: string;
   name: string;
   img: string;
-  sessions?: SINFOSession[];
+  sessions?: string[];
+  days?: string[];
+  cv?: boolean;
 };
 
 type SINFOEvent = {

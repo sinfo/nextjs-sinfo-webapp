@@ -45,7 +45,10 @@ export default function AchievementTile({
           {achievement.description && (
             <p className="text-xs">{achievement.description}</p>
           )}
-          <span className="text-gray-500">Value: {achievement.value}</span>
+          <span className="text-gray-500">Points: {achievement.value}</span>
+          <span className="text-xs text-gray-500">
+            {achievement.users?.length ?? 0} users have this achievement
+          </span>
         </div>
       </Modal>
     </>

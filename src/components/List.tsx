@@ -6,7 +6,7 @@ export interface ListProps {
   description?: string;
   link?: string;
   linkText?: string;
-  linkProps?: LinkProps;
+  linkProps?: Partial<LinkProps>;
   bottomLink?: string;
   bottomLinkText?: string;
   bottomLinkProps?: LinkProps;

@@ -31,7 +31,7 @@ export default async function Session({ params }: { params: SessionParams }) {
   const user: User | null = await UserService.getMe(session!.cannonToken);
 
   return (
-    <div className="container m-auto h-full">
+    <div className="container mx-auto h-full">
       <div className="flex flex-col items-center gap-y-2 p-4 text-center text-sm">
         {sinfoSession.company && (
           <span className="text-2xl text-gray-600">
@@ -134,8 +134,9 @@ export default async function Session({ params }: { params: SessionParams }) {
         >
           <PrizeTile
             prize={sinfoSession.prize}
-            participants={sinfoSession.participants || []}
+            participants={sinfoSession.users?.map((u) => ({ userId: u }))}
             pickWinner={!!user && isMember(user.role)}
+            cannonToken={session?.cannonToken}
           />
         </List>
       )}

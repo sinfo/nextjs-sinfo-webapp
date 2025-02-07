@@ -22,7 +22,7 @@ export default async function Speaker({ params }: { params: SpeakerParams }) {
   );
 
   return (
-    <div className="container m-auto h-full">
+    <div className="container mx-auto h-full">
       <div className="flex flex-col items-center gap-y-2 p-4 text-center">
         <h2 className="text-2xl font-bold">{speaker.name}</h2>
         <Image
@@ -35,7 +35,7 @@ export default async function Speaker({ params }: { params: SpeakerParams }) {
         <h4>{speaker.title}</h4>
         {speaker.company?.img && (
           <Image
-            className="h-12 w-16 object-contain"
+            className="h-16 w-16 object-contain"
             width={64}
             height={64}
             src={speaker.company.img}

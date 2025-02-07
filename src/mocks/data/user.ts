@@ -8,8 +8,6 @@ export const MOCK_USER: User = {
     email: "gatesybill@gmail.com",
     github: "billgates",
   },
-  achievements: [],
-  connections: [],
   role: "user",
   bearer: [],
   mail: "gatesybill@gmail.com",

@@ -20,6 +20,26 @@ export const UserService = (() => {
     return null;
   };
 
+  const getActiveUsersByDay = async (
+    cannonToken: string,
+    day: string,
+  ): Promise<User[] | null> => {
+    try {
+      const resp = await fetch(`${usersEndpoint}?date=${day}`, {
+        headers: {
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        next: {
+          revalidate: 86400, // 1 day
+        },
+      });
+      if (resp.ok) return (await resp.json()) as User[];
+    } catch (err) {
+      console.error(err);
+    }
+    return null;
+  };
+
   const getMe = async (cannonToken: string): Promise<User | null> => {
     try {
       const resp = await fetch(usersEndpoint + "/me", {
@@ -85,7 +105,7 @@ export const UserService = (() => {
   ): Promise<SINFOFile | {} | null> => {
     try {
       const resp = await fetch(
-        id ? filesEndpoint + `/users/${id}/cv` : filesEndpoint + "/me",
+        id ? filesEndpoint + `/users/${id}` : filesEndpoint + "/me",
         {
           method: "GET",
           headers: {
@@ -109,8 +129,7 @@ export const UserService = (() => {
     fileID: string,
   ): Promise<string | null> => {
     try {
-      /* TODO: Implement this */
-      return `${filesEndpoint}/me/download?access_token=${cannonToken}`;
+      return `${filesEndpoint}/${fileID || "me"}/download?access_token=${cannonToken}`;
     } catch (error) {
       console.error(error);
     }
@@ -217,6 +236,7 @@ export const UserService = (() => {
 
   return {
     getUser,
+    getActiveUsersByDay,
     getMe,
     getQRCode,
     demoteMe,
