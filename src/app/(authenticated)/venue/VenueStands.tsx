@@ -22,6 +22,7 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
 
   // Extract the 'day' parameter from the URL search parameters
   const dayParam = searchParams.get("day");
+  const companyParam = searchParams.get("company");
   const [showingDay, setShowingDay] = useState<string | null>(null);
 
   const standPositions: Record<number, { x: number; y: number }> = {
@@ -56,7 +57,7 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
       new Set(
         companies
           .flatMap((company) => company.stands || [])
-          .map((stand) => stand.date)
+          .map((stand) => stand.date.split("T")[0])
       )
     ).sort();
   };
@@ -66,7 +67,7 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
   const companiesForSelectedDay = useMemo(() => {
     if (!showingDay) return [];
     return companies.filter((company) =>
-      company.stands?.some((stand) => stand.date === showingDay)
+      company.stands?.some((stand) => stand.date.split("T")[0] === showingDay)
     );
   }, [companies, showingDay]);
 
@@ -76,7 +77,8 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
     return (
       companiesForSelectedDay.find((company) =>
         company.stands?.some(
-          (stand) => stand.date === showingDay && stand.standId === standId
+          (stand) =>
+            stand.date.split("T")[0] === showingDay && stand.standId === standId
         )
       ) || null
     );
@@ -86,7 +88,9 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
     if (!showingDay) return [];
     return companies.flatMap(
       (company) =>
-        company.stands?.filter((stand) => stand.date === showingDay) || []
+        company.stands?.filter(
+          (stand) => stand.date.split("T")[0] === showingDay
+        ) || []
     );
   }, [companies, showingDay]);
 
@@ -110,6 +114,10 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
       setShowingDay(dayParam);
     }
   }, [dayParam, sortedDays]);
+
+  const isStandHighlighted = (company: Company | null) => {
+    return company?.id === companyParam;
+  };
 
   return (
     <div className="w-full space-y-8">
@@ -136,14 +144,18 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
 
           {/* Company Stands */}
           <g id="stands">
-            {standsForSelectedDay.map((stand) => (
-              <CompanyStand
-                key={`stand-${stand.standId}`}
-                stand={stand}
-                company={getCompanyAtPosition(stand.standId)}
-                standPositions={standPositions}
-              />
-            ))}
+            {standsForSelectedDay.map((stand) => {
+              const company = getCompanyAtPosition(stand.standId);
+              return (
+                <CompanyStand
+                  key={`stand-${stand.standId}`}
+                  stand={stand}
+                  company={company}
+                  standPositions={standPositions}
+                  isSelected={isStandHighlighted(company)}
+                />
+              );
+            })}
           </g>
         </svg>
       </ZoomSvg>

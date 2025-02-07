@@ -28,7 +28,7 @@ const CompanyStand: React.FC<StandProps> = ({
         className={`
           transition-all duration-200 ease-in-out
           ${company ? "cursor-pointer hover:opacity-80" : "cursor-default"}
-          ${isSelected ? "opacity-70" : "opacity-100"}
+          opacity-100
         `}
       >
         {/* Base stand rectangle */}
@@ -38,7 +38,7 @@ const CompanyStand: React.FC<StandProps> = ({
           width="26"
           height="26"
           fill={isSelected ? "#E5E7EB" : "white"}
-          stroke={isSelected ? "#9CA3AF" : "black"}
+          stroke="black"
           strokeWidth={isSelected ? "2" : "1"}
           className="transition-all duration-200"
         />
@@ -64,7 +64,7 @@ const CompanyStand: React.FC<StandProps> = ({
             fontSize="6"
             className={`
               ${company ? "font-medium" : "font-normal"}
-              ${isSelected ? "fill-gray-600" : "fill-black"}
+              ${isSelected ? "fill-black" : "fill-black"}
             `}
           >
             {company.name}
@@ -81,20 +81,6 @@ const CompanyStand: React.FC<StandProps> = ({
           >
             {standNumber}
           </text>
-        )}
-
-        {/* Optional highlight effect for selected state */}
-        {isSelected && (
-          <rect
-            x={position.x - 1}
-            y={position.y - 1}
-            width="28"
-            height="28"
-            fill="none"
-            stroke="#4F46E5"
-            strokeWidth="2"
-            className="pointer-events-none"
-          />
         )}
       </g>
     </a>
