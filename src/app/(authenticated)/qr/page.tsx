@@ -48,8 +48,8 @@ export default async function QR() {
   })();
 
   return (
-    <div className="container m-auto h-full">
-      <div className="flex flex-col justify-center items-center text-center p-4 gap-y-4">
+    <div className="container mx-auto flex-1">
+      <div className="flex flex-col h-full justify-center items-center text-center p-4 gap-y-4">
         <div className="flex flex-col justify-center items-center">
           <QRCode
             className="w-72 h-72 p-4 border-[14px] bg-white rounded-lg"
