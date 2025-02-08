@@ -31,13 +31,13 @@ export default async function Company({ params }: { params: CompanyParams }) {
   }
 
   const companySessions = company.sessions?.sort((a, b) =>
-    a.date.localeCompare(b.date),
+    a.date.localeCompare(b.date)
   );
   const companyMembers = company.members?.sort((a, b) =>
-    a.name.localeCompare(b.name),
+    a.name.localeCompare(b.name)
   );
   const companyStands = company.stands?.sort((a, b) =>
-    a.date.localeCompare(b.date),
+    a.date.localeCompare(b.date)
   );
   const hereToday = isHereToday(company);
 
@@ -83,7 +83,12 @@ export default async function Company({ params }: { params: CompanyParams }) {
           description="When we will be at SINFO"
         >
           {companyStands.map((s) => (
-            <EventDayButton key={s.date} date={s.date} selected={true} />
+            <Link
+              key={s.date}
+              href={`/venue?day=${s.date.split("T")[0]}&company=${companyID}`}
+            >
+              <EventDayButton date={s.date} selected={true} disabled={false} />
+            </Link>
           ))}
         </GridList>
       ) : (
