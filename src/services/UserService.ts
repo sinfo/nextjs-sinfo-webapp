@@ -99,6 +99,33 @@ export const UserService = (() => {
     return success;
   };
 
+  const updateMe = async (
+    cannonToken: string,
+    user: User,
+  ): Promise<boolean> => {
+    try {
+      const resp = await fetch(usersEndpoint + "/me", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        body: JSON.stringify({
+          ...user,
+          id: undefined,
+          role: undefined,
+        }),
+      });
+      if (resp.ok) {
+        revalidateTag(`modified-me`);
+        return true;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return false;
+  };
+
   const getCVInfo = async (
     cannonToken: string,
     id?: string,
@@ -240,6 +267,7 @@ export const UserService = (() => {
     getMe,
     getQRCode,
     demoteMe,
+    updateMe,
     getCVInfo,
     getDownloadURL,
     uploadCV,

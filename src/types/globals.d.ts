@@ -6,6 +6,7 @@ type User = {
   img: string;
   role: string;
   title?: string;
+  nationality?: string;
   contacts?: {
     linkedin?: string;
     email?: string;

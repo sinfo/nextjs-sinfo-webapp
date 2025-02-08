@@ -38,7 +38,6 @@ export default async function Achievements() {
           Total points:{" "}
           {userAchievements?.reduce((acc, a) => acc + a.value, 0) || 0}
         </span>
-        {/* TODO: Add bullshit text, ask ChatGPT or Copilot */}
       </div>
       {sortedKinds.map((k) => (
         <GridList key={k} title={humanizeAchivementKind(k)}>
