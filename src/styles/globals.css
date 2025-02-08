@@ -25,3 +25,9 @@
 .mb-safe {
   margin-bottom: env(safe-area-inset-bottom);
 }
+
+/* Form components */
+
+.input {
+  @apply h-10 block bg-white text-inherit rounded-md w-full p-2.5;
+}
