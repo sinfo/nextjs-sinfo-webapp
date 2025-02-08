@@ -17,7 +17,7 @@ export default async function ProfileHeader({ user }: ProfileHeaderProps) {
     <>
       <header className="bg-sinfo-primary h-[150px] mb-6">
         <Image
-          className="w-[150px] h-[150px] object-contain relative left-4 -bottom-8 rounded-full border-white border-4"
+          className="size-[150px] object-contain relative left-4 -bottom-8 rounded-full border-white border-4"
           width={150}
           height={150}
           src={user.img}
