@@ -14,11 +14,11 @@ import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { UserService } from "@/services/UserService";
 import { isCompany, isToday } from "@/utils/utils";
 import UserSignOut from "@/components/UserSignOut";
+import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 
 const N_SESSION_TILES = 3;
 const N_COMPANY_TILES = 6;
 const N_SPEAKER_TILES = 6;
-const SPIN_WHEEL_MAXIMUM = 10;
 
 export default async function Home() {
   const session = (await getServerSession(authOptions))!;
@@ -58,7 +58,10 @@ export default async function Home() {
       {/* Spin the Wheel Section */}
       {showSpinWheelSection && (
         <ProgressBar
-          current={spinWheelData?.signatures.length ?? 0}
+          current={Math.min(
+            spinWheelData?.signatures.length ?? 0,
+            SPIN_WHEEL_MAXIMUM
+          )}
           maximum={SPIN_WHEEL_MAXIMUM}
           title="Companies Visited Today"
           className="pb-2"
