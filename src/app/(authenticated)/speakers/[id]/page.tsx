@@ -1,3 +1,4 @@
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 import List from "@/components/List";
 import { ShowMore } from "@/components/ShowMore";
 import { SessionTile } from "@/components/session";
@@ -14,11 +15,11 @@ export default async function Speaker({ params }: { params: SpeakerParams }) {
   const speaker = await SpeakerService.getSpeaker(speakerID);
 
   if (!speaker) {
-    return <div>Speaker not found</div>;
+    return <BlankPageWithMessage message="Speaker not found!" />;
   }
 
   const speakerSessions = speaker.sessions?.sort((a, b) =>
-    a.date.localeCompare(b.date),
+    a.date.localeCompare(b.date)
   );
 
   return (

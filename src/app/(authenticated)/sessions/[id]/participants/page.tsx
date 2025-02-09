@@ -1,4 +1,5 @@
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 import List from "@/components/List";
 import { UserTile } from "@/components/user/UserTile";
 import { AchievementService } from "@/services/AchievementService";
@@ -20,17 +21,17 @@ export default async function SessionParticipants({
   const sinfoSession = await SessionService.getSession(sessionID);
 
   if (!sinfoSession) {
-    return <div>Session not found</div>;
+    return <BlankPageWithMessage message="Session not found!" />;
   }
 
   const session = await getServerSession(authOptions);
 
   const sessionAchievement = await AchievementService.getAchievementBySession(
     session!.cannonToken,
-    sessionID,
+    sessionID
   );
   if (!sessionAchievement) {
-    return <div>Session achievement not found</div>;
+    return <BlankPageWithMessage message="Sesssion Achievement not found!" />;
   }
 
   async function getUserTile(userId: string) {
@@ -51,7 +52,7 @@ export default async function SessionParticipants({
       >
         {sessionAchievement.users?.length ? (
           await Promise.all(
-            sessionAchievement.users.map((id) => getUserTile(id)),
+            sessionAchievement.users.map((id) => getUserTile(id))
           )
         ) : (
           <div>There are no registered users at this session</div>

@@ -1,11 +1,12 @@
 import { SpeakerService } from "@/services/SpeakerService";
 import SpeakersList from "./SpeakersList";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 
 export default async function Speakers() {
   let speakers = await SpeakerService.getSpeakers();
 
   if (!speakers) {
-    return <div>Failed to load speakers</div>;
+    return <BlankPageWithMessage message="No speakers found!" />;
   }
 
   // Sort speakers by name

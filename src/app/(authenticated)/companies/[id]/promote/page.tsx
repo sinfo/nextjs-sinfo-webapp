@@ -2,6 +2,7 @@ import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { CompanyService } from "@/services/CompanyService";
 import { getServerSession } from "next-auth";
 import CompanyPromoteScanner from "./CompanyPromoteScanner";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 
 interface CompanyPromoteParams {
   id: string;
@@ -17,7 +18,7 @@ export default async function CompanyPromote({
   const company = await CompanyService.getCompany(companyID);
 
   if (!company) {
-    return <div>Company not found</div>;
+    return <BlankPageWithMessage message="Company not found!" />;
   }
 
   const session = await getServerSession(authOptions);

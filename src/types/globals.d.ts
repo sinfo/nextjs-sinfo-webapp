@@ -1,4 +1,4 @@
-type UserRole = "Attendee" | "Company" | "Member" | "Admin";
+type UserRole = "Attendee" | "Company" | "Member" | "Admin"; // only in the webapp, roles in cannon are different
 
 type User = {
   id: string;

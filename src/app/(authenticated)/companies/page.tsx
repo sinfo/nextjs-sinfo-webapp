@@ -1,11 +1,12 @@
 import { CompanyService } from "@/services/CompanyService";
 import CompaniesList from "./CompaniesList";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 
 export default async function Companies() {
   let companies = await CompanyService.getCompanies();
 
   if (!companies) {
-    return <div>Failed to load companies</div>;
+    return <BlankPageWithMessage message="No companies found!" />;
   }
 
   // Sort companies by name
