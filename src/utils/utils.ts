@@ -40,7 +40,7 @@ export function trimText(text: string, n: number): string {
 export function generateTimeInterval(
   timestamp: string,
   durationMinutes: number,
-  { onlyHours }: { onlyHours?: boolean } = {},
+  { onlyHours }: { onlyHours?: boolean } = {}
 ): string {
   // extract "HH:mm" from ISO string
   const formatTime = (date: Date) => date.toISOString().slice(11, 16);
@@ -92,7 +92,7 @@ export function getEventFullDate(date: string): string {
 // TODO: Implement this correctly
 export function isValidQRCode(
   data: string,
-  kind?: "user" | "achievement",
+  kind?: "user" | "achievement"
 ): boolean {
   try {
     return (
