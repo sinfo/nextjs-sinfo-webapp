@@ -10,6 +10,7 @@ import {
   MOCK_SPEAKER,
   MOCK_USER_QR_CODE,
   MOCK_SESSION_STATUS,
+  MOCK_ACHIEVEMENTS,
 } from "./data";
 
 const BACKEND_URL = process.env.CANNON_URL;
@@ -78,5 +79,9 @@ export const handlers = [
   // get all sessions for the edition
   http.get(`${BACKEND_URL}/session`, () => {
     return HttpResponse.json(MOCK_SESSIONS);
+  }),
+  // get all achievements for the edition
+  http.get(`${BACKEND_URL}/achievements`, () => {
+    return HttpResponse.json(MOCK_ACHIEVEMENTS);
   }),
 ];

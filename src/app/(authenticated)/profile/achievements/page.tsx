@@ -24,10 +24,10 @@ export default async function Achievements() {
       const kindAchievements = [...(acc[a.kind] || []), a];
       return { ...acc, [a.kind]: kindAchievements };
     },
-    {} as Record<AchievementKind, Achievement[]>,
+    {} as Record<AchievementKind, Achievement[]>
   );
   const sortedKinds = Object.keys(
-    achievementsByKind,
+    achievementsByKind
   ).sort() as AchievementKind[];
 
   return (
