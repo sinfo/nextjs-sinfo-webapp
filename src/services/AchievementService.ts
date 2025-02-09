@@ -14,7 +14,7 @@ export const AchievementService = (() => {
 
   const getAchievementBySession = async (
     cannonToken: string,
-    sessionId: string,
+    sessionId: string
   ): Promise<Achievement | null> => {
     try {
       const resp = await fetch(`${achievementsEndpoint}/session/${sessionId}`, {
