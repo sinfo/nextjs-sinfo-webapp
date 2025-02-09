@@ -1,5 +1,6 @@
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { hackyPeeking } from "@/assets/images";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 import List from "@/components/List";
 import ListCard from "@/components/ListCard";
 import MessageCard from "@/components/MessageCard";
@@ -24,7 +25,7 @@ export default async function Session({ params }: { params: SessionParams }) {
   const sinfoSession = await SessionService.getSession(sessionID);
 
   if (!sinfoSession) {
-    return <div>Session not found</div>;
+    return <BlankPageWithMessage message="No sessions found!" />;
   }
 
   const session = await getServerSession(authOptions);

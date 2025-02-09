@@ -1,16 +1,17 @@
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 import GridList from "@/components/GridList";
 import AchievementTile from "@/components/user/AchievementTile";
 import { AchievementService } from "@/services/AchievementService";
 import { UserService } from "@/services/UserService";
-import { humanizeAchivementKind } from "@/utils/utils";
+import { formatAchievementKind } from "@/utils/utils";
 import { getServerSession } from "next-auth";
 
 export default async function Achievements() {
   const achievements = await AchievementService.getAchievements();
 
   if (!achievements) {
-    return <div>Achievements not found.</div>;
+    return <BlankPageWithMessage message="No achievements found." />;
   }
 
   const session = await getServerSession(authOptions);
@@ -40,7 +41,7 @@ export default async function Achievements() {
         </span>
       </div>
       {sortedKinds.map((k) => (
-        <GridList key={k} title={humanizeAchivementKind(k)}>
+        <GridList key={k} title={formatAchievementKind(k)}>
           {achievementsByKind[k].slice(0, 30).map((a) => (
             <AchievementTile
               key={a.id}

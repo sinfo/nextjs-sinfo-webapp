@@ -6,6 +6,7 @@ import AchievementTile from "@/components/user/AchievementTile";
 import CurriculumVitae from "@/components/user/CurriculumVitae";
 import ProfileHeader from "@/components/user/ProfileHeader";
 import ProfileInformations from "@/components/user/ProfileInformations";
+import UserSignOut from "@/components/UserSignOut";
 import { AchievementService } from "@/services/AchievementService";
 import { UserService } from "@/services/UserService";
 import { isCompany } from "@/utils/utils";
@@ -18,15 +19,12 @@ const N_ACHIEVEMENTS = 5;
 
 export default async function Profile() {
   const session = (await getServerSession(authOptions))!;
-  const user: User | null = await UserService.getMe(session.cannonToken);
-
-  if (!user) {
-    return <div>Profile not found</div>;
-  }
+  const user = await UserService.getMe(session.cannonToken);
+  if (!user) return <UserSignOut />;
 
   const achievements = await AchievementService.getAchievements();
   const userAchievements = achievements?.filter((a) =>
-    a.users?.includes(user.id),
+    a.users?.includes(user.id)
   );
 
   return (
