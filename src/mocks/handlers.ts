@@ -11,6 +11,7 @@ import {
   MOCK_USER_QR_CODE,
   MOCK_SESSION_STATUS,
   MOCK_ACHIEVEMENTS,
+  MOCK_OTHER_USER,
 } from "./data";
 
 const BACKEND_URL = process.env.CANNON_URL;
@@ -36,16 +37,16 @@ export const handlers = [
   }),
   // get a specific user
   http.get(`${BACKEND_URL}/users/*`, () => {
-    return HttpResponse.json(MOCK_USER);
+    return HttpResponse.json(MOCK_OTHER_USER);
   }),
   // get a specific company connections
   http.get(`${BACKEND_URL}/company/*/connections`, () => {
     return HttpResponse.json([
-      MOCK_USER,
-      MOCK_USER,
-      MOCK_USER,
-      MOCK_USER,
-      MOCK_USER,
+      MOCK_OTHER_USER,
+      MOCK_OTHER_USER,
+      MOCK_OTHER_USER,
+      MOCK_OTHER_USER,
+      MOCK_OTHER_USER,
     ]);
   }),
   // get a specific company

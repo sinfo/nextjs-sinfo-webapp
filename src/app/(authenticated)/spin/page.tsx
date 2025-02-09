@@ -4,12 +4,11 @@ import { CompanyTile } from "@/components/company";
 import GridList from "@/components/GridList";
 import ProgressBar from "@/components/ProgressBar";
 import UserSignOut from "@/components/UserSignOut";
+import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 import { CompanyService } from "@/services/CompanyService";
 import { UserService } from "@/services/UserService";
 import { isCompany, isToday } from "@/utils/utils";
 import { getServerSession } from "next-auth";
-
-const SPIN_WHEEL_MAXIMUM = 10;
 
 export default async function Spin() {
   const session = (await getServerSession(authOptions))!;
@@ -39,7 +38,8 @@ export default async function Spin() {
     spinWheelData?.signatures
       .sort((a, b) => a.date.localeCompare(b.date))
       .map((s) => companyMap.get(s.companyId))
-      .filter((c) => c !== undefined) ?? [];
+      .filter((c) => c !== undefined)
+      .slice(0, SPIN_WHEEL_MAXIMUM) ?? [];
 
   return (
     <div className="container mx-auto">

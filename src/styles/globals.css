@@ -10,6 +10,14 @@
   @apply button bg-sinfo-primary text-white px-4 py-2 rounded-md shadow-md disabled:opacity-75;
 }
 
+.button-secondary {
+  @apply button bg-sinfo-secondary text-white px-4 py-2 rounded-md shadow-md disabled:opacity-75;
+}
+
+.button-tertiary {
+  @apply button bg-sinfo-tertiary text-white px-4 py-2 rounded-md shadow-md disabled:opacity-75;
+}
+
 .text-link {
   @apply text-blue-600 hover:underline active:text-blue-900;
 }

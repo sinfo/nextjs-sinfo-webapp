@@ -8,11 +8,10 @@ import ProfileInformations from "@/components/user/ProfileInformations";
 import { AchievementService } from "@/services/AchievementService";
 import { UserService } from "@/services/UserService";
 import { isCompany, isMember } from "@/utils/utils";
-import { UserPlus } from "lucide-react";
 import { getServerSession } from "next-auth";
-import DemoteButton from "./DemoteButton";
 import UserSignOut from "@/components/UserSignOut";
 import BlankPageWithMessage from "@/components/BlankPageMessage";
+import ProfileButtons from "./buttons";
 
 interface UserProfileParams {
   id: string;
@@ -34,8 +33,6 @@ export default async function UserProfile({
     return <BlankPageWithMessage message="User not found!" />;
   }
 
-  const isMyself = userProfile.id === user.id;
-
   const achievements = await AchievementService.getAchievements();
   const userAchievements = achievements?.filter((a) =>
     a.users?.includes(userProfile.id)
@@ -44,21 +41,12 @@ export default async function UserProfile({
   return (
     <div className="container mx-auto">
       <ProfileHeader user={userProfile} />
-      {!isMyself && (
-        <div className="px-4 py-2">
-          <button className="button-primary text-sm w-full mt-2">
-            <UserPlus size={16} />
-            Connect
-          </button>
-          {isMember(user.role) &&
-            (isMember(userProfile.role) || isCompany(userProfile.role)) && (
-              <DemoteButton
-                cannonToken={session.cannonToken}
-                userId={userProfile.id}
-              />
-            )}
-        </div>
-      )}
+
+      <ProfileButtons
+        cannonToken={session.cannonToken}
+        user={user}
+        otherUser={userProfile}
+      />
 
       {/* Notes */}
       {/* <List title="Notes">
