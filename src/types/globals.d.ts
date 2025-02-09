@@ -30,8 +30,8 @@ type User = {
     degree: string;
     field: string;
     grade?: string;
-    start?: string;
-    end?: string;
+    start: string;
+    end: string;
   }[];
   mail?: string;
   bearer?:
