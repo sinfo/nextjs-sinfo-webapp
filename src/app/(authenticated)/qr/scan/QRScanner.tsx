@@ -3,6 +3,7 @@
 import MessageCard from "@/components/MessageCard";
 import QRCodeScanner from "@/components/QRCodeScanner";
 import { UserTile } from "@/components/user/UserTile";
+import { AchievementService } from "@/services/AchievementService";
 import { CompanyService } from "@/services/CompanyService";
 import {
   getAchievementFromQRCode,
@@ -50,8 +51,26 @@ export default function QRScanner({ user, cannonToken }: QRScannerProps) {
           }
         }
       } else if (scannedAchievement) {
-        // FIXME: Redeem secret achievement
-        setBottomCard(<h1>Achievement Redeemed</h1>);
+        const redeemedAchievent = await AchievementService.redeemSecretAchievement(
+          cannonToken,
+          scannedAchievement
+        )
+
+        if (redeemedAchievent) {
+          setBottomCard(<MessageCard
+            type="success"
+            content="Secret Achievement found!"
+          />,
+          );
+        } else {
+          setBottomCard(<MessageCard
+            type="warning"
+            content="Failed to get user's achievement. Scan again!"
+          />,
+          );
+        }
+
+        
       } else {
         setBottomCard(<MessageCard type="danger" content="Invalid QR-Code" />);
       }
