@@ -44,7 +44,7 @@ export default function EditProfileForm({
   updateUser,
 }: EditProfileFormProps) {
   const [profilePicturePreview, setProfilePicturePreview] = useState<string>(
-    user.img,
+    user.img
   );
   const {
     control,
@@ -277,7 +277,7 @@ export default function EditProfileForm({
           {errors.contacts?.linkedin?.message}
         </span>
         <span className="text-gray-600 text-sm block">
-          Don't know how to find it?&nbsp;
+          Don&apos;t know how to find it?&nbsp;
           <a
             href="https://www.linkedin.com/help/linkedin/answer/a522735"
             className="text-link"
@@ -375,8 +375,10 @@ export default function EditProfileForm({
               >
                 <option value="">Choose an option</option>
                 <option value="Associate degree">Associate degree</option>
-                <option value="Bachelor's degree">Bachelor's degree</option>
-                <option value="Master's degree">Master's degree</option>
+                <option value="Bachelor's degree">
+                  Bachelor&apos;s degree
+                </option>
+                <option value="Master's degree">Master&apos;s degree</option>
                 <option value="Doctoral degree">Doctoral degree</option>
                 <option value="Other">Other</option>
               </select>
