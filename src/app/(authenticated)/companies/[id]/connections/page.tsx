@@ -1,3 +1,4 @@
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 import List from "@/components/List";
 import { UserTile } from "@/components/user/UserTile";
 import { CompanyService } from "@/services/CompanyService";
@@ -16,7 +17,7 @@ export default async function CompanyConnections({
   const connections = await CompanyService.getConnections(companyID);
 
   if (!connections) {
-    return <div>Company connections not found</div>;
+    return <BlankPageWithMessage message="Company connections not found!" />;
   }
 
   return (

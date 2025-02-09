@@ -3,14 +3,12 @@ import { UserService } from "@/services/UserService";
 import { getServerSession } from "next-auth";
 import EditProfileForm from "./EditProfileForm";
 import { redirect } from "next/navigation";
+import UserSignOut from "@/components/UserSignOut";
 
 export default async function EditProfile() {
   const session = (await getServerSession(authOptions))!;
-  const user: User | null = await UserService.getMe(session.cannonToken);
-
-  if (!user) {
-    return <div>Profile not found</div>;
-  }
+  const user = await UserService.getMe(session.cannonToken);
+  if (!user) return <UserSignOut />;
 
   async function updateUser(newUser: User) {
     "use server";

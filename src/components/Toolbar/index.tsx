@@ -5,7 +5,7 @@ import { sinfoLogo } from "@/assets/images";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowLeft, Menu, RefreshCcw } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Sidebar from "./Sidebar";
 
 export default function Toolbar() {
@@ -15,10 +15,7 @@ export default function Toolbar() {
 
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const showMenu = useMemo(
-    () => currPath === "/home" || currPath === "/profile",
-    [currPath],
-  );
+  const showMenu = ["/home", "/profile"].includes(currPath);
 
   return (
     <>

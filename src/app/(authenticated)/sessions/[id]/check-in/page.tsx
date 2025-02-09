@@ -2,6 +2,7 @@ import { SessionService } from "@/services/SessionService";
 import SessionCheckInScanner from "./SessionCheckInScanner";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 
 interface SessionCheckInParams {
   id: string;
@@ -17,7 +18,7 @@ export default async function SessionCheckIn({
   const sinfoSession = await SessionService.getSession(sessionID);
 
   if (!sinfoSession) {
-    return <div>Session not found</div>;
+    return <BlankPageWithMessage message="Session not found!" />;
   }
 
   const session = await getServerSession(authOptions);

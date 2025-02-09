@@ -11,6 +11,8 @@ import { isCompany, isMember } from "@/utils/utils";
 import { UserPlus } from "lucide-react";
 import { getServerSession } from "next-auth";
 import DemoteButton from "./DemoteButton";
+import UserSignOut from "@/components/UserSignOut";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 
 interface UserProfileParams {
   id: string;
@@ -24,17 +26,19 @@ export default async function UserProfile({
   const { id: userID } = params;
 
   const session = (await getServerSession(authOptions))!;
-  const user: User | null = await UserService.getMe(session.cannonToken);
-  if (!user) return;
+  const user = await UserService.getMe(session.cannonToken);
+  if (!user) return <UserSignOut />;
 
   const userProfile = await UserService.getUser(session.cannonToken, userID);
-  if (!userProfile) return <div>User not found.</div>;
+  if (!userProfile) {
+    return <BlankPageWithMessage message="User not found!" />;
+  }
 
   const isMyself = userProfile.id === user.id;
 
   const achievements = await AchievementService.getAchievements();
   const userAchievements = achievements?.filter((a) =>
-    a.users?.includes(userProfile.id),
+    a.users?.includes(userProfile.id)
   );
 
   return (

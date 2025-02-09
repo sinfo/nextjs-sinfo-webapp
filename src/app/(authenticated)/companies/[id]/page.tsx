@@ -14,6 +14,7 @@ import EventDayButton from "@/components/EventDayButton";
 import { Scan } from "lucide-react";
 import Link from "next/link";
 import { SocialNetwork } from "@/components/SocialNetwork";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 
 interface CompanyParams {
   id: string;
@@ -27,17 +28,17 @@ export default async function Company({ params }: { params: CompanyParams }) {
   const company = await CompanyService.getCompany(companyID);
 
   if (!company) {
-    return <div>Company not found</div>;
+    return <BlankPageWithMessage message="Company not found!" />;
   }
 
   const companySessions = company.sessions?.sort((a, b) =>
-    a.date.localeCompare(b.date),
+    a.date.localeCompare(b.date)
   );
   const companyMembers = company.members?.sort((a, b) =>
-    a.name.localeCompare(b.name),
+    a.name.localeCompare(b.name)
   );
   const companyStands = company.stands?.sort((a, b) =>
-    a.date.localeCompare(b.date),
+    a.date.localeCompare(b.date)
   );
   const hereToday = isHereToday(company);
 

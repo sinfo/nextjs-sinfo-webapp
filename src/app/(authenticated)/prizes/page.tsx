@@ -10,12 +10,13 @@ import { getServerSession } from "next-auth";
 import PrizeSessions from "./PrizeSessions";
 import MessageCard from "@/components/MessageCard";
 import DailyPrizesTable from "./DailyPrizesTable";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 
 export default async function Prizes() {
   const prizes = await PrizeService.getPrizes();
 
   if (!prizes) {
-    return <div>Prizes not found.</div>;
+    return <BlankPageWithMessage message="Prizes not found!" />;
   }
 
   const session = await getServerSession(authOptions);
@@ -84,7 +85,7 @@ export default async function Prizes() {
             <PrizeTile prize={sessionPrize} />
             <PrizeSessions
               sessions={sinfoSessions.filter((s) =>
-                sessionPrize.sessions?.includes(s.id),
+                sessionPrize.sessions?.includes(s.id)
               )}
             />
           </div>

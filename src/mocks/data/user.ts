@@ -1,3 +1,5 @@
+import { MOCK_ACHIEVEMENTS } from "./achievement";
+
 export const MOCK_USER: User = {
   id: "mock_user_id",
   name: "Bill Gates",
@@ -8,11 +10,27 @@ export const MOCK_USER: User = {
     email: "gatesybill@gmail.com",
     github: "billgates",
   },
-  role: "user",
+  role: "team",
   bearer: [],
   mail: "gatesybill@gmail.com",
   registered: "2024-07-21T23:02:19.167Z",
   updated: "2024-11-16T23:02:19.167Z",
+  signatures: [
+    {
+      edition: process.env.EVENT_EDITION as string,
+      day: new Date().toISOString(),
+      redeemed: false,
+      signatures: MOCK_ACHIEVEMENTS.filter(
+        (a) => a.kind === "stand" && a.users?.includes("mock_user_id")
+      ).map(
+        (a, idx) =>
+          ({
+            companyId: a.company?.id ?? "",
+            date: new Date(Date.now() - idx * 5 * 60 * 1000).toISOString(), // 5 minute difference
+          }) as SINFOSignature
+      ),
+    },
+  ],
 };
 
 export const MOCK_USER_QR_CODE: string =

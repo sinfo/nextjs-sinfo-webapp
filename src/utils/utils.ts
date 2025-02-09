@@ -22,7 +22,7 @@ export function isCompany(role: string): boolean {
   return appRole === "Company";
 }
 
-export function humanizeAchivementKind(kind: AchievementKind): string {
+export function formatAchievementKind(kind: AchievementKind): string {
   switch (kind) {
     case "cv":
       return "CV";
@@ -115,4 +115,19 @@ export function getUserFromQRCode(data: string): User | null {
 export function getAchievementFromQRCode(data: string): string | null {
   if (!isValidQRCode(data, "achievement")) return null;
   return JSON.parse(atob(data.split("sinfo://")[1])).achievement as string;
+}
+
+export function isToday(date: Date | string): boolean {
+  if (typeof date === "string") {
+    date = new Date(date);
+    if (isNaN(date.getTime())) return false;
+  }
+
+  const today = new Date();
+
+  return (
+    date.getFullYear() === today.getFullYear() &&
+    date.getMonth() === today.getMonth() &&
+    date.getDate() === today.getDate()
+  );
 }

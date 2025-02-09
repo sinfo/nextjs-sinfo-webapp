@@ -1,11 +1,12 @@
 import { SessionService } from "@/services/SessionService";
 import ScheduleTable from "./ScheduleTable";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 
 export default async function Schedule() {
   const sessions = await SessionService.getSessions();
 
   if (!sessions) {
-    return <div>Sessions not found!</div>;
+    return <BlankPageWithMessage message="No sessions found!" />;
   }
 
   return (
