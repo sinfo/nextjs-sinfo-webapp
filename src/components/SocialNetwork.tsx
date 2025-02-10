@@ -41,6 +41,7 @@ export function SocialNetwork({ text, type }: SocialNetworkProps) {
   return (
     <SocialIcon
       url={url}
+      target="_blank"
       style={{ height: 32, width: 32 }}
       {...(socialNetwork.extraProps ?? {})}
     />
