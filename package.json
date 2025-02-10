@@ -28,6 +28,7 @@
     "react-confetti": "^6.2.2",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.54.2",
+    "react-image-file-resizer": "^0.4.8",
     "react-qr-code": "^2.0.12",
     "react-social-icons": "^6.18.0",
     "react-use": "^17.6.0",

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Plus, Save, Upload, X } from "lucide-react";
 import CountryList from "country-list";
 import { ChangeEvent, useState } from "react";
+import Resizer from "react-image-file-resizer";
 
 interface EditProfileFormProps {
   user: User;
@@ -44,7 +45,7 @@ export default function EditProfileForm({
   updateUser,
 }: EditProfileFormProps) {
   const [profilePicturePreview, setProfilePicturePreview] = useState<string>(
-    user.img
+    user.img,
   );
   const {
     control,
@@ -53,6 +54,7 @@ export default function EditProfileForm({
     register,
     setValue,
     getValues,
+    resetField,
     watch,
   } = useForm<FormData>({
     defaultValues: {
@@ -108,11 +110,27 @@ export default function EditProfileForm({
     if (formData.lookingFor.partTime) lookingFor.push("Part-time");
     if (formData.lookingFor.fullTime) lookingFor.push("Full-time");
 
+    const imgFile = formData.imgFile.item(0);
+
+    async function resizeImageAndConvert(file: File): Promise<string> {
+      return new Promise((resolve) =>
+        Resizer.imageFileResizer(
+          file,
+          300, // Max width
+          300, // Max height
+          "JPEG", // Output compression
+          100, // Quality
+          0, // Rotation
+          (uri) => resolve(uri as string),
+          "base64", // Output format
+        ),
+      );
+    }
+
     await updateUser({
       id: user.id,
-      // TODO: Add profile picture
       role: user.role,
-      img: user.img,
+      img: (imgFile && (await resizeImageAndConvert(imgFile))) || user.img,
       name: formData.name,
       title: formData.title,
       nationality: formData.nationality,
