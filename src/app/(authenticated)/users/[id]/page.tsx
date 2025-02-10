@@ -12,6 +12,7 @@ import { getServerSession } from "next-auth";
 import UserSignOut from "@/components/UserSignOut";
 import BlankPageWithMessage from "@/components/BlankPageMessage";
 import ProfileButtons from "./buttons";
+import Notes from "@/components/user/Notes";
 
 interface UserProfileParams {
   id: string;
@@ -35,8 +36,21 @@ export default async function UserProfile({
 
   const achievements = await AchievementService.getAchievements();
   const userAchievements = achievements?.filter((a) =>
-    a.users?.includes(userProfile.id)
+    a.users?.includes(userProfile.id),
   );
+
+  const connections = await UserService.getConnections(session.cannonToken);
+  const connection = connections?.find((c) => c.to === userProfile.id);
+
+  async function handleNotesUpdate(notes: string) {
+    "use server";
+    if (userProfile)
+      await UserService.updateConnection(
+        session.cannonToken,
+        userProfile.id,
+        notes,
+      );
+  }
 
   return (
     <div className="container mx-auto">
@@ -46,24 +60,13 @@ export default async function UserProfile({
         cannonToken={session.cannonToken}
         user={user}
         otherUser={userProfile}
+        connections={connections ?? []}
       />
 
       {/* Notes */}
-      {/* <List title="Notes">
-        {userNotes && userNotes.trim() !== "" ? (
-          <ShowMore lines={3}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </ShowMore>
-        ) : (
-          <ListCard title="Write a note" icon={NotebookPen} />
-        )}
-      </List> */}
+      {connection && (
+        <Notes notes={connection.notes} onNotesUpdate={handleNotesUpdate} />
+      )}
 
       {!isCompany(userProfile.role) &&
         (isCompany(user.role) || isMember(user.role)) && (
