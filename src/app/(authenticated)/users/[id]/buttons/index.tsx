@@ -6,6 +6,7 @@ export interface ProfileButtonProps {
   cannonToken: string;
   user: User;
   otherUser: User;
+  connections: Connection[];
 }
 
 export default function ProfileButtons(buttonProps: ProfileButtonProps) {

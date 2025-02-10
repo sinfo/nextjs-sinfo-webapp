@@ -6,7 +6,7 @@ export const UserService = (() => {
 
   const getUser = async (
     cannonToken: string,
-    id: string
+    id: string,
   ): Promise<User | null> => {
     const resp = await fetch(`${usersEndpoint}/${id}`, {
       headers: {
@@ -22,7 +22,7 @@ export const UserService = (() => {
 
   const getActiveUsersByDay = async (
     cannonToken: string,
-    day: string
+    day: string,
   ): Promise<User[] | null> => {
     try {
       const resp = await fetch(`${usersEndpoint}?date=${day}`, {
@@ -101,7 +101,7 @@ export const UserService = (() => {
 
   const updateMe = async (
     cannonToken: string,
-    user: User
+    user: User,
   ): Promise<boolean> => {
     try {
       const resp = await fetch(usersEndpoint + "/me", {
@@ -114,6 +114,7 @@ export const UserService = (() => {
           ...user,
           id: undefined,
           role: undefined,
+          company: undefined,
         }),
       });
       if (resp.ok) {
@@ -128,7 +129,7 @@ export const UserService = (() => {
 
   const getCVInfo = async (
     cannonToken: string,
-    id?: string
+    id?: string,
   ): Promise<SINFOFile | {} | null> => {
     try {
       const resp = await fetch(
@@ -142,7 +143,7 @@ export const UserService = (() => {
             revalidate: 86400, // 1 day
             tags: ["modified-cv"],
           },
-        }
+        },
       );
       if (resp.ok) return resp.json();
     } catch (error) {
@@ -224,7 +225,7 @@ export const UserService = (() => {
   const promote = async (
     cannonToken: string,
     id: string,
-    options: PromoteOptions
+    options: PromoteOptions,
   ): Promise<boolean> => {
     try {
       const resp = await fetch(usersEndpoint + `/${id}`, {
@@ -263,7 +264,7 @@ export const UserService = (() => {
 
   const validateSpinWheel = async (
     cannonToken: string,
-    id: string
+    id: string,
   ): Promise<boolean> => {
     try {
       const resp = await fetch(`${usersEndpoint}/${id}/redeem-card`, {
@@ -280,6 +281,94 @@ export const UserService = (() => {
     return false;
   };
 
+  const getConnections = async (
+    cannonToken: string,
+  ): Promise<Connection[] | null> => {
+    try {
+      const resp = await fetch(`${usersEndpoint}/me/connections`, {
+        headers: {
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        next: {
+          revalidate: 86400, // 1 day
+          tags: ["updated-connection"],
+        },
+      });
+      if (resp.ok) return (await resp.json()) as Connection[];
+    } catch (err) {
+      console.error(err);
+    }
+    return null;
+  };
+
+  const connect = async (
+    cannonToken: string,
+    to: string,
+    notes?: string,
+  ): Promise<Connection | null> => {
+    try {
+      const resp = await fetch(`${usersEndpoint}/me/connections`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        body: JSON.stringify({ to, notes }),
+      });
+
+      if (resp.ok) return (await resp.json()) as Connection;
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  };
+
+  const updateConnection = async (
+    cannonToken: string,
+    to: string,
+    notes?: string,
+  ): Promise<Connection | null> => {
+    try {
+      const resp = await fetch(`${usersEndpoint}/me/connections/${to}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        body: JSON.stringify({ notes }),
+      });
+
+      if (resp.ok) {
+        revalidateTag("updated-connection");
+        return (await resp.json()) as Connection;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  };
+
+  const removeConnection = async (
+    cannonToken: string,
+    to: string,
+  ): Promise<Connection | null> => {
+    try {
+      const resp = await fetch(`${usersEndpoint}/me/connections/${to}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${cannonToken}`,
+        },
+      });
+
+      if (resp.ok) {
+        return (await resp.json()) as Connection;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  };
+
   return {
     getUser,
     getActiveUsersByDay,
@@ -294,5 +383,9 @@ export const UserService = (() => {
     promote,
     demote,
     validateSpinWheel,
+    getConnections,
+    connect,
+    updateConnection,
+    removeConnection,
   };
 })();

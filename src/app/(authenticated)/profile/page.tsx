@@ -3,6 +3,7 @@ import GridList from "@/components/GridList";
 import List from "@/components/List";
 import ListCard from "@/components/ListCard";
 import AchievementTile from "@/components/user/AchievementTile";
+import ConnectionTile from "@/components/user/ConnectionTile";
 import CurriculumVitae from "@/components/user/CurriculumVitae";
 import ProfileHeader from "@/components/user/ProfileHeader";
 import ProfileInformations from "@/components/user/ProfileInformations";
@@ -15,7 +16,7 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 const N_ACHIEVEMENTS = 5;
-// const N_CONNECTIONS = 3;
+const N_CONNECTIONS = 3;
 
 export default async function Profile() {
   const session = (await getServerSession(authOptions))!;
@@ -24,8 +25,10 @@ export default async function Profile() {
 
   const achievements = await AchievementService.getAchievements();
   const userAchievements = achievements?.filter((a) =>
-    a.users?.includes(user.id)
+    a.users?.includes(user.id),
   );
+
+  const userConnections = await UserService.getConnections(session.cannonToken);
 
   return (
     <div className="container mx-auto">
@@ -76,17 +79,17 @@ export default async function Profile() {
       </GridList>
 
       {/* Connections */}
-      {/* !!user.connections?.length && (
+      {!!userConnections?.length && (
         <List
           title="Connections"
           link="/profile/connections"
           linkText="See all"
         >
-          {user.connections.slice(0, N_CONNECTIONS).map((u) => (
-            <UserTile key={u.id} user={u} />
+          {userConnections.slice(0, N_CONNECTIONS).map((c) => (
+            <ConnectionTile key={c.to} connection={c} />
           ))}
         </List>
-      ) */}
+      )}
     </div>
   );
 }

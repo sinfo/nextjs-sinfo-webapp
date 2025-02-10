@@ -21,14 +21,20 @@ export const CompanyService = (() => {
     return null;
   };
 
-  const getConnections = async (id: string): Promise<User[] | null> => {
+  const getConnections = async (
+    cannonToken: string,
+    id: string,
+  ): Promise<Connection[] | null> => {
     try {
       const resp = await fetch(`${companiesEndpoint}/${id}/connections`, {
+        headers: {
+          Authorization: `Bearer ${cannonToken}`,
+        },
         next: {
           revalidate: 86400, // 1 day
         },
       });
-      if (resp.ok) return (await resp.json()) as User[];
+      if (resp.ok) return (await resp.json()) as Connection[];
     } catch (e) {
       console.error(e);
     }
