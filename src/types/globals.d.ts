@@ -53,6 +53,15 @@ type User = {
   updated?: string;
 };
 
+type Connection = {
+  from: string;
+  to: string;
+  edition: string;
+  notes?: string;
+  created?: string;
+  updated?: string;
+};
+
 type AchievementKind =
   | "cv"
   | "stand"

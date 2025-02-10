@@ -15,6 +15,7 @@ import { Scan } from "lucide-react";
 import Link from "next/link";
 import { SocialNetwork } from "@/components/SocialNetwork";
 import BlankPageWithMessage from "@/components/BlankPageMessage";
+import ConnectionTile from "@/components/user/ConnectionTile";
 
 interface CompanyParams {
   id: string;
@@ -32,20 +33,23 @@ export default async function Company({ params }: { params: CompanyParams }) {
   }
 
   const companySessions = company.sessions?.sort((a, b) =>
-    a.date.localeCompare(b.date)
+    a.date.localeCompare(b.date),
   );
   const companyMembers = company.members?.sort((a, b) =>
-    a.name.localeCompare(b.name)
+    a.name.localeCompare(b.name),
   );
   const companyStands = company.stands?.sort((a, b) =>
-    a.date.localeCompare(b.date)
+    a.date.localeCompare(b.date),
   );
   const hereToday = isHereToday(company);
 
-  const session = await getServerSession(authOptions);
+  const session = (await getServerSession(authOptions))!;
   const user: User | null = await UserService.getMe(session!.cannonToken);
 
-  const companyConnections = await CompanyService.getConnections(companyID);
+  const companyConnections = await CompanyService.getConnections(
+    session.cannonToken,
+    companyID,
+  );
 
   return (
     <div className="container mx-auto">
@@ -115,19 +119,17 @@ export default async function Company({ params }: { params: CompanyParams }) {
         <StandDetails standDetails={company.standDetails} />
       )}
       {/* Connections */}
-      {user &&
-        (isCompany(user.role) || isMember(user.role)) &&
-        companyConnections && (
-          <List
-            title="Company connections"
-            link={`/companies/${companyID}/connections`}
-            linkText="See all"
-          >
-            {companyConnections.slice(0, N_CONNECTIONS).map((u) => (
-              <UserTile key={u.id} user={u} />
-            ))}
-          </List>
-        )}
+      {user && isCompany(user.role) && !!companyConnections?.length && (
+        <List
+          title="Company connections"
+          link={`/companies/${companyID}/connections`}
+          linkText="See all"
+        >
+          {companyConnections.slice(0, N_CONNECTIONS).map((c) => (
+            <ConnectionTile key={c.to} connection={c} />
+          ))}
+        </List>
+      )}
     </div>
   );
 }
