@@ -51,7 +51,7 @@ export default function QRScanner({ user, cannonToken }: QRScannerProps) {
           }
         }
       } else if (scannedAchievement) {
-        const redeemedAchievent = await AchievementService.redeemSecretAchievement(
+        const redeemedAchievement = await AchievementService.redeemSecretAchievement(
           cannonToken,
           scannedAchievement
         )
