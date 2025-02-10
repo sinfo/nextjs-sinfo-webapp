@@ -56,7 +56,7 @@ export default function QRScanner({ user, cannonToken }: QRScannerProps) {
           scannedAchievement
         )
 
-        if (redeemedAchievent) {
+        if (redeemedAchievement) {
           setBottomCard(<MessageCard
             type="success"
             content="Secret Achievement found!"
