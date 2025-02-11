@@ -4,7 +4,7 @@ export const CompanyService = (() => {
   const getCompany = async (id: string): Promise<Company | null> => {
     const resp = await fetch(`${companiesEndpoint}/${id}`, {
       next: {
-        revalidate: 86400, // 1 day
+        revalidate: 0, // 1 day
       },
     });
     if (resp.ok) return (await resp.json()) as Company;
@@ -14,7 +14,7 @@ export const CompanyService = (() => {
   const getCompanies = async (): Promise<Company[] | null> => {
     const resp = await fetch(companiesEndpoint, {
       next: {
-        revalidate: 86400, // 1 day
+        revalidate: 0, // 1 day
       },
     });
     if (resp.ok) return (await resp.json()) as Company[];
@@ -31,7 +31,7 @@ export const CompanyService = (() => {
           Authorization: `Bearer ${cannonToken}`,
         },
         next: {
-          revalidate: 86400, // 1 day
+          revalidate: 0, // 1 day
         },
       });
       if (resp.ok) return (await resp.json()) as Connection[];

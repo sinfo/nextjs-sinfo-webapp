@@ -5,7 +5,7 @@ export const AchievementService = (() => {
   const getAchievements = async (): Promise<Achievement[] | null> => {
     const resp = await fetch(`${achievementsEndpoint}`, {
       next: {
-        revalidate: 86400, // 1 day
+        revalidate: 0, // 1 day
       },
     });
     if (resp.ok) return (await resp.json()) as Achievement[];

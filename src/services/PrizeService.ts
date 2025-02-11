@@ -5,7 +5,7 @@ export const PrizeService = (() => {
     try {
       const resp = await fetch(`${prizesEndpoint}`, {
         next: {
-          revalidate: 86400, // 1 day
+          revalidate: 0, // 1 day
         },
       });
       if (resp.ok) return (await resp.json()) as Prize[];
