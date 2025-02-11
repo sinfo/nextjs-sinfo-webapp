@@ -4,7 +4,7 @@ export const SpeakerService = (() => {
   const getSpeaker = async (id: string): Promise<Speaker | null> => {
     const resp = await fetch(`${speakersEndpoint}/${id}`, {
       next: {
-        revalidate: 86400, // 1 day
+        revalidate: 0, // 1 day
       },
     });
     if (resp.ok) return (await resp.json()) as Speaker;
@@ -14,7 +14,7 @@ export const SpeakerService = (() => {
   const getSpeakers = async (): Promise<Speaker[] | null> => {
     const resp = await fetch(speakersEndpoint, {
       next: {
-        revalidate: 86400, // 1 day
+        revalidate: 0, // 1 day
       },
     });
     if (resp.ok) {

@@ -13,7 +13,7 @@ export const UserService = (() => {
         Authorization: `Bearer ${cannonToken}`,
       },
       next: {
-        revalidate: 86400, // 1 day
+        revalidate: 0, // 1 day
       },
     });
     if (resp.ok) return (await resp.json()) as User;
@@ -30,7 +30,7 @@ export const UserService = (() => {
           Authorization: `Bearer ${cannonToken}`,
         },
         next: {
-          revalidate: 86400, // 1 day
+          revalidate: 0, // 1 day
         },
       });
       if (resp.ok) return (await resp.json()) as User[];
@@ -140,7 +140,7 @@ export const UserService = (() => {
             Authorization: `Bearer ${cannonToken}`,
           },
           next: {
-            revalidate: 86400, // 1 day
+            revalidate: 0, // 1 day
             tags: ["modified-cv"],
           },
         },
@@ -290,7 +290,7 @@ export const UserService = (() => {
           Authorization: `Bearer ${cannonToken}`,
         },
         next: {
-          revalidate: 86400, // 1 day
+          revalidate: 0, // 1 day
           tags: ["updated-connection"],
         },
       });
