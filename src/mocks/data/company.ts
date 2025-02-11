@@ -83,9 +83,9 @@ export const MOCK_COMPANY: Company = {
   advertisementLvl: "max",
   img: "https://static.sinfo.org/static%2F30-sinfo%2FcompanyLogos%2FCloudFlare-01.webp",
   stands: [
-    { id: "13", date: "2025-02-15" },
-    { id: "13", date: "2025-02-16" },
-    { id: "13", date: "2025-02-17" },
+    { standId: "13", date: "2025-02-15" },
+    { standId: "13", date: "2025-02-16" },
+    { standId: "13", date: "2025-02-17" },
   ],
   standDetails: {
     chairs: 0,
