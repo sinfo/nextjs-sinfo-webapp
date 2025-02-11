@@ -4,7 +4,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import Image from "next/image";
 import { Plus, Save, Upload, X } from "lucide-react";
 import CountryList from "country-list";
-import { ChangeEvent, useState } from "react";
+import { useEffect, useState } from "react";
 import Resizer from "react-image-file-resizer";
 
 interface EditProfileFormProps {
@@ -54,7 +54,6 @@ export default function EditProfileForm({
     register,
     setValue,
     getValues,
-    resetField,
     watch,
   } = useForm<FormData>({
     defaultValues: {
@@ -103,6 +102,7 @@ export default function EditProfileForm({
       maxLength: 3,
     },
   });
+  const imgFile: FileList | undefined = watch("imgFile");
 
   const onSubmit = handleSubmit(async (formData) => {
     const lookingFor = [];
@@ -146,14 +146,13 @@ export default function EditProfileForm({
     });
   });
 
-  function handleProfilePictureUpload(event: ChangeEvent<HTMLInputElement>) {
-    if (!event.target.files) setProfilePicturePreview(user.img);
-    else {
-      const file = event.target.files[0];
+  useEffect(() => {
+    const file = imgFile?.item(0);
+    if (file) {
       const urlImage = URL.createObjectURL(file);
       setProfilePicturePreview(urlImage);
     }
-  }
+  }, [imgFile]);
 
   return (
     <form className="flex flex-col gap-y-4 p-4" onSubmit={onSubmit}>
@@ -178,7 +177,6 @@ export default function EditProfileForm({
           accept="image/png, image/jpeg"
           className="absolute z-10 size-[150px] inset-0 mx-auto rounded-full opacity-0"
           {...register("imgFile")}
-          onChange={handleProfilePictureUpload}
         />
         <span className="text-sm text-red-700">{errors.imgFile?.message}</span>
       </div>
