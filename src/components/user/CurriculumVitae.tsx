@@ -47,7 +47,7 @@ export default function CurriculumVitae({
         if (file) {
           const url = await UserService.getDownloadURL(
             session.cannonToken,
-            file.id,
+            currentUser ? undefined : file.id,
           );
           setDownloadURL(url);
         } else {

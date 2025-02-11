@@ -68,7 +68,11 @@ export default async function UserProfile({
       {!isCompany(userProfile.role) &&
         (isCompany(user.role) || isMember(user.role)) && (
           <List title="Curriculum Vitae (CV)">
-            <CurriculumVitae user={userProfile} session={session} />
+            <CurriculumVitae
+              user={userProfile}
+              session={session}
+              currentUser={userProfile.id === user.id}
+            />
           </List>
         )}
 

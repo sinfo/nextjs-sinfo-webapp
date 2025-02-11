@@ -153,7 +153,7 @@ export const UserService = (() => {
 
   const getDownloadURL = async (
     cannonToken: string,
-    fileID: string
+    fileID?: string,
   ): Promise<string | null> => {
     try {
       return `${filesEndpoint}/${fileID || "me"}/download?access_token=${cannonToken}`;
