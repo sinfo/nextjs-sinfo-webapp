@@ -16,12 +16,14 @@ export default function AcademicTile({
   start,
   end,
 }: AcademicTileProps) {
-  const today = new Date().toISOString();
   const startDate = new Date(start);
   const endDate = new Date(end);
 
   function formatDate(date: Date) {
-    return `${date.getMonth().toString().padStart(2, "0")}/${date.getFullYear()}`;
+    return date.toLocaleDateString("en-GB", {
+      month: "2-digit",
+      year: "numeric",
+    });
   }
 
   const label = `${formatDate(startDate)} - ${formatDate(endDate)}`;
