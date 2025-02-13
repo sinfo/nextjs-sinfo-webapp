@@ -1,6 +1,5 @@
 import GridList from "@/components/GridList";
 import List from "@/components/List";
-import ListCard from "@/components/ListCard";
 import AcademicTile from "./AcademicTile";
 
 interface ProfileInformationProps {
@@ -26,7 +25,7 @@ export default function ProfileInformations({ user }: ProfileInformationProps) {
 
       {/* Skills */}
       {!!skills?.length && (
-        <GridList title="Skills">
+        <GridList title="Skills" className="!justify-start">
           {skills.map((skill, idx) => (
             <span
               key={`skills-${idx}`}
@@ -40,7 +39,7 @@ export default function ProfileInformations({ user }: ProfileInformationProps) {
 
       {/* Interested In */}
       {!!interestedIn?.length && (
-        <GridList title="Interested In">
+        <GridList title="Interested In" className="!justify-start">
           {interestedIn.map((interest, idx) => (
             <span
               key={`interested-in-${idx}`}
@@ -54,7 +53,7 @@ export default function ProfileInformations({ user }: ProfileInformationProps) {
 
       {/* Looking For */}
       {!!lookingFor?.length && (
-        <GridList title="Looking for">
+        <GridList title="Looking for" className="!justify-start">
           {lookingFor.map((looking, idx) => (
             <span
               key={`looking-for-${idx}`}
