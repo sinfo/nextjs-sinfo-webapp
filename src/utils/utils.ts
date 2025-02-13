@@ -131,3 +131,15 @@ export function isToday(date: Date | string): boolean {
     date.getDate() === today.getDate()
   );
 }
+
+export function getSessionColorClassName(sessionKind: string) {
+  switch (sessionKind) {
+    case "Presentation":
+      return "!bg-sinfo-tertiary";
+    case "Workshop":
+      return "!bg-sinfo-quaternary";
+    case "Keynote":
+    default:
+      return "!bg-sinfo-secondary";
+  }
+}
