@@ -31,6 +31,7 @@ export const MOCK_USER: User = {
       ),
     },
   ],
+  skills: ["Python", "Git", "Github", "React", "NodeJS"],
 };
 
 export const MOCK_OTHER_USER: User = {
