@@ -18,6 +18,17 @@ export default {
     LinkedInProvider({
       clientId: process.env.LINKEDIN_CLIENT_ID as string,
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET as string,
+      issuer: "https://www.linkedin.com/oauth",
+      jwks_endpoint: "https://www.linkedin.com/oauth/openid/jwks",
+      async profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          firstname: profile.given_name,
+          lastname: profile.family_name,
+          email: profile.email,
+        };
+      },
     }),
     {
       id: "microsoft",
