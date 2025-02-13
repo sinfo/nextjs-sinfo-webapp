@@ -19,11 +19,13 @@ export default async function Connections() {
         {connections.length > 0 ? (
           connections.map((c) => <ConnectionTile key={c.to} connection={c} />)
         ) : (
-          <div>
-            <p>1. Scan other user&apos;s QR-Code.</p>
-            <p>2. Open user&apos;s page.</p>
-            <p>3. And click on the connect button.</p>
-          </div>
+          <p className="text-gray-600">
+            1. Scan the QR code of another user. <br />
+            2. Visit their profile page.
+            <br />
+            3. Click on the "Connect" button.
+            <br />
+          </p>
         )}
       </List>
     </div>
