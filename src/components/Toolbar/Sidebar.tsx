@@ -14,7 +14,7 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
 
   return (
     <div
-      className={`overflow-y-auto z-50 fixed inset-0 bg-sinfo-primary p-10 mb-safe flex flex-col gap-6 transition-transform duration-300 ${
+      className={`overflow-y-auto z-50 fixed inset-0 bg-sinfo-primary px-10 py-8 mb-safe flex flex-col gap-6 transition-transform duration-300 ${
         show ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -29,6 +29,9 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
         <div className="flex flex-col gap-2">
           <Link href="/profile" onClick={onClose}>
             Profile
+          </Link>
+          <Link href="/profile/connections" onClick={onClose}>
+            Connections
           </Link>
         </div>
         <div className="flex flex-col gap-2">
@@ -75,10 +78,6 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
           Report a Bug
           <ExternalLink size={16} />
         </Link>
-        {/* todo: the pages below dont exist */}
-        <Link href="#" onClick={onClose}>
-          Privacy Policy
-        </Link>
         <Link
           href="https://sinfo.org/code-of-conduct"
           target="_blank"
@@ -91,8 +90,8 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
           className="flex items-center gap-x-2 text-red-500"
           onClick={handleLogout}
         >
-          <LogOut size={16} />
           Logout
+          <LogOut size={16} />
         </button>
       </div>
     </div>
