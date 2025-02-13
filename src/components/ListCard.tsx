@@ -13,7 +13,7 @@ interface ListCardProps {
   subtitle?: string;
   headtext?: string;
   label?: string;
-  labelExtraClassName?: string;
+  labelColor?: string;
   link?: string;
   linkProps?: LinkProps;
   extraClassName?: string;
@@ -41,7 +41,7 @@ export default function ListCard({
   subtitle,
   headtext,
   label,
-  labelExtraClassName,
+  labelColor,
   link,
   extraComponent,
   imgProps,
@@ -74,7 +74,8 @@ export default function ListCard({
             )}
             {label && (
               <span
-                className={`bg-sinfo-secondary text-white rounded-md px-2 py-0.5 uppercase ${labelExtraClassName ?? ""}`}
+                className={`bg-sinfo-secondary text-white rounded-md px-2 py-0.5 uppercase`}
+                style={labelColor ? { backgroundColor: labelColor } : undefined}
               >
                 {label}
               </span>

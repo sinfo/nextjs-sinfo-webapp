@@ -1,5 +1,5 @@
 import ListCard from "@/components/ListCard";
-import { generateTimeInterval, getSessionColorClassName } from "@/utils/utils";
+import { generateTimeInterval, getSessionColor } from "@/utils/utils";
 
 interface SesionTileProps {
   session: SINFOSession;
@@ -29,7 +29,7 @@ export function SessionTile({
         onlyHours: onlyShowHours,
       })}
       label={session.kind}
-      labelExtraClassName={getSessionColorClassName(session.kind)}
+      labelColor={getSessionColor(session.kind)}
       link={`/sessions/${session.id}`}
       extraClassName={
         pastSession ? "!bg-neutral-200 hover:!bg-neutral-300" : ""
