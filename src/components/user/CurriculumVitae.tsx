@@ -29,16 +29,16 @@ export default function CurriculumVitae({
       async function getCV() {
         const cvInfo = await UserService.getCVInfo(
           session.cannonToken,
-          currentUser ? undefined : user.id,
+          currentUser ? undefined : user.id
         );
         setFile(
           cvInfo && Object.keys(cvInfo).length > 0
             ? (cvInfo as SINFOFile)
-            : null,
+            : null
         );
         if (loading) setLoading(false);
       },
-    [session.cannonToken, user.id, currentUser, loading],
+    [session.cannonToken, user.id, currentUser, loading]
   );
 
   const getDownloadURL = useMemo(
@@ -47,14 +47,14 @@ export default function CurriculumVitae({
         if (file) {
           const url = await UserService.getDownloadURL(
             session.cannonToken,
-            currentUser ? undefined : file.id,
+            currentUser ? undefined : file.id
           );
           setDownloadURL(url);
         } else {
           setDownloadURL(null);
         }
       },
-    [session.cannonToken, file],
+    [session.cannonToken, currentUser, file]
   );
 
   useEffect(() => {
