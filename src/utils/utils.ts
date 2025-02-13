@@ -1,3 +1,5 @@
+import config from "../../tailwind.config";
+
 export function convertToAppRole(role: string): UserRole {
   switch (role) {
     case "company":
@@ -132,14 +134,15 @@ export function isToday(date: Date | string): boolean {
   );
 }
 
-export function getSessionColorClassName(sessionKind: string) {
+export function getSessionColor(sessionKind: string) {
   switch (sessionKind) {
     case "Presentation":
-      return "!bg-sinfo-tertiary";
+      return config.theme.extend.colors.sinfo.tertiary;
     case "Workshop":
-      return "!bg-sinfo-quaternary";
+      return config.theme.extend.colors.sinfo.quaternary;
     case "Keynote":
+      return config.theme.extend.colors.sinfo.secondary;
     default:
-      return "!bg-sinfo-secondary";
+      return "#000";
   }
 }

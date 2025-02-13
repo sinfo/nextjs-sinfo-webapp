@@ -9,11 +9,7 @@ import { PrizeTile } from "@/components/prize";
 import AddToCalendarButton from "@/components/session/AddToCalendarButton";
 import { SessionService } from "@/services/SessionService";
 import { UserService } from "@/services/UserService";
-import {
-  generateTimeInterval,
-  getSessionColorClassName,
-  isMember,
-} from "@/utils/utils";
+import { generateTimeInterval, getSessionColor, isMember } from "@/utils/utils";
 import { CalendarClock, MapPin, Scan, Users } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
@@ -63,7 +59,8 @@ export default async function Session({ params }: { params: SessionParams }) {
           </span>
         </div>
         <span
-          className={`text-white rounded-md px-3 py-1 font-bold uppercase ${getSessionColorClassName(sinfoSession.kind)}`}
+          className={`text-white rounded-md px-3 py-1 font-bold uppercase`}
+          style={{ backgroundColor: getSessionColor(sinfoSession.kind) }}
         >
           {sinfoSession.kind}
         </span>
