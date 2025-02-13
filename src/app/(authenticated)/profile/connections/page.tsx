@@ -23,7 +23,7 @@ export default async function Connections() {
             1. Scan the QR code of another user. <br />
             2. Visit their profile page.
             <br />
-            3. Click on the "Connect" button.
+            3. Click on the &quot;Connect&quot; button.
             <br />
           </p>
         )}
