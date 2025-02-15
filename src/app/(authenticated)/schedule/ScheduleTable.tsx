@@ -37,11 +37,14 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
 
   const sessionsByDay = useMemo(() => {
     const sessionsCleaned = sessions
-      .filter(
-        (s) =>
-          (!kindParam || s.kind.toLowerCase() === kindParam) &&
-          (!placeParam || s.place.toLowerCase() === placeParam),
-      )
+      .filter((s) => {
+        return (
+          (!kindParam ||
+            s.kind.toLowerCase() === kindParam.toLocaleLowerCase()) &&
+          (!placeParam ||
+            s.place.toLowerCase() === placeParam.toLocaleLowerCase())
+        );
+      })
       .sort((a, b) => a.date.localeCompare(b.date));
 
     return sessionsCleaned.reduce(
@@ -50,13 +53,13 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
         const daySessions = [...(acc[day] || []), s];
         return { ...acc, [day]: daySessions };
       },
-      {} as Record<string, SINFOSession[]>,
+      {} as Record<string, SINFOSession[]>
     );
   }, [sessions, kindParam, placeParam]);
 
   const sortedDays = useMemo(
     () => Object.keys(sessionsByDay).sort(),
-    [sessionsByDay],
+    [sessionsByDay]
   );
 
   useEffect(() => {
