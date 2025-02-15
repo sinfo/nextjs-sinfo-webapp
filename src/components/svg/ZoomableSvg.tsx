@@ -19,6 +19,9 @@ const ZoomableWrapper: React.FC<ZoomableWrapperProps> = ({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [touchStartDistance, setTouchStartDistance] = useState<number | null>(
+    null
+  );
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,6 +56,47 @@ const ZoomableWrapper: React.FC<ZoomableWrapperProps> = ({
       container.removeEventListener("wheel", handleWheel);
     };
   }, [scale, position, minZoom, maxZoom]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.touches[0].clientX - position.x,
+        y: e.touches[0].clientY - position.y,
+      });
+    } else if (e.touches.length === 2) {
+      setTouchStartDistance(getDistance(e.touches));
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    e.preventDefault();
+    if (e.touches.length === 1 && isDragging) {
+      setPosition({
+        x: e.touches[0].clientX - dragStart.x,
+        y: e.touches[0].clientY - dragStart.y,
+      });
+    } else if (e.touches.length === 2) {
+      const newDistance = getDistance(e.touches);
+      if (touchStartDistance) {
+        const scaleFactor = newDistance / touchStartDistance;
+        setScale((prevScale) =>
+          Math.min(Math.max(prevScale * scaleFactor, minZoom), maxZoom)
+        );
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    setTouchStartDistance(null);
+  };
+
+  const getDistance = (touches: React.TouchList) => {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (e.button === 0) {
@@ -132,6 +176,9 @@ const ZoomableWrapper: React.FC<ZoomableWrapperProps> = ({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         <div
           className={`
