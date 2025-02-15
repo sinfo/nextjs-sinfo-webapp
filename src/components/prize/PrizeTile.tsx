@@ -61,7 +61,7 @@ export function PrizeTile({
     <div className="flex flex-col justify-center items-center text-center py-6 px-2 gap-y-2 bg-white shadow-md rounded-md">
       <span className="text-sm">{prize.name}</span>
       <Image
-        className="w-50 h-50 object-contain"
+        className="w-[200px] h-[200px] object-contain"
         width={200}
         height={200}
         src={prize.img}
