@@ -564,7 +564,7 @@ export default function EditProfileForm({
             <input
               id="full-time"
               type="checkbox"
-              className="mr-2"
+              className="mr-2 accent-sinfo-primary"
               {...register("lookingFor.fullTime")}
             />
             <label htmlFor="full-time">Full-time</label>
@@ -573,7 +573,7 @@ export default function EditProfileForm({
             <input
               id="internship"
               type="checkbox"
-              className="mr-2"
+              className="mr-2 accent-sinfo-primary"
               {...register("lookingFor.internship")}
             />
             <label htmlFor="internship">Internship</label>
@@ -582,7 +582,7 @@ export default function EditProfileForm({
             <input
               id="part-time"
               type="checkbox"
-              className="mr-2"
+              className="mr-2 accent-sinfo-primary"
               {...register("lookingFor.partTime")}
             />
             <label htmlFor="part-time">Part-time</label>
