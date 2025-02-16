@@ -23,7 +23,11 @@ const CompanyStand: React.FC<StandProps> = ({
   if (!position) return null;
 
   return (
-    <a href={company ? `/companies/${company.id}` : "#"} className={className}>
+    <a
+      href={company ? `/companies/${company.id}` : "#"}
+      className={className}
+      id={company?.id ? `company-${company?.id}` : `stand-${standNumber}`}
+    >
       <g
         className={`
           transition-all duration-200 ease-in-out
