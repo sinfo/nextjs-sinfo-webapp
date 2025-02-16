@@ -46,17 +46,19 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
           </Link>
         </div>
         <div className="flex flex-col gap-2">
+          <Link href="/venue" onClick={onClose}>
+            Venue
+          </Link>
           <Link href="/speakers" onClick={onClose}>
             Speakers
           </Link>
           <Link href="/companies" onClick={onClose}>
             Companies
           </Link>
-          <Link href="/venue" onClick={onClose}>
-            Venue
+          <Link href="/prizes" onClick={onClose}>
+            Prizes
           </Link>
         </div>
-        <div></div>
       </div>
       <div className="flex-1" />
 
