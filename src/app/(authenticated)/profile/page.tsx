@@ -25,7 +25,7 @@ export default async function Profile() {
 
   const achievements = await AchievementService.getAchievements();
   const userAchievements = achievements?.filter((a) =>
-    a.users?.includes(user.id),
+    a.users?.includes(user.id)
   );
 
   const userConnections = await UserService.getConnections(session.cannonToken);
@@ -70,10 +70,9 @@ export default async function Profile() {
         ) : (
           <ListCard
             title="Start winning achievements"
-            subtitle="Click here to know more"
+            subtitle="Click to know more"
             link="/profile/achievements"
             icon={Award}
-            extraClassName="!bg-sinfo-primary !text-white"
           />
         )}
       </GridList>

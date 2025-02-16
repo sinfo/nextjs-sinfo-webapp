@@ -14,6 +14,11 @@ export function convertToAppRole(role: string): UserRole {
   }
 }
 
+export function isAttendee(role: string): boolean {
+  const appRole = convertToAppRole(role);
+  return appRole === "Attendee";
+}
+
 export function isMember(role: string): boolean {
   const appRole = convertToAppRole(role);
   return appRole === "Member" || appRole === "Admin";
@@ -145,4 +150,28 @@ export function getSessionColor(sessionKind: string) {
     default:
       return "#000";
   }
+}
+
+export function getUserActiveSignatureData(user: User, edition: string) {
+  let relevantSignatures = user.signatures?.find(
+    (s) => s.edition === edition && isToday(s.day)
+  );
+  if (!relevantSignatures) return null;
+
+  const singatureMap: { [key: string]: SINFOSignature } = {};
+  relevantSignatures.signatures.map((s) => {
+    const curr = singatureMap[s.companyId];
+    if (!curr) {
+      singatureMap[s.companyId] = s;
+      return;
+    }
+    if (new Date(s.date) < new Date(curr.date)) {
+      singatureMap[s.date] = s;
+    }
+  });
+
+  return {
+    ...relevantSignatures,
+    signatures: Object.values(singatureMap),
+  };
 }

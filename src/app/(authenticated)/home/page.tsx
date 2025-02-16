@@ -12,7 +12,7 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { UserService } from "@/services/UserService";
-import { isCompany, isToday } from "@/utils/utils";
+import { getUserActiveSignatureData, isAttendee } from "@/utils/utils";
 import UserSignOut from "@/components/UserSignOut";
 import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 import { EventService } from "@/services/EventService";
@@ -49,11 +49,9 @@ export default async function Home() {
     ? speakers.sort(() => Math.random() - 0.5).slice(0, N_SPEAKER_TILES)
     : [];
 
-  const spinWheelData = user.signatures?.find(
-    (s) => s.edition === event?.id && isToday(s.day)
-  );
+  const spinWheelData = getUserActiveSignatureData(user, event?.id ?? ``);
   const showSpinWheelSection =
-    !isCompany(user.role) && !spinWheelData?.redeemed;
+    isAttendee(user.role) && !spinWheelData?.redeemed;
 
   return (
     <div className="container mx-auto">
