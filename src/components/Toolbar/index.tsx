@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowLeft, Menu, RefreshCcw } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 import Sidebar from "./Sidebar";
 
 export default function Toolbar() {
@@ -31,7 +32,11 @@ export default function Toolbar() {
               ) : (
                 <button
                   onClick={() => {
-                    router.back();
+                    if (window.history.length > 2) {
+                      router.back();
+                    } else {
+                      router.push("/home");
+                    }
                   }}
                 >
                   <ArrowLeft size={32} className="cursor-pointer" />
@@ -39,12 +44,14 @@ export default function Toolbar() {
               )}
             </div>
             <div className="flex-1">
-              <Image
-                className="w-32 mx-auto"
-                src={sinfoLogo}
-                alt="SINFO logo"
-                quality={100}
-              />
+              <Link href="/home">
+                <Image
+                  className="w-32 mx-auto"
+                  src={sinfoLogo}
+                  alt="SINFO logo"
+                  quality={100}
+                />
+              </Link>
             </div>
             <div className="w-1/6 flex justify-end items-center">
               <button onClick={() => window.location.reload()}>
