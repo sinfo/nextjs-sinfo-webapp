@@ -141,59 +141,77 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
           centerZoomedOut={true}
           centerOnInit={true}
         >
-          {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-            <React.Fragment>
-              <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
-                <button
-                  onClick={() => zoomIn()}
-                  className="button button-primary !bg-sinfo-primary flex-1 p-2 rounded hover:opacity-90 transition-opacity"
-                >
-                  +
-                </button>
-                <button
-                  onClick={() => zoomOut()}
-                  className="button button-primary !bg-sinfo-primary flex-1 p-2 rounded hover:opacity-90 transition-opacity"
-                >
-                  -
-                </button>
-                {/* <button
+          {({ zoomIn, zoomOut, resetTransform, zoomToElement, ...rest }) => {
+            useEffect(() => {
+              setTimeout(() => {
+                if (companyParam) {
+                  let element = document.getElementById(
+                    `company-${companyParam}`
+                  );
+                  if (element) {
+                    console.log("Zooming to element", element);
+                    zoomToElement(`company-${companyParam}`, 3);
+                  }
+                }
+              }, 300); // Wait for the SVG to render
+            }, [companyParam]);
+
+            return (
+              <>
+                <React.Fragment>
+                  <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
+                    <button
+                      onClick={() => zoomIn()}
+                      className="button button-primary !bg-sinfo-primary flex-1 p-2 rounded hover:opacity-90 transition-opacity"
+                    >
+                      +
+                    </button>
+                    <button
+                      onClick={() => zoomOut()}
+                      className="button button-primary !bg-sinfo-primary flex-1 p-2 rounded hover:opacity-90 transition-opacity"
+                    >
+                      -
+                    </button>
+                    {/* <button
                   onClick={() => resetTransform()}
                   className="button button-primary !bg-sinfo-secondary flex-1 p-2 rounded hover:opacity-90 transition-opacity"
                 >
                   Reset
                 </button> */}
-              </div>
-              <div className="relative overflow-hidden border border-gray-300 rounded">
-                <TransformComponent>
-                  <svg
-                    viewBox="0 0 512 380"
-                    className="w-full h-auto max-w-4xl mx-auto"
-                  >
-                    <Entrances />
-                    <SessionsStands />
-                    <FoodZone />
-                    <CoworkingZone />
+                  </div>
+                  <div className="relative overflow-hidden border border-gray-300 rounded">
+                    <TransformComponent>
+                      <svg
+                        viewBox="0 0 512 380"
+                        className="w-full h-auto max-w-4xl mx-auto"
+                      >
+                        <Entrances />
+                        <SessionsStands />
+                        <FoodZone />
+                        <CoworkingZone />
 
-                    {/* Company Stands */}
-                    <g id="stands">
-                      {standsForSelectedDay.map((stand) => {
-                        const company = getCompanyAtPosition(stand.standId);
-                        return (
-                          <CompanyStand
-                            key={`stand-${stand.standId}`}
-                            stand={stand}
-                            company={company}
-                            standPositions={standPositions}
-                            isSelected={isStandHighlighted(company)}
-                          />
-                        );
-                      })}
-                    </g>
-                  </svg>
-                </TransformComponent>
-              </div>
-            </React.Fragment>
-          )}
+                        {/* Company Stands */}
+                        <g id="stands">
+                          {standsForSelectedDay.map((stand) => {
+                            const company = getCompanyAtPosition(stand.standId);
+                            return (
+                              <CompanyStand
+                                key={`stand-${stand.standId}`}
+                                stand={stand}
+                                company={company}
+                                standPositions={standPositions}
+                                isSelected={isStandHighlighted(company)}
+                              />
+                            );
+                          })}
+                        </g>
+                      </svg>
+                    </TransformComponent>
+                  </div>
+                </React.Fragment>
+              </>
+            );
+          }}
         </TransformWrapper>
       </div>
     </div>
