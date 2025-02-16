@@ -63,17 +63,6 @@ export default async function QR() {
             {convertToAppRole(user.role)}
           </p>
         </div>
-        {company && (
-          <Link href={`/companies/${company.id}`}>
-            <Image
-              className="h-[80px] w-[80px] object-contain"
-              width={80}
-              height={80}
-              src={company.img}
-              alt={`${company.name} logo`}
-            />
-          </Link>
-        )}
         <Link
           href="/qr/scan"
           className="button button-primary text-lg w-full"
@@ -82,6 +71,17 @@ export default async function QR() {
           <ScanQrCode size={24} />
           Scan
         </Link>
+        {company && (
+          <Link href={`/companies/${company.id}`}>
+            <Image
+              className="size-[50px] object-contain"
+              width={50}
+              height={50}
+              src={company.img}
+              alt={`${company.name} logo`}
+            />
+          </Link>
+        )}
       </div>
     </div>
   );
