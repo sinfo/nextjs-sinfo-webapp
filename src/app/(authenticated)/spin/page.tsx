@@ -8,7 +8,7 @@ import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 import { CompanyService } from "@/services/CompanyService";
 import { EventService } from "@/services/EventService";
 import { UserService } from "@/services/UserService";
-import { isCompany, isToday } from "@/utils/utils";
+import { getUserActiveSignatureData, isAttendee } from "@/utils/utils";
 import { getServerSession } from "next-auth";
 
 export default async function Spin() {
@@ -16,16 +16,14 @@ export default async function Spin() {
   const user = await UserService.getMe(session.cannonToken);
   if (!user) return <UserSignOut />;
 
-  if (isCompany(user.role)) {
+  if (!isAttendee(user.role)) {
     return (
       <BlankPageWithMessage message="You're not eligible to spin the wheel." />
     );
   }
 
   const event = await EventService.getLatest();
-  const spinWheelData = user.signatures?.find(
-    (s) => s.edition === event?.id && isToday(s.day)
-  );
+  const spinWheelData = getUserActiveSignatureData(user, event?.id ?? ``);
 
   if (spinWheelData?.redeemed) {
     return (

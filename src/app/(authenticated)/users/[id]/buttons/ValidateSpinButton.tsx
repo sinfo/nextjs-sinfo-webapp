@@ -1,6 +1,10 @@
 "use client";
 
-import { isCompany, isMember, isToday } from "@/utils/utils";
+import {
+  getUserActiveSignatureData,
+  isAttendee,
+  isMember,
+} from "@/utils/utils";
 import { FerrisWheel } from "lucide-react";
 import { ProfileButtonProps } from ".";
 import { UserService } from "@/services/UserService";
@@ -18,14 +22,12 @@ export default function ValidateSpinButton({
   if (
     user.id === otherUser.id ||
     !isMember(user.role) ||
-    isCompany(otherUser.role)
+    !isAttendee(otherUser.role)
   ) {
     return <></>;
   }
 
-  const spinWheelData = otherUser.signatures?.find(
-    (s) => s.edition === edition && isToday(s.day)
-  );
+  const spinWheelData = getUserActiveSignatureData(otherUser, edition ?? ``);
 
   const isEligible =
     (spinWheelData &&

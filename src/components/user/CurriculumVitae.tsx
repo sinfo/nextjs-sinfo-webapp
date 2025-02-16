@@ -125,7 +125,7 @@ export default function CurriculumVitae({
     <>
       <MessageCard
         type="info"
-        content="By submitting your CV you are accepting the Terms and Conditions. Click here to know more."
+        content="By submitting your CV you are accepting the Terms and Conditions. Click to know more."
         onClick={() => router.push("/terms-and-conditions/cv")}
       />
       <div className="relative flex flex-col justify-center items-center text-center p-4 gap-y-2 rounded-md outline-dashed outline-sinfo-primary text-sinfo-primary mt-2">
