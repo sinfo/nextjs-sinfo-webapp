@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import EventDayButton from "@/components/EventDayButton";
 import GridList from "@/components/GridList";
-import ZoomSvg from "@/components/svg/ZoomableSvg";
 import CompanyStand from "./stands/CompanyStand";
 import Entrances from "./stands/Entrances";
 import CoworkingZone from "./stands/CoworkingZone";
@@ -135,30 +135,67 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
         ))}
       </GridList>
 
-      <ZoomSvg minZoom={0.6}>
-        <svg viewBox="0 0 512 380" className="w-full h-auto max-w-4xl mx-auto">
-          <Entrances />
-          <SessionsStands />
-          <FoodZone />
-          <CoworkingZone />
+      <div className="relative w-full">
+        <TransformWrapper
+          initialScale={1}
+          centerZoomedOut={true}
+          centerOnInit={true}
+        >
+          {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+            <React.Fragment>
+              <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
+                <button
+                  onClick={() => zoomIn()}
+                  className="button button-primary !bg-sinfo-primary flex-1 p-2 rounded hover:opacity-90 transition-opacity"
+                >
+                  +
+                </button>
+                <button
+                  onClick={() => zoomOut()}
+                  className="button button-primary !bg-sinfo-primary flex-1 p-2 rounded hover:opacity-90 transition-opacity"
+                >
+                  -
+                </button>
+                {/* <button
+                  onClick={() => resetTransform()}
+                  className="button button-primary !bg-sinfo-secondary flex-1 p-2 rounded hover:opacity-90 transition-opacity"
+                >
+                  Reset
+                </button> */}
+              </div>
+              <div className="relative overflow-hidden border border-gray-300 rounded">
+                <TransformComponent>
+                  <svg
+                    viewBox="0 0 512 380"
+                    className="w-full h-auto max-w-4xl mx-auto"
+                  >
+                    <Entrances />
+                    <SessionsStands />
+                    <FoodZone />
+                    <CoworkingZone />
 
-          {/* Company Stands */}
-          <g id="stands">
-            {standsForSelectedDay.map((stand) => {
-              const company = getCompanyAtPosition(stand.standId);
-              return (
-                <CompanyStand
-                  key={`stand-${stand.standId}`}
-                  stand={stand}
-                  company={company}
-                  standPositions={standPositions}
-                  isSelected={isStandHighlighted(company)}
-                />
-              );
-            })}
-          </g>
-        </svg>
-      </ZoomSvg>
+                    {/* Company Stands */}
+                    <g id="stands">
+                      {standsForSelectedDay.map((stand) => {
+                        const company = getCompanyAtPosition(stand.standId);
+                        return (
+                          <CompanyStand
+                            key={`stand-${stand.standId}`}
+                            stand={stand}
+                            company={company}
+                            standPositions={standPositions}
+                            isSelected={isStandHighlighted(company)}
+                          />
+                        );
+                      })}
+                    </g>
+                  </svg>
+                </TransformComponent>
+              </div>
+            </React.Fragment>
+          )}
+        </TransformWrapper>
+      </div>
     </div>
   );
 };
