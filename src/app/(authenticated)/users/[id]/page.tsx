@@ -13,6 +13,7 @@ import UserSignOut from "@/components/UserSignOut";
 import BlankPageWithMessage from "@/components/BlankPageMessage";
 import ProfileButtons from "./buttons";
 import Notes from "@/components/user/Notes";
+import { EventService } from "@/services/EventService";
 
 interface UserProfileParams {
   id: string;
@@ -34,9 +35,11 @@ export default async function UserProfile({
     return <BlankPageWithMessage message="User not found!" />;
   }
 
+  const event = await EventService.getLatest();
+
   const achievements = await AchievementService.getAchievements();
   const userAchievements = achievements?.filter((a) =>
-    a.users?.includes(userProfile.id),
+    a.users?.includes(userProfile.id)
   );
 
   const connections = await UserService.getConnections(session.cannonToken);
@@ -48,7 +51,7 @@ export default async function UserProfile({
       await UserService.updateConnection(
         session.cannonToken,
         userProfile.id,
-        notes,
+        notes
       );
   }
 
@@ -61,6 +64,7 @@ export default async function UserProfile({
         user={user}
         otherUser={userProfile}
         connections={connections ?? []}
+        edition={event?.id ?? ``}
       />
 
       {/* Notes */}

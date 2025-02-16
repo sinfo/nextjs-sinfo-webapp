@@ -15,6 +15,7 @@ import { UserService } from "@/services/UserService";
 import { isCompany, isToday } from "@/utils/utils";
 import UserSignOut from "@/components/UserSignOut";
 import { SPIN_WHEEL_MAXIMUM } from "@/constants";
+import { EventService } from "@/services/EventService";
 
 const N_SESSION_TILES = 3;
 const N_COMPANY_TILES = 6;
@@ -25,6 +26,7 @@ export default async function Home() {
   const user = await UserService.getMe(session.cannonToken);
   if (!user) return <UserSignOut />;
 
+  const event = await EventService.getLatest();
   const eventSessions = await SessionService.getSessions();
   const companies = await CompanyService.getCompanies();
   const speakers = await SpeakerService.getSpeakers();
@@ -48,7 +50,7 @@ export default async function Home() {
     : [];
 
   const spinWheelData = user.signatures?.find(
-    (s) => s.edition === process.env.EVENT_EDITION && isToday(s.day)
+    (s) => s.edition === event?.id && isToday(s.day)
   );
   const showSpinWheelSection =
     !isCompany(user.role) && !spinWheelData?.redeemed;

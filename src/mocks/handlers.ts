@@ -17,6 +17,10 @@ import {
 const BACKEND_URL = process.env.CANNON_URL;
 
 export const handlers = [
+  // get latest sinfo event
+  http.get(`${BACKEND_URL}/event/latest`, () => {
+    return HttpResponse.json(MOCK_EVENT);
+  }),
   // get cannon_token for the user
   http.post(`${BACKEND_URL}/auth/*`, () => {
     return HttpResponse.json({
@@ -30,6 +34,10 @@ export const handlers = [
   // update logged in user
   http.put(`${BACKEND_URL}/users/me`, () => {
     return new Response(null, { status: 200 });
+  }),
+  // get logged in user connections
+  http.get(`${BACKEND_URL}/users/me/connections`, () => {
+    return HttpResponse.json([]);
   }),
   // get user QR-Code
   http.get(`${BACKEND_URL}/users/qr-code`, () => {

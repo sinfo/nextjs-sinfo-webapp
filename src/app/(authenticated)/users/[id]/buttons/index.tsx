@@ -7,6 +7,7 @@ export interface ProfileButtonProps {
   user: User;
   otherUser: User;
   connections: Connection[];
+  edition?: string;
 }
 
 export default function ProfileButtons(buttonProps: ProfileButtonProps) {
