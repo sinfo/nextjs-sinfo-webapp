@@ -45,11 +45,11 @@
     transform: translate(-150%, -150%);
     opacity: 0;
   }
-  5% {
+  10% {
     transform: translate(150%, 150%);
     opacity: 1;
   }
-  10% {
+  20% {
     opacity: 0;
   }
   100% {
@@ -74,5 +74,5 @@
   );
   transform: translate(-150%, -150%);
   opacity: 0;
-  animation: shine 30s infinite linear;
+  animation: shine 15s infinite linear;
 }
