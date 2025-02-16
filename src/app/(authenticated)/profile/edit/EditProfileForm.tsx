@@ -590,11 +590,9 @@ export default function EditProfileForm({
         </fieldset>
       </div>
 
-      <button
-        className="bg-sinfo-primary text-white rounded-full p-4 fixed mb-navbar bottom-4 right-4 disabled:opacity-75"
-        type="submit"
-      >
-        <Save size={32} />
+      <button className="button-primary" type="submit">
+        <Save size={16} />
+        Save profile
       </button>
     </form>
   );
