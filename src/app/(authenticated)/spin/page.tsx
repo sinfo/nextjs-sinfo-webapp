@@ -6,6 +6,7 @@ import ProgressBar from "@/components/ProgressBar";
 import UserSignOut from "@/components/UserSignOut";
 import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 import { CompanyService } from "@/services/CompanyService";
+import { EventService } from "@/services/EventService";
 import { UserService } from "@/services/UserService";
 import { isCompany, isToday } from "@/utils/utils";
 import { getServerSession } from "next-auth";
@@ -21,8 +22,9 @@ export default async function Spin() {
     );
   }
 
+  const event = await EventService.getLatest();
   const spinWheelData = user.signatures?.find(
-    (s) => s.edition === process.env.EVENT_EDITION && isToday(s.day)
+    (s) => s.edition === event?.id && isToday(s.day)
   );
 
   if (spinWheelData?.redeemed) {

@@ -39,3 +39,40 @@
 .input {
   @apply h-10 block bg-white text-inherit rounded-md w-full p-2.5;
 }
+
+@keyframes shine {
+  0% {
+    transform: translate(-150%, -150%);
+    opacity: 0;
+  }
+  5% {
+    transform: translate(150%, 150%);
+    opacity: 1;
+  }
+  10% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.shine-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 150%;
+  height: 150%;
+  background: linear-gradient(
+    -45deg,
+    transparent 20%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.4) 55%,
+    transparent 70%,
+    transparent 100%
+  );
+  transform: translate(-150%, -150%);
+  opacity: 0;
+  animation: shine 30s infinite linear;
+}

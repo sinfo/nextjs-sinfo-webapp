@@ -11,6 +11,7 @@ export default function ValidateSpinButton({
   cannonToken,
   user,
   otherUser,
+  edition,
 }: ProfileButtonProps) {
   const router = useRouter();
 
@@ -23,7 +24,7 @@ export default function ValidateSpinButton({
   }
 
   const spinWheelData = otherUser.signatures?.find(
-    (s) => s.edition === process.env.EVENT_EDITION && isToday(s.day)
+    (s) => s.edition === edition && isToday(s.day)
   );
 
   const isEligible =

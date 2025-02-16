@@ -18,11 +18,13 @@ export default function QRCodeButton() {
     return <></>;
 
   return (
-    <Link
-      href="/qr"
-      className="absolute -top-20 right-4 p-4 rounded-full bg-sinfo-primary"
-    >
-      <QrCode size={32} />
+    <Link href="/qr">
+      <div className="absolute -top-20 right-4">
+        <div className="p-4 rounded-full bg-sinfo-primary relative overflow-hidden">
+          <QrCode size={32} />
+          <div className="shine-effect" />
+        </div>
+      </div>
     </Link>
   );
 }
