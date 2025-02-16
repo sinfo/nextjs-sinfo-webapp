@@ -32,11 +32,7 @@ export default function Toolbar() {
               ) : (
                 <button
                   onClick={() => {
-                    if (window.history.length > 2) {
-                      router.back();
-                    } else {
-                      router.push("/home");
-                    }
+                    router.back();
                   }}
                 >
                   <ArrowLeft size={32} className="cursor-pointer" />
