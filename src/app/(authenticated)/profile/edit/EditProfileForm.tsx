@@ -284,7 +284,7 @@ export default function EditProfileForm({
           className="input"
           {...register("contacts.linkedin", {
             pattern: {
-              value: /^[A-Za-z0-9_-]{3,300}$/,
+              value: /^[a-zA-Z0-9À-ž_.-]{3,300}$/,
               message: "Invalid username",
             },
           })}
