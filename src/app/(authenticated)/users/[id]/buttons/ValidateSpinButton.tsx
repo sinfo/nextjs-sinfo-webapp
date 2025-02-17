@@ -47,9 +47,11 @@ export default function ValidateSpinButton({
       disabled={!isEligible}
       onClick={validateSpinWheel}
     >
-      <FerrisWheel size={16} />
-      Validate Spin the Wheel ({spinWheelData?.signatures.length ?? 0}/
-      {SPIN_WHEEL_MAXIMUM})
+      <FerrisWheel size={16} />(
+      {spinWheelData?.redeemed
+        ? "Already redeemed"
+        : `Validate Spin the Wheel ${spinWheelData?.signatures.length ?? 0}/ ${SPIN_WHEEL_MAXIMUM}`}
+      )
     </button>
   );
 }
