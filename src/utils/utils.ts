@@ -124,21 +124,6 @@ export function getAchievementFromQRCode(data: string): string | null {
   return JSON.parse(atob(data.split("sinfo://")[1])).achievement as string;
 }
 
-export function isToday(date: Date | string): boolean {
-  if (typeof date === "string") {
-    date = new Date(date);
-    if (isNaN(date.getTime())) return false;
-  }
-
-  const today = new Date();
-
-  return (
-    date.getFullYear() === today.getFullYear() &&
-    date.getMonth() === today.getMonth() &&
-    date.getDate() === today.getDate()
-  );
-}
-
 export function getSessionColor(sessionKind: string) {
   switch (sessionKind) {
     case "Presentation":
@@ -154,7 +139,7 @@ export function getSessionColor(sessionKind: string) {
 
 export function getUserActiveSignatureData(user: User, edition: string) {
   let relevantSignatures = user.signatures?.find(
-    (s) => s.edition === edition && isToday(s.day)
+    (s) => s.edition === edition && new Date().getDate().toString() === s.day,
   );
   if (!relevantSignatures) return null;
 

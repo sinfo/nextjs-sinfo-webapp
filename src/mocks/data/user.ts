@@ -19,7 +19,7 @@ export const MOCK_USER: User = {
   signatures: [
     {
       edition: MOCK_EVENT.id,
-      day: new Date().toISOString(),
+      day: new Date().getDate().toString(),
       redeemed: false,
       signatures: MOCK_ACHIEVEMENTS.filter(
         (a) => a.kind === "stand" && a.users?.includes("mock_user_id")
@@ -48,7 +48,7 @@ export const MOCK_OTHER_USER: User = {
   signatures: [
     {
       edition: MOCK_EVENT.id,
-      day: new Date().toISOString(),
+      day: new Date().getDate().toString(),
       redeemed: false,
       signatures: MOCK_ACHIEVEMENTS.filter(
         (a) => a.kind === "stand" && a.users?.includes("other_user_id_1")
