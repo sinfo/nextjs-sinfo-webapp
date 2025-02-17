@@ -8,7 +8,6 @@ export const EventService = (() => {
           revalidate: 0, // 1 day
         },
       });
-      console.log(resp);
       if (resp.ok) return (await resp.json()) as SINFOEvent;
     } catch (e) {
       console.error(e);

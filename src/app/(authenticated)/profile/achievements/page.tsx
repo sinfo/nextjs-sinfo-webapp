@@ -42,7 +42,7 @@ export default async function Achievements() {
       </div>
       {sortedKinds.map((k) => (
         <GridList key={k} title={formatAchievementKind(k)}>
-          {achievementsByKind[k].slice(0, 30).map((a) => (
+          {achievementsByKind[k].map((a) => (
             <AchievementTile
               key={a.id}
               achievement={a}
