@@ -48,7 +48,8 @@ export default function ValidateSpinButton({
       onClick={validateSpinWheel}
     >
       <FerrisWheel size={16} />
-      Validate Spin the Wheel
+      Validate Spin the Wheel ({spinWheelData?.signatures.length ?? 0}/
+      {SPIN_WHEEL_MAXIMUM})
     </button>
   );
 }
