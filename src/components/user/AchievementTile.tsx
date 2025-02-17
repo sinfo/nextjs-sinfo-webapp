@@ -18,7 +18,7 @@ export default function AchievementTile({
   return (
     <>
       <div
-        className={`max-w-30 max-h-30 rounded-full shadow-md cursor-pointer ${achieved ? "bg-white" : "bg-gray-200 grayscale opacity-25"}`}
+        className={`size-30 rounded-full shadow-md cursor-pointer ${achieved ? "bg-white" : "bg-gray-200 grayscale opacity-25"}`}
         onClick={() => setIsOpen(true)}
       >
         <Image

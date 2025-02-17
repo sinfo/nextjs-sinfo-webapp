@@ -44,9 +44,18 @@ export default async function CompanyConnections({
       {users.map(
         (u) =>
           u && (
-            <List key={u.id} title={`${u.name}&apos;s connections`}>
+            <List key={u.id} title={`${u.name}'s connections`}>
               {connectionsByUser[u.id].map((c) => (
-                <ConnectionTile key={c.to} connection={c} />
+                <div key={c.to} className="flex flex-col">
+                  <ConnectionTile connection={c} />
+                  {!!c.notes && (
+                    <textarea
+                      disabled
+                      className="input resize-y min-h-16 max-h-32"
+                      value={c.notes}
+                    />
+                  )}
+                </div>
               ))}
             </List>
           ),
