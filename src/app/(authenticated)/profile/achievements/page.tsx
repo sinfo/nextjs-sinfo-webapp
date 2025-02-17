@@ -36,19 +36,21 @@ export default async function Achievements() {
       <div className="flex flex-col items-start gap-y-2 p-4 text-start text-sm">
         <h1 className="text-2xl font-bold">Achievements</h1>
         <span className="text-gray-600">
-          Total points:{" "}
+          Total points:&nbsp;
           {userAchievements?.reduce((acc, a) => acc + a.value, 0) || 0}
         </span>
       </div>
       {sortedKinds.map((k) => (
         <GridList key={k} title={formatAchievementKind(k)}>
-          {achievementsByKind[k].map((a) => (
-            <AchievementTile
-              key={a.id}
-              achievement={a}
-              achieved={!!user && a.users?.includes(user.id)}
-            />
-          ))}
+          {achievementsByKind[k]
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((a) => (
+              <AchievementTile
+                key={a.id}
+                achievement={a}
+                achieved={!!user && a.users?.includes(user.id)}
+              />
+            ))}
         </GridList>
       ))}
     </div>

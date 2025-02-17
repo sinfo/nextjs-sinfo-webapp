@@ -19,6 +19,7 @@ export default function ConnectButton({
     if (!connection) {
       alert("Failed to connect");
     }
+    window.location.reload();
   }
 
   async function handleRemoveConnection() {
@@ -29,6 +30,7 @@ export default function ConnectButton({
     if (!connection) {
       alert("Failed to connect");
     }
+    window.location.reload();
   }
 
   if (connection) {

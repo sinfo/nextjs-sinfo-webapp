@@ -48,7 +48,7 @@ export const UserService = (() => {
           Authorization: `Bearer ${cannonToken}`,
         },
         next: {
-          revalidate: 300, // 5 mins
+          revalidate: 0, // 1 day
           tags: ["modified-me"],
         },
       });
@@ -67,7 +67,7 @@ export const UserService = (() => {
           Authorization: `Bearer ${cannonToken}`,
         },
         next: {
-          revalidate: 300, // 5 mins
+          revalidate: 0, // 1 day
           tags: ["modified-me"],
         },
       });
@@ -102,7 +102,7 @@ export const UserService = (() => {
   const updateMe = async (
     cannonToken: string,
     user: User,
-  ): Promise<boolean> => {
+  ): Promise<User | null> => {
     try {
       const resp = await fetch(usersEndpoint + "/me", {
         method: "PUT",
@@ -119,12 +119,12 @@ export const UserService = (() => {
       });
       if (resp.ok) {
         revalidateTag(`modified-me`);
-        return true;
+        return (await resp.json()) as User;
       }
     } catch (error) {
       console.error(error);
     }
-    return false;
+    return null;
   };
 
   const getCVInfo = async (

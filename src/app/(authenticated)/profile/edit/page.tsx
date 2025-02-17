@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import EditProfileForm from "./EditProfileForm";
 import { redirect } from "next/navigation";
 import UserSignOut from "@/components/UserSignOut";
+import { revalidatePath } from "next/cache";
 
 export default async function EditProfile() {
   const session = (await getServerSession(authOptions))!;
@@ -12,7 +13,17 @@ export default async function EditProfile() {
 
   async function updateUser(newUser: User) {
     "use server";
-    if (await UserService.updateMe(session.cannonToken, newUser)) {
+    const updatedUser = await UserService.updateMe(
+      session.cannonToken,
+      newUser,
+    );
+    if (updatedUser) {
+      if (
+        newUser.img.startsWith("data:") &&
+        updatedUser.img.startsWith("http")
+      ) {
+        revalidatePath(updatedUser.img);
+      }
       redirect("/profile");
     }
   }

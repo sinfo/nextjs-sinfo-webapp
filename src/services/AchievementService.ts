@@ -14,14 +14,16 @@ export const AchievementService = (() => {
 
   const getAchievementBySession = async (
     cannonToken: string,
-    sessionId: string
+    sessionId: string,
   ): Promise<Achievement | null> => {
     try {
       const resp = await fetch(`${achievementsEndpoint}/session/${sessionId}`, {
         headers: {
           Authorization: `Bearer ${cannonToken}`,
         },
-        next: { revalidate: 5 },
+        next: {
+          revalidate: 0, // 1 day
+        },
       });
       if (resp.ok) return (await resp.json()) as Achievement;
     } catch (e) {
@@ -33,22 +35,22 @@ export const AchievementService = (() => {
   const redeemSecretAchievement = async (
     cannonToken: string,
     code: string,
-  ): Promise<Achievement | null> => {
+  ): Promise<boolean> => {
     try {
-      const resp = await fetch(`${achievementsEndpoint}/session/secret`, {
+      const resp = await fetch(`${achievementsEndpoint}/redeem/secret`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${cannonToken}`,
         },
-        body: JSON.stringify({code}),
+        body: JSON.stringify({ code }),
       });
-      if (resp.ok) return (await resp.json()) as Achievement;
+      if (resp.ok) return true;
     } catch (e) {
       console.error(e);
     }
-    return null;
-  }
+    return false;
+  };
 
   return { getAchievements, getAchievementBySession, redeemSecretAchievement };
 })();

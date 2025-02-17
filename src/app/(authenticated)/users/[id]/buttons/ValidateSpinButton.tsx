@@ -8,7 +8,6 @@ import {
 import { FerrisWheel } from "lucide-react";
 import { ProfileButtonProps } from ".";
 import { UserService } from "@/services/UserService";
-import { useRouter } from "next/navigation";
 import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 
 export default function ValidateSpinButton({
@@ -17,8 +16,6 @@ export default function ValidateSpinButton({
   otherUser,
   edition,
 }: ProfileButtonProps) {
-  const router = useRouter();
-
   if (
     user.id === otherUser.id ||
     !isMember(user.role) ||
@@ -38,9 +35,9 @@ export default function ValidateSpinButton({
   async function validateSpinWheel() {
     const success = await UserService.validateSpinWheel(
       cannonToken,
-      otherUser.id
+      otherUser.id,
     );
-    if (success) router.refresh();
+    if (success) window.location.reload();
     else alert("Could not validate!");
   }
 

@@ -23,6 +23,7 @@ export default function DemoteButton({
   async function handleDemote() {
     if (await UserService.demote(cannonToken, otherUser.id)) router.refresh();
     else alert("Failed to demote!");
+    window.location.reload();
   }
 
   return (

@@ -51,26 +51,24 @@ export default function QRScanner({ user, cannonToken }: QRScannerProps) {
           }
         }
       } else if (scannedAchievement) {
-        const redeemedAchievement = await AchievementService.redeemSecretAchievement(
-          cannonToken,
-          scannedAchievement
-        )
+        const redeemedAchievement =
+          await AchievementService.redeemSecretAchievement(
+            cannonToken,
+            scannedAchievement,
+          );
 
         if (redeemedAchievement) {
-          setBottomCard(<MessageCard
-            type="success"
-            content="Secret Achievement found!"
-          />,
+          setBottomCard(
+            <MessageCard type="success" content="Achievement redeemed!" />,
           );
         } else {
-          setBottomCard(<MessageCard
-            type="warning"
-            content="Failed to get user's achievement. Scan again!"
-          />,
+          setBottomCard(
+            <MessageCard
+              type="warning"
+              content="Failed to redeem achievement. Scan again!"
+            />,
           );
         }
-
-        
       } else {
         setBottomCard(<MessageCard type="danger" content="Invalid QR-Code" />);
       }
