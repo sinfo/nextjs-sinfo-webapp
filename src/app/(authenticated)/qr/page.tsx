@@ -10,6 +10,7 @@ import { CompanyService } from "@/services/CompanyService";
 import { convertToAppRole, isCompany } from "@/utils/utils";
 import Link from "next/link";
 import { ScanQrCode } from "lucide-react";
+import BlankPageWithMessage from "@/components/BlankPageMessage";
 
 export default async function QR() {
   const session = await getServerSession(authOptions);
@@ -20,12 +21,13 @@ export default async function QR() {
   const userQRCode: string | null = await UserService.getQRCode(
     session!.cannonToken
   );
-  if (!userQRCode) return <div>Unable to get QR-Code</div>;
+  if (!userQRCode)
+    return <BlankPageWithMessage message="Unable to get QR code." />;
 
   let company: Company | null = null;
   if (isCompany(user.role)) {
     // assumes that cannon api only provides the company associated with the current edition
-    if (user.company?.length) {
+    if (user.company && user.company.length > 0) {
       company = await CompanyService.getCompany(user.company[0].company);
     } else {
       await demoteMe(session!.cannonToken);
@@ -93,4 +95,5 @@ const demoteMe = async (cannonToken: string) => {
     revalidateTag("modified-me");
     redirect("/");
   }
+  return null;
 };

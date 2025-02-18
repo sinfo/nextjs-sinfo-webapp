@@ -10,7 +10,7 @@ import QRCodeButton from "./QRCodeButton";
 
 const navbarItemKeysByRole: Record<UserRole, NavbarItemKey[]> = {
   Attendee: ["home", "schedule", "profile"],
-  Company: ["home", "connections", "profile"],
+  Company: ["home", "connections", "myCompany", "profile"],
   Member: ["home", "schedule", "companies", "profile"],
   Admin: ["home", "schedule", "companies", "profile"],
 };
@@ -25,7 +25,7 @@ export default async function BottomNavbar() {
     <div className="sticky z-10 bottom-0 left-0 right-0 bg-sinfo-primary pb-safe">
       <div className="relative container mx-auto flex h-navbar flex-row">
         {navbarItemKeysByRole[convertToAppRole(user.role)].map((k) => (
-          <NavbarItem key={k} name={k} />
+          <NavbarItem key={k} name={k} user={user} />
         ))}
         <QRCodeButton />
       </div>
