@@ -52,5 +52,33 @@ export const AchievementService = (() => {
     return false;
   };
 
-  return { getAchievements, getAchievementBySession, redeemSecretAchievement };
+  const removeUser = async (
+    cannonToken: string,
+    id: string,
+    userId: string,
+  ): Promise<Achievement | null> => {
+    try {
+      const resp = await fetch(
+        `${achievementsEndpoint}/${id}/users/${userId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cannonToken}`,
+          },
+        },
+      );
+      if (resp.ok) return (await resp.json()) as Achievement;
+    } catch (e) {
+      console.error(e);
+    }
+    return null;
+  };
+
+  return {
+    getAchievements,
+    getAchievementBySession,
+    redeemSecretAchievement,
+    removeUser,
+  };
 })();

@@ -6,6 +6,7 @@ import { AchievementService } from "@/services/AchievementService";
 import { SessionService } from "@/services/SessionService";
 import { UserService } from "@/services/UserService";
 import { getServerSession } from "next-auth";
+import RemoveUser from "./RemoveUser";
 
 interface SessionParticipantsParams {
   id: string;
@@ -24,20 +25,38 @@ export default async function SessionParticipants({
     return <BlankPageWithMessage message="Session not found!" />;
   }
 
-  const session = await getServerSession(authOptions);
+  const session = (await getServerSession(authOptions))!;
 
   const sessionAchievement = await AchievementService.getAchievementBySession(
-    session!.cannonToken,
-    sessionID
+    session.cannonToken,
+    sessionID,
   );
   if (!sessionAchievement) {
     return <BlankPageWithMessage message="Sesssion Achievement not found!" />;
   }
 
+  async function removeUser(userId: string) {
+    "use server";
+    await AchievementService.removeUser(
+      session.cannonToken,
+      sessionAchievement!.id,
+      userId,
+    );
+  }
+
   async function getUserTile(userId: string) {
     const user = await UserService.getUser(session!.cannonToken, userId);
     if (!user) return undefined;
-    return <UserTile key={user.id} user={user} />;
+    return (
+      <div className="flex items-center gap-x-2 w-full">
+        <UserTile key={user.id} user={user} />
+        <RemoveUser
+          userId={user.id}
+          userName={user.name}
+          handleRemoveUser={removeUser}
+        />
+      </div>
+    );
   }
 
   const unregisteredUsers = sessionAchievement.unregisteredUsers || 0;
@@ -52,7 +71,7 @@ export default async function SessionParticipants({
       >
         {sessionAchievement.users?.length ? (
           await Promise.all(
-            sessionAchievement.users.map((id) => getUserTile(id))
+            sessionAchievement.users.map((id) => getUserTile(id)),
           )
         ) : (
           <div>There are no registered users at this session</div>
