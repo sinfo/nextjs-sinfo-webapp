@@ -8,7 +8,7 @@ import { useState } from "react";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 
-type PrizeParticipant = {
+export type PrizeParticipant = {
   userId: string;
   entries?: number;
 };
