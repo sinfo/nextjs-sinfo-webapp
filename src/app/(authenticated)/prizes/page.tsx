@@ -72,7 +72,11 @@ export default async function Prizes() {
             Visit SINFO and get the chance to win
           </span>
         </div>
-        <DailyPrizesTable prizes={dailyPrizes} />
+        <DailyPrizesTable
+          prizes={dailyPrizes}
+          cannonToken={session!.cannonToken}
+          user={user || undefined}
+        />
       </div>
 
       {/* Sessions Prizes */}
