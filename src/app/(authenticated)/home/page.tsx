@@ -32,9 +32,10 @@ export default async function Home() {
   const speakers = await SpeakerService.getSpeakers();
 
   // choose upcoming sessions
+  const tenMinutesEarlier = new Date(new Date().getTime() - 10 * 60 * 1000);
   const upcomingSessions: SINFOSession[] = eventSessions
     ? eventSessions
-        .filter((s) => new Date(s.date) >= new Date())
+        .filter((s) => new Date(s.date) >= tenMinutesEarlier)
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
         .slice(0, N_SESSION_TILES)
     : [];
