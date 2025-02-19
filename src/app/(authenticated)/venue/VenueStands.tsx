@@ -106,7 +106,7 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
   const updateSearchParam = (newDay: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("day", newDay);
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   useEffect(() => {
@@ -142,19 +142,9 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
           centerOnInit={true}
         >
           {({ zoomIn, zoomOut, resetTransform, zoomToElement, ...rest }) => {
-            useEffect(() => {
-              setTimeout(() => {
-                if (companyParam) {
-                  let element = document.getElementById(
-                    `company-${companyParam}`
-                  );
-                  if (element) {
-                    console.log("Zooming to element", element);
-                    zoomToElement(`company-${companyParam}`, 3);
-                  }
-                }
-              }, 300); // Wait for the SVG to render
-            }, [companyParam]);
+            setTimeout(() => {
+              zoomToElement(`company-${companyParam}`, 3);
+            }, 300); // Wait for the SVG to render
 
             return (
               <>
