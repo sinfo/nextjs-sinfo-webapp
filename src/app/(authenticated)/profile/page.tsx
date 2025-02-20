@@ -25,10 +25,12 @@ export default async function Profile() {
 
   const achievements = await AchievementService.getAchievements();
   const userAchievements = achievements?.filter((a) =>
-    a.users?.includes(user.id)
+    a.users?.includes(user.id),
   );
 
-  const userConnections = await UserService.getConnections(session.cannonToken);
+  const { connections, suggestions } = (await UserService.getConnections(
+    session.cannonToken,
+  )) || { connections: [], suggestions: [] };
 
   return (
     <div className="container mx-auto">
@@ -78,13 +80,13 @@ export default async function Profile() {
       </GridList>
 
       {/* Connections */}
-      {!!userConnections?.length && (
+      {!!connections?.length && (
         <List
           title="Connections"
           link="/profile/connections"
           linkText="See all"
         >
-          {userConnections.slice(0, N_CONNECTIONS).map((c) => (
+          {connections.slice(0, N_CONNECTIONS).map((c) => (
             <ConnectionTile key={c.to} connection={c} />
           ))}
         </List>
