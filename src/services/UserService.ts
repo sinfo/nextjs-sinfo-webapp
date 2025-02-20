@@ -281,9 +281,11 @@ export const UserService = (() => {
     return false;
   };
 
+  type ConnectionsResponse = { connections: Connection[]; suggestions: User[] };
+
   const getConnections = async (
     cannonToken: string,
-  ): Promise<Connection[] | null> => {
+  ): Promise<ConnectionsResponse | null> => {
     try {
       const resp = await fetch(`${usersEndpoint}/me/connections`, {
         headers: {
@@ -294,7 +296,7 @@ export const UserService = (() => {
           tags: ["updated-connection"],
         },
       });
-      if (resp.ok) return (await resp.json()) as Connection[];
+      if (resp.ok) return (await resp.json()) as ConnectionsResponse;
     } catch (err) {
       console.error(err);
     }

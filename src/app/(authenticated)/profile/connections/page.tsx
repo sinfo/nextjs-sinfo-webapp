@@ -2,13 +2,16 @@ import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import BlankPageWithMessage from "@/components/BlankPageMessage";
 import List from "@/components/List";
 import ConnectionTile from "@/components/user/ConnectionTile";
+import { UserTile } from "@/components/user/UserTile";
 import { UserService } from "@/services/UserService";
 import { getServerSession } from "next-auth";
 
 export default async function Connections() {
   const session = (await getServerSession(authOptions))!;
 
-  const connections = await UserService.getConnections(session.cannonToken);
+  const { connections, suggestions } = (await UserService.getConnections(
+    session.cannonToken,
+  )) || { connections: [], suggestions: [] };
   if (!connections) {
     return <BlankPageWithMessage message="Connections not found!" />;
   }
@@ -28,6 +31,16 @@ export default async function Connections() {
           </p>
         )}
       </List>
+      {!!suggestions.length && (
+        <List
+          title="Suggestions"
+          description="People who are connected with you"
+        >
+          {suggestions.map((u) => (
+            <UserTile key={u.id} user={u} />
+          ))}
+        </List>
+      )}
     </div>
   );
 }

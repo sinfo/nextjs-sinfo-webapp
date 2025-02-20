@@ -39,10 +39,12 @@ export default async function UserProfile({
 
   const achievements = await AchievementService.getAchievements();
   const userAchievements = achievements?.filter((a) =>
-    a.users?.includes(userProfile.id)
+    a.users?.includes(userProfile.id),
   );
 
-  const connections = await UserService.getConnections(session.cannonToken);
+  const { connections } = (await UserService.getConnections(
+    session.cannonToken,
+  )) || { connections: [] };
   const connection = connections?.find((c) => c.to === userProfile.id);
 
   async function handleNotesUpdate(notes: string) {
@@ -51,7 +53,7 @@ export default async function UserProfile({
       await UserService.updateConnection(
         session.cannonToken,
         userProfile.id,
-        notes
+        notes,
       );
   }
 
