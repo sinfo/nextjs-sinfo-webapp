@@ -11,6 +11,7 @@ import { convertToAppRole, isCompany } from "@/utils/utils";
 import Link from "next/link";
 import { ScanQrCode } from "lucide-react";
 import BlankPageWithMessage from "@/components/BlankPageMessage";
+import History from "./History";
 
 export default async function QR() {
   const session = await getServerSession(authOptions);
@@ -50,8 +51,8 @@ export default async function QR() {
   })();
 
   return (
-    <div className="container mx-auto flex-1">
-      <div className="flex flex-col h-full justify-center items-center text-center p-4 gap-y-4">
+    <div className="container mx-auto flex flex-col">
+      <div className="flex flex-col h-full justify-center items-center text-center p-4 py-8 gap-y-4">
         <div className="flex flex-col justify-center items-center">
           <QRCode
             className="w-72 h-72 p-4 border-[14px] bg-white rounded-lg"
@@ -85,6 +86,7 @@ export default async function QR() {
           </Link>
         )}
       </div>
+      <History />
     </div>
   );
 }

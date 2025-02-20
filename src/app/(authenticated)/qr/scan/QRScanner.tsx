@@ -9,6 +9,7 @@ import {
   getAchievementFromQRCode,
   getUserFromQRCode,
   isCompany,
+  pushToHistory,
 } from "@/utils/utils";
 import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
@@ -50,6 +51,7 @@ export default function QRScanner({ user, cannonToken }: QRScannerProps) {
             );
           }
         }
+        pushToHistory(data);
       } else if (scannedAchievement) {
         const redeemedAchievement =
           await AchievementService.redeemSecretAchievement(

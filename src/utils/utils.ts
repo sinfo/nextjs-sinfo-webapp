@@ -160,3 +160,19 @@ export function getUserActiveSignatureData(user: User, edition: string) {
     signatures: Object.values(singatureMap),
   };
 }
+
+const HISTORY_KEY = "scan-history";
+
+export function pushToHistory(data: string): string[] {
+  const history = [data, ...getHistory()].slice(0, 20);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  return history;
+}
+
+export function getHistory(): string[] {
+  return JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+}
+
+export function deleteHistory() {
+  localStorage.removeItem(HISTORY_KEY);
+}

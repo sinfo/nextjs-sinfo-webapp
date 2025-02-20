@@ -13,7 +13,7 @@ export default function Notes({ notes, onNotesUpdate }: NotesProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   return (
-    <List title="Notes">
+    <List title="Notes" description="Notes are only visible to you">
       <textarea
         ref={inputRef}
         className="input resize-y min-h-16 max-h-32"
