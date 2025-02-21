@@ -18,8 +18,8 @@ import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 import { EventService } from "@/services/EventService";
 
 const N_SESSION_TILES = 3;
-const N_COMPANY_TILES = 6;
-const N_SPEAKER_TILES = 6;
+const N_COMPANY_TILES = 15;
+const N_SPEAKER_TILES = 10;
 
 export default async function Home() {
   const session = (await getServerSession(authOptions))!;

@@ -97,7 +97,7 @@ export default async function Company({ params }: { params: CompanyParams }) {
               key={s.date}
               href={`/venue?day=${s.date.split("T")[0]}&company=${companyID}`}
             >
-              <EventDayButton date={s.date} selected={true} disabled={false} />
+              <EventDayButton date={s.date} />
             </Link>
           ))}
         </GridList>

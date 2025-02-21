@@ -26,7 +26,7 @@ export default function EventDayButton({
       disabled={disabled}
     >
       <span
-        className={`flex items-center justify-center font-mono rounded-full w-10 h-10 shadow-md focus:shadow-none ${selected ? "text-sinfo-primary outline outline-sinfo-primary hover:bg-slate-50" : "text-white bg-sinfo-primary"}`}
+        className={`flex items-center justify-center font-mono rounded-full w-10 h-10 shadow-md focus:shadow-none outline outline-sinfo-primary ${!selected ? "text-sinfo-primary hover:bg-slate-50" : "text-white bg-sinfo-primary"}`}
       >
         {getEventDay(date)}
       </span>

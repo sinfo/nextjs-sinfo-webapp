@@ -21,7 +21,7 @@ const navbarItems = {
   schedule: {
     title: "Schedule",
     icon: Calendar,
-    route: "/schedule",
+    route: "/schedule?day=today",
     isSelected: (currPath: string, _: User) => currPath === "/schedule",
   },
   profile: {

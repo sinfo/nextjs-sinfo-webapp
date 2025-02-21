@@ -35,13 +35,13 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
           </Link>
         </div>
         <div className="flex flex-col gap-2">
-          <Link href="/schedule?kind=keynote" onClick={onClose}>
+          <Link href="/schedule?kind=keynote&day=today" onClick={onClose}>
             Keynotes
           </Link>
-          <Link href="/schedule?kind=presentation" onClick={onClose}>
+          <Link href="/schedule?kind=presentation&day=today" onClick={onClose}>
             Presentations
           </Link>
-          <Link href="/schedule?kind=workshop" onClick={onClose}>
+          <Link href="/schedule?kind=workshop&day=today" onClick={onClose}>
             Workshops
           </Link>
         </div>
