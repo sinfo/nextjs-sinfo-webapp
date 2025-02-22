@@ -4,11 +4,13 @@ import { generateTimeInterval, getSessionColor } from "@/utils/utils";
 interface SesionTileProps {
   session: SINFOSession;
   onlyShowHours?: boolean;
+  indicatePastSession?: boolean;
 }
 
 export function SessionTile({
   session,
   onlyShowHours = false,
+  indicatePastSession = true,
 }: SesionTileProps) {
   const speakersNames = session.speakers
     ?.map((s) => s.name)
@@ -32,7 +34,9 @@ export function SessionTile({
       labelColor={getSessionColor(session.kind)}
       link={`/sessions/${session.id}`}
       extraClassName={
-        pastSession ? "!bg-neutral-200 hover:!bg-neutral-300" : ""
+        indicatePastSession && pastSession
+          ? "!bg-neutral-200 hover:!bg-neutral-300"
+          : undefined
       }
     />
   );
