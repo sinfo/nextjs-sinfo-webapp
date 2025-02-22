@@ -31,7 +31,7 @@ export default async function Home() {
   const companies = await CompanyService.getCompanies();
   const speakers = await SpeakerService.getSpeakers();
 
-  // choose upcoming sessions
+  // choose upcoming or random sessions
   const tenMinutesEarlier = new Date(new Date().getTime() - 10 * 60 * 1000);
   const upcomingSessions: SINFOSession[] = eventSessions
     ? eventSessions
@@ -39,6 +39,12 @@ export default async function Home() {
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
         .slice(0, N_SESSION_TILES)
     : [];
+  const highlightedSessions =
+    upcomingSessions.length > 0
+      ? upcomingSessions
+      : (eventSessions
+          ?.sort(() => Math.random() - 0.5)
+          .slice(0, N_SESSION_TILES) ?? []);
 
   // choose random companies
   const highlightedCompanies: Company[] = companies
@@ -50,9 +56,15 @@ export default async function Home() {
     ? speakers.sort(() => Math.random() - 0.5).slice(0, N_SPEAKER_TILES)
     : [];
 
+  let standDates = new Set(
+    companies?.flatMap(
+      (c) => c.stands?.flatMap((cs) => cs.date.slice(0, 10)) ?? []
+    ) ?? []
+  );
+  let today = new Date().toISOString().split("T")[0];
   const spinWheelData = getUserActiveSignatureData(user, event?.id ?? ``);
   const showSpinWheelSection =
-    isAttendee(user.role) && !spinWheelData?.redeemed;
+    standDates.has(today) && isAttendee(user.role) && !spinWheelData?.redeemed;
 
   return (
     <div className="container mx-auto">
@@ -78,9 +90,15 @@ export default async function Home() {
       )}
 
       {/* Upcoming Sessions */}
-      <List title="Next Up" link="/schedule?day=today" linkText="See all">
-        {upcomingSessions.length > 0 ? (
-          upcomingSessions.map((s) => <SessionTile key={s.id} session={s} />)
+      <List
+        title={upcomingSessions.length > 0 ? "Next Up" : "Sessions"}
+        link="/schedule?day=today"
+        linkText="See all"
+      >
+        {highlightedSessions.length > 0 ? (
+          highlightedSessions.map((s) => (
+            <SessionTile key={s.id} session={s} indicatePastSession={false} />
+          ))
         ) : (
           <ListCard title="Nothing to show" />
         )}
