@@ -88,6 +88,14 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
           Code of Conduct
           <ExternalLink size={16} />
         </Link>
+        <Link
+          href="https://sinfo.org/privacy-policy"
+          target="_blank"
+          className="flex items-center gap-x-2"
+        >
+          Privacy Policy
+          <ExternalLink size={16} />
+        </Link>
         <button
           className="flex items-center gap-x-2 text-red-500"
           onClick={handleLogout}
