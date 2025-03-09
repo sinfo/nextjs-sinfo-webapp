@@ -34,7 +34,15 @@ export default async function Prizes() {
     const achievements = await AchievementService.getAchievements();
     const cvPrizeUsers = achievements?.find((a) => a.kind === "cv")?.users;
 
-    return cvPrizeUsers?.map((u) => ({ userId: u })) || [];
+    return (
+      cvPrizeUsers?.map((u) => ({
+        userId: u,
+        entries: achievements?.reduce(
+          (acc, a) => (a.users?.includes(u) ? acc + a.value : acc),
+          0,
+        ),
+      })) || []
+    );
   }
 
   return (
@@ -89,7 +97,7 @@ export default async function Prizes() {
             <PrizeTile prize={sessionPrize} />
             <PrizeSessions
               sessions={sinfoSessions.filter((s) =>
-                sessionPrize.sessions?.includes(s.id)
+                sessionPrize.sessions?.includes(s.id),
               )}
             />
           </div>

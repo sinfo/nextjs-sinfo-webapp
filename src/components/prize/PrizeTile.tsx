@@ -75,13 +75,15 @@ export function PrizeTile({
             numberOfPieces={500}
             recycle={false}
           />
-          <Image
-            className="w-32 h-32 object-contain"
-            width={128}
-            height={128}
-            src={winner.img}
-            alt={winner.name}
-          />
+          <Link href={`/users/${winner.id}`}>
+            <Image
+              className="size-[128px] object-contain"
+              width={128}
+              height={128}
+              src={winner.img}
+              alt={winner.name}
+            />
+          </Link>
           <span className="">{winner.name}</span>
           <Link
             className="button button-primary text-sm w-full"
