@@ -60,5 +60,25 @@ export const CompanyService = (() => {
     return null;
   };
 
-  return { getCompany, getCompanies, getConnections, sign };
+  const getDownloadLinks = async (
+    cannonToken: string,
+    id: string,
+  ): Promise<DownloadLinks | null> => {
+    try {
+      const resp = await fetch(`${companiesEndpoint}/${id}/url`, {
+        headers: {
+          Authorization: `Bearer ${cannonToken}`,
+        },
+        next: {
+          revalidate: 0, // 1 day
+        },
+      });
+      if (resp.ok) return (await resp.json()) as DownloadLinks;
+    } catch (e) {
+      console.error(e);
+    }
+    return null;
+  };
+
+  return { getCompany, getCompanies, getConnections, sign, getDownloadLinks };
 })();

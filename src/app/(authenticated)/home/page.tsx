@@ -12,10 +12,15 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { UserService } from "@/services/UserService";
-import { getUserActiveSignatureData, isAttendee } from "@/utils/utils";
+import {
+  getUserActiveSignatureData,
+  isAttendee,
+  isCompany,
+} from "@/utils/utils";
 import UserSignOut from "@/components/UserSignOut";
 import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 import { EventService } from "@/services/EventService";
+import { FileUser, Users } from "lucide-react";
 
 const N_SESSION_TILES = 3;
 const N_COMPANY_TILES = 15;
@@ -58,13 +63,21 @@ export default async function Home() {
 
   let standDates = new Set(
     companies?.flatMap(
-      (c) => c.stands?.flatMap((cs) => cs.date.slice(0, 10)) ?? []
-    ) ?? []
+      (c) => c.stands?.flatMap((cs) => cs.date.slice(0, 10)) ?? [],
+    ) ?? [],
   );
   let today = new Date().toISOString().split("T")[0];
   const spinWheelData = getUserActiveSignatureData(user, event?.id ?? ``);
   const showSpinWheelSection =
     standDates.has(today) && isAttendee(user.role) && !spinWheelData?.redeemed;
+
+  const downloadCVsLinks =
+    isCompany(user.role) &&
+    !!user.company?.length &&
+    (await CompanyService.getDownloadLinks(
+      session.cannonToken,
+      user.company[0].company,
+    ));
 
   return (
     <div className="container mx-auto">
@@ -87,6 +100,32 @@ export default async function Home() {
             </Link>
           </div>
         </ProgressBar>
+      )}
+
+      {/* Download CVs section */}
+      {downloadCVsLinks && (
+        <List title="Download CVs">
+          {downloadCVsLinks.all && (
+            <Link
+              className="button-primary text-sm"
+              href={downloadCVsLinks.all}
+              download
+            >
+              <FileUser size={16} />
+              Download all
+            </Link>
+          )}
+          {downloadCVsLinks.all && (
+            <Link
+              className="button-tertiary text-sm"
+              href={downloadCVsLinks.all}
+              download
+            >
+              <Users size={16} />
+              Download company connections
+            </Link>
+          )}
+        </List>
       )}
 
       {/* Upcoming Sessions */}

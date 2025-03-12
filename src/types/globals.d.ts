@@ -91,6 +91,11 @@ type Achievement = {
   updated?: string;
 };
 
+type DownloadLinks = {
+  all?: string;
+  companyConnections?: string;
+};
+
 type SINFOSignature = {
   companyId: string;
   date: string;
