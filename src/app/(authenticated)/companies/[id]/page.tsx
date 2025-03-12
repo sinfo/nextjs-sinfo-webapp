@@ -15,6 +15,7 @@ import { ExternalLinkIcon, Scan } from "lucide-react";
 import Link from "next/link";
 import BlankPageWithMessage from "@/components/BlankPageMessage";
 import ConnectionTile from "@/components/user/ConnectionTile";
+import DownloadCVs from "@/components/company/DownloadCVs";
 
 interface CompanyParams {
   id: string;
@@ -32,13 +33,13 @@ export default async function Company({ params }: { params: CompanyParams }) {
   }
 
   const companySessions = company.sessions?.sort((a, b) =>
-    a.date.localeCompare(b.date)
+    a.date.localeCompare(b.date),
   );
   const companyMembers = company.members?.sort((a, b) =>
-    a.name.localeCompare(b.name)
+    a.name.localeCompare(b.name),
   );
   const companyStands = company.stands?.sort((a, b) =>
-    a.date.localeCompare(b.date)
+    a.date.localeCompare(b.date),
   );
   const hereToday = isHereToday(company);
 
@@ -47,8 +48,16 @@ export default async function Company({ params }: { params: CompanyParams }) {
 
   const companyConnections = await CompanyService.getConnections(
     session.cannonToken,
-    companyID
+    companyID,
   );
+
+  const downloadCVsLinks =
+    user &&
+    ((isCompany(user.role) &&
+      !!user.company?.length &&
+      user.company[0].company === companyID) ||
+      isMember(user.role)) &&
+    (await CompanyService.getDownloadLinks(session.cannonToken, companyID));
 
   return (
     <div className="container mx-auto">
@@ -74,6 +83,10 @@ export default async function Company({ params }: { params: CompanyParams }) {
           </span>
         )}
       </div>
+
+      {/* Download CVs */}
+      {downloadCVsLinks && <DownloadCVs links={downloadCVsLinks} />}
+
       {/* Members section */}
       {user && isMember(user.role) && (
         <div className="flex justify-center items-center p-4 gap-2">

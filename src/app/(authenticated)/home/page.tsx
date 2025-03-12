@@ -21,6 +21,7 @@ import UserSignOut from "@/components/UserSignOut";
 import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 import { EventService } from "@/services/EventService";
 import { FileUser, Users } from "lucide-react";
+import DownloadCVs from "@/components/company/DownloadCVs";
 
 const N_SESSION_TILES = 3;
 const N_COMPANY_TILES = 15;
@@ -103,30 +104,7 @@ export default async function Home() {
       )}
 
       {/* Download CVs section */}
-      {downloadCVsLinks && (
-        <List title="Download CVs">
-          {downloadCVsLinks.all && (
-            <Link
-              className="button-primary text-sm"
-              href={downloadCVsLinks.all}
-              download
-            >
-              <FileUser size={16} />
-              Download all
-            </Link>
-          )}
-          {downloadCVsLinks.companyConnections && (
-            <Link
-              className="button-tertiary text-sm"
-              href={downloadCVsLinks.companyConnections}
-              download
-            >
-              <Users size={16} />
-              Download company connections
-            </Link>
-          )}
-        </List>
-      )}
+      {downloadCVsLinks && <DownloadCVs links={downloadCVsLinks} />}
 
       {/* Upcoming Sessions */}
       <List
