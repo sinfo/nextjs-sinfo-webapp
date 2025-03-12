@@ -21,7 +21,6 @@ import UserSignOut from "@/components/UserSignOut";
 import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 import { EventService } from "@/services/EventService";
 import { FileUser, Users } from "lucide-react";
-import MessageCard from "@/components/MessageCard";
 
 const N_SESSION_TILES = 3;
 const N_COMPANY_TILES = 15;
@@ -80,8 +79,6 @@ export default async function Home() {
       user.company[0].company,
     ));
 
-  console.log("Download CVs Links", downloadCVsLinks);
-
   return (
     <div className="container mx-auto">
       {/* Spin the Wheel Section */}
@@ -108,7 +105,6 @@ export default async function Home() {
       {/* Download CVs section */}
       {downloadCVsLinks && (
         <List title="Download CVs">
-          <MessageCard type="info" content="CVs will be available after 5pm" />
           {downloadCVsLinks.all && (
             <Link
               className="button-primary text-sm"
@@ -119,10 +115,10 @@ export default async function Home() {
               Download all
             </Link>
           )}
-          {downloadCVsLinks.all && (
+          {downloadCVsLinks.companyConnections && (
             <Link
               className="button-tertiary text-sm"
-              href={downloadCVsLinks.all}
+              href={downloadCVsLinks.companyConnections}
               download
             >
               <Users size={16} />
