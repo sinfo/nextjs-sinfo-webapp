@@ -106,12 +106,14 @@ export function PrizeTile({
       />
       {winner && !isOverlayOpen && (
         <div className="flex flex-col justify-center items-center text-center gap-y-2 w-full">
-          <Confetti
-            width={windowWidth}
-            height={windowHeight}
-            numberOfPieces={500}
-            recycle={false}
-          />
+          { disableAnimation && (
+            <Confetti
+              width={windowWidth}
+              height={windowHeight}
+              numberOfPieces={500}
+              recycle={false}
+            />
+          )}
           <Link href={`/users/${winner.id}`}>
             <Image
               className="size-[128px] object-contain"
