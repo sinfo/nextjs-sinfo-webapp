@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Confetti from "react-confetti";
+import { useWindowSize } from "react-use";
 
 interface PrizeDrawAnimationProps {
   participants: User[];
@@ -30,6 +32,7 @@ export function PrizeDrawAnimation({
   const [showWinner, setShowWinner] = useState(false);
   const [showPrize, setShowPrize] = useState(false);
   const [animationDuration, setAnimationDuration] = useState(1000);
+  const { width: windowWidth, height: windowHeight } = useWindowSize();
 
   useEffect(() => {
     // Calculate dynamic timing based on participant count
@@ -191,6 +194,14 @@ export function PrizeDrawAnimation({
       {/* Winner reveal */}
       {showWinner && (
         <div className="absolute inset-0 flex items-center justify-center animate-winner-reveal">
+          {/* Confetti effect */}
+          <Confetti
+            width={windowWidth}
+            height={windowHeight}
+            numberOfPieces={500}
+            recycle={false}
+          />
+          
           <div className="relative flex flex-col items-center gap-6">
             <div className="relative">
               <Image
