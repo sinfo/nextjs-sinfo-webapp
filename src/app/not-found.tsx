@@ -51,7 +51,10 @@ export default async function NotFound() {
         </div>
 
           <div className="mt-0 flex items-center justify-center gap-3 relative z-10">
-            <Link href="/" className="button-primary text-base font-medium px-8 py-3 rounded-full shadow-lg">
+            <Link
+              href="/"
+              className="button-primary text-base font-medium px-10 py-3.5 rounded-full shadow-lg !rounded-full"
+            >
               Go back home
             </Link>
           </div>
