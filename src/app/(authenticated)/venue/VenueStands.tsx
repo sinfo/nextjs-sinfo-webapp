@@ -57,8 +57,8 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
       new Set(
         companies
           .flatMap((company) => company.stands || [])
-          .map((stand) => stand.date.split("T")[0])
-      )
+          .map((stand) => stand.date.split("T")[0]),
+      ),
     ).sort();
   };
 
@@ -67,7 +67,7 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
   const companiesForSelectedDay = useMemo(() => {
     if (!showingDay) return [];
     return companies.filter((company) =>
-      company.stands?.some((stand) => stand.date.split("T")[0] === showingDay)
+      company.stands?.some((stand) => stand.date.split("T")[0] === showingDay),
     );
   }, [companies, showingDay]);
 
@@ -78,8 +78,9 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
       companiesForSelectedDay.find((company) =>
         company.stands?.some(
           (stand) =>
-            stand.date.split("T")[0] === showingDay && stand.standId === standId
-        )
+            stand.date.split("T")[0] === showingDay &&
+            stand.standId === standId,
+        ),
       ) || null
     );
   };
@@ -89,8 +90,8 @@ const VenueStands: React.FC<VenueStandsProps> = ({ companies }) => {
     return companies.flatMap(
       (company) =>
         company.stands?.filter(
-          (stand) => stand.date.split("T")[0] === showingDay
-        ) || []
+          (stand) => stand.date.split("T")[0] === showingDay,
+        ) || [],
     );
   }, [companies, showingDay]);
 

@@ -22,13 +22,13 @@ export const MOCK_USER: User = {
       day: new Date().getDate().toString(),
       redeemed: false,
       signatures: MOCK_ACHIEVEMENTS.filter(
-        (a) => a.kind === "stand" && a.users?.includes("mock_user_id")
+        (a) => a.kind === "stand" && a.users?.includes("mock_user_id"),
       ).map(
         (a, idx) =>
           ({
             companyId: a.company?.id ?? "",
             date: new Date(Date.now() - idx * 5 * 60 * 1000).toISOString(), // 5 minute difference
-          }) as SINFOSignature
+          }) as SINFOSignature,
       ),
     },
   ],
@@ -51,13 +51,13 @@ export const MOCK_OTHER_USER: User = {
       day: new Date().getDate().toString(),
       redeemed: false,
       signatures: MOCK_ACHIEVEMENTS.filter(
-        (a) => a.kind === "stand" && a.users?.includes("other_user_id_1")
+        (a) => a.kind === "stand" && a.users?.includes("other_user_id_1"),
       ).map(
         (a, idx) =>
           ({
             companyId: a.company?.id ?? "",
             date: new Date(Date.now() - idx * 5 * 60 * 1000).toISOString(), // 5 minute difference
-          }) as SINFOSignature
+          }) as SINFOSignature,
       ),
     },
   ],

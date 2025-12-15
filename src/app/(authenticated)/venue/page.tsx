@@ -21,7 +21,7 @@ export default async function VenuePage() {
       all_companies.map(async (company) => {
         const detailedCompany = await CompanyService.getCompany(company.id);
         return detailedCompany;
-      })
+      }),
     )
   ).filter(Boolean);
 
@@ -30,7 +30,7 @@ export default async function VenuePage() {
   }
 
   const uniqueCompanies = Array.from(
-    new Map(companies.map((company) => [company?.id, company])).values()
+    new Map(companies.map((company) => [company?.id, company])).values(),
   ).filter((company): company is Company => company !== null); // Remove nulls
 
   return (
