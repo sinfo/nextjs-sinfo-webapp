@@ -20,7 +20,6 @@ import {
 import UserSignOut from "@/components/UserSignOut";
 import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 import { EventService } from "@/services/EventService";
-import { FileUser, Users } from "lucide-react";
 import DownloadCVs from "@/components/company/DownloadCVs";
 
 const N_SESSION_TILES = 3;
