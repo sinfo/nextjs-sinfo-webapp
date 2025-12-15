@@ -22,9 +22,10 @@ export default function QRCodeScanner({
   const scanning = useRef<boolean>(true);
 
   useEffect(() => {
-    if (videoRef.current && !scannerRef.current) {
+    const video = videoRef.current;
+    if (video && !scannerRef.current) {
       scannerRef.current = new QrScanner(
-        videoRef.current,
+        video,
         (result) => {
           if (result.data && scanning.current) {
             scanning.current = false;
@@ -50,7 +51,7 @@ export default function QRCodeScanner({
     }
 
     return () => {
-      if (!videoRef.current) scannerRef.current?.stop();
+      if (!video) scannerRef.current?.stop();
     };
   }, [scanning, onQRCodeScanned]);
 
