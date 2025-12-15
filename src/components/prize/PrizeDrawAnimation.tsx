@@ -41,7 +41,7 @@ export function PrizeDrawAnimation({
     const participantCount = participants.length;
     let calculatedStagger = 150;
     let calculatedDuration = 1000;
-    
+
     if (participantCount > 10) {
       // Target total time of 5 seconds for the dropping phase
       const targetTotalTime = 5000;
@@ -49,11 +49,13 @@ export function PrizeDrawAnimation({
       // targetTotalTime = (participantCount - 1) * stagger + duration
       // We want to keep the animation smooth, so minimum duration is 600ms
       calculatedDuration = Math.max(600, targetTotalTime * 0.3);
-      calculatedStagger = (targetTotalTime - calculatedDuration) / Math.max(1, participantCount - 1);
+      calculatedStagger =
+        (targetTotalTime - calculatedDuration) /
+        Math.max(1, participantCount - 1);
       // Ensure minimum stagger for visual effect
       calculatedStagger = Math.max(20, calculatedStagger);
     }
-    
+
     setAnimationDuration(calculatedDuration);
 
     // Initialize participant positions with random horizontal positions and delays
@@ -82,7 +84,8 @@ export function PrizeDrawAnimation({
     });
 
     // Calculate total drop time
-    const totalDropTime = (positions.length - 1) * calculatedStagger + calculatedDuration;
+    const totalDropTime =
+      (positions.length - 1) * calculatedStagger + calculatedDuration;
 
     // Start shaking after all participants have dropped
     const shakeTimer = setTimeout(() => {
@@ -102,7 +105,7 @@ export function PrizeDrawAnimation({
     }, totalDropTime + 3000); // 1 second after winner appears
 
     return () => {
-      timers.forEach(timer => clearTimeout(timer));
+      timers.forEach((timer) => clearTimeout(timer));
       clearTimeout(shakeTimer);
       clearTimeout(winnerTimer);
       clearTimeout(prizeTimer);
@@ -173,14 +176,7 @@ export function PrizeDrawAnimation({
           {/* Hat top opening (darker to show depth) */}
           <ellipse cx="100" cy="75" rx="40" ry="8" fill="#1A202C" />
           {/* Hat band */}
-          <rect
-            x="55"
-            y="130"
-            width="90"
-            height="12"
-            rx="2"
-            fill="#E53E3E"
-          />
+          <rect x="55" y="130" width="90" height="12" rx="2" fill="#E53E3E" />
         </svg>
 
         {/* Participant count badge */}
@@ -201,7 +197,7 @@ export function PrizeDrawAnimation({
             numberOfPieces={500}
             recycle={false}
           />
-          
+
           <div className="relative flex flex-col items-center gap-6">
             <div className="relative">
               <Image
@@ -226,7 +222,7 @@ export function PrizeDrawAnimation({
             <span className="text-2xl font-bold text-gray-800 animate-fade-in">
               {winner.name}
             </span>
-            
+
             {/* Prize display - fades in after winner with absolute positioning to prevent layout shift */}
             <div className="relative h-64 w-full flex items-center justify-center">
               {showPrize && (
