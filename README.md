@@ -1,6 +1,6 @@
 # SINFO WebApp
 
-New SINFO webapp, made with Next.js. 
+New SINFO webapp, made with Next.js.
 
 ## Getting Started
 
@@ -46,7 +46,7 @@ Stores all project stylesheet files (CSS & SCSS files).
 
 Contains TypeScript type definitions.
 
-***More directories may be added for efficient project organization on as-needed basis.***
+**_More directories may be added for efficient project organization on as-needed basis._**
 
 ## More on Next.js
 

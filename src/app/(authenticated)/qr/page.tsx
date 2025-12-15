@@ -20,7 +20,7 @@ export default async function QR() {
   if (!user) return <UserSignOut />;
 
   const userQRCode: string | null = await UserService.getQRCode(
-    session!.cannonToken
+    session!.cannonToken,
   );
   if (!userQRCode)
     return <BlankPageWithMessage message="Unable to get QR code." />;

@@ -19,7 +19,7 @@ export default async function Speaker({ params }: { params: SpeakerParams }) {
   }
 
   const speakerSessions = speaker.sessions?.sort((a, b) =>
-    a.date.localeCompare(b.date)
+    a.date.localeCompare(b.date),
   );
 
   return (
