@@ -53,13 +53,13 @@ export default function ScheduleTable({ sessions }: ScheduleTableProps) {
         const daySessions = [...(acc[day] || []), s];
         return { ...acc, [day]: daySessions };
       },
-      {} as Record<string, SINFOSession[]>
+      {} as Record<string, SINFOSession[]>,
     );
   }, [sessions, kindParam, placeParam]);
 
   const sortedDays = useMemo(
     () => Object.keys(sessionsByDay).sort(),
-    [sessionsByDay]
+    [sessionsByDay],
   );
 
   useEffect(() => {
