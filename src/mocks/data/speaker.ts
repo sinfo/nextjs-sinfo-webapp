@@ -1,5 +1,3 @@
-import { MOCK_SESSIONS } from "./session";
-
 export const MOCK_SPEAKERS: Speaker[] = [
   {
     id: "speaker_1",
