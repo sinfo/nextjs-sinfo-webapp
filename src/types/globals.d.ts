@@ -179,6 +179,19 @@ type Prize = {
   cv?: boolean;
 };
 
+type DiscountCode = {
+  _id: {
+    $oid: string;
+  };
+  edition: string;
+  company: string;
+  expire: {
+    $date: string;
+  };
+  description: string;
+  code: string;
+};
+
 type SINFOEvent = {
   id: string;
   name: string;
