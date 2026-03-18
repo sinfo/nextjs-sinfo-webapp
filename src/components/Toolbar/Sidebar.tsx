@@ -58,6 +58,9 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
           <Link href="/prizes" onClick={onClose}>
             Prizes
           </Link>
+          <Link href="/discounts" onClick={onClose}>
+            Cupons
+          </Link>
         </div>
       </div>
       <div className="flex-1" />
