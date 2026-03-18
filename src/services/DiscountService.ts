@@ -1,14 +1,23 @@
 export const DiscountService = (() => {
-  const discountsEndpoint = process.env.NEXT_PUBLIC_CANNON_URL + "/promocodes";
+  const baseUrl = process.env.NEXT_PUBLIC_CANNON_URL;
+  const discountsEndpoints = ["/promo-code", "/promocodes"];
 
   const getDiscounts = async (): Promise<DiscountCode[] | null> => {
     try {
-      const resp = await fetch(discountsEndpoint, {
-        next: {
-          revalidate: 0, // no cache - sempre busca dados frescos
-        },
-      });
-      if (resp.ok) return (await resp.json()) as DiscountCode[];
+      if (!baseUrl) {
+        console.error("Missing NEXT_PUBLIC_CANNON_URL");
+        return null;
+      }
+
+      for (const endpoint of discountsEndpoints) {
+        const resp = await fetch(baseUrl + endpoint, {
+          next: {
+            revalidate: 0,
+          },
+        });
+
+        if (resp.ok) return (await resp.json()) as DiscountCode[];
+      }
     } catch (e) {
       console.error("Error fetching discounts:", e);
     }

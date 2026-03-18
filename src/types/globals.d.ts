@@ -180,14 +180,12 @@ type Prize = {
 };
 
 type DiscountCode = {
-  _id: {
+  _id?: {
     $oid: string;
   };
   edition: string;
   company: string;
-  expire: {
-    $date: string;
-  };
+  expire: string | { $date: string };
   description: string;
   code: string;
 };
