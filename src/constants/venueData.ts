@@ -67,6 +67,7 @@ export interface Zone {
 export interface Entrance {
   label: string;
   position: { x: number; z: number };
+  rotation?: number;
 }
 
 export interface VenueConfig {
@@ -213,152 +214,152 @@ const stands: Stand[] = [
   {
     id: "1",
     label: "1",
-    position: { x: -15.15, z: -1.25 },
+    position: { x: -15.15, z: -3.25 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "2",
     label: "2",
-    position: { x: -15.15, z: 1.25 },
+    position: { x: -15.15, z: -0.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
 
   // ── Column B (pair top, quad bottom) ──
-  // Top pair (z = -3.75)
+  // Top pair (z = -5.75)
   {
     id: "3",
     label: "3",
-    position: { x: -9.45, z: -3.75 },
+    position: { x: -9.45, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "4",
     label: "4",
-    position: { x: -6.95, z: -3.75 },
+    position: { x: -6.95, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
-  // Quad (z = 1.25, 3.75)
+  // Quad (z = -0.75, 1.75)
   {
     id: "5",
     label: "5",
-    position: { x: -9.45, z: 1.25 },
+    position: { x: -9.45, z: -0.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "6",
     label: "6",
-    position: { x: -6.95, z: 1.25 },
+    position: { x: -6.95, z: -0.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "7",
     label: "7",
-    position: { x: -9.45, z: 3.75 },
+    position: { x: -9.45, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "8",
     label: "8",
-    position: { x: -6.95, z: 3.75 },
+    position: { x: -6.95, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
 
   // ── Column C (quad top, pair bottom) ──
-  // Quad (z = -3.75, -1.25)
+  // Quad (z = -5.75, -3.25)
   {
     id: "9",
     label: "9",
-    position: { x: -1.25, z: -3.75 },
+    position: { x: -1.25, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "10",
     label: "10",
-    position: { x: 1.25, z: -3.75 },
+    position: { x: 1.25, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "11",
     label: "11",
-    position: { x: -1.25, z: -1.25 },
+    position: { x: -1.25, z: -3.25 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "12",
     label: "12",
-    position: { x: 1.25, z: -1.25 },
+    position: { x: 1.25, z: -3.25 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
-  // Bottom pair (z = 3.75)
+  // Bottom pair (z = 1.75)
   {
     id: "13",
     label: "13",
-    position: { x: -1.25, z: 3.75 },
+    position: { x: -1.25, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "14",
     label: "14",
-    position: { x: 1.25, z: 3.75 },
+    position: { x: 1.25, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
 
   // ── Column D (pair top, quad bottom) ──
-  // Top pair (z = -3.75)
+  // Top pair (z = -5.75)
   {
     id: "15",
     label: "15",
-    position: { x: 6.95, z: -3.75 },
+    position: { x: 6.95, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "16",
     label: "16",
-    position: { x: 9.45, z: -3.75 },
+    position: { x: 9.45, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
-  // Quad (z = 1.25, 3.75)
+  // Quad (z = -0.75, 1.75)
   {
     id: "17",
     label: "17",
-    position: { x: 6.95, z: 1.25 },
+    position: { x: 6.95, z: -0.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "18",
     label: "18",
-    position: { x: 9.45, z: 1.25 },
+    position: { x: 9.45, z: -0.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "19",
     label: "19",
-    position: { x: 6.95, z: 3.75 },
+    position: { x: 6.95, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "20",
     label: "20",
-    position: { x: 9.45, z: 3.75 },
+    position: { x: 9.45, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
@@ -367,28 +368,28 @@ const stands: Stand[] = [
   {
     id: "21",
     label: "21",
-    position: { x: 15.15, z: -3.75 },
+    position: { x: 15.15, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "22",
     label: "22",
-    position: { x: 15.15, z: -1.25 },
+    position: { x: 15.15, z: -3.25 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "23",
     label: "23",
-    position: { x: 15.15, z: 1.25 },
+    position: { x: 15.15, z: -0.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
   {
     id: "24",
     label: "24",
-    position: { x: 15.15, z: 3.75 },
+    position: { x: 15.15, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
   },
@@ -396,8 +397,8 @@ const stands: Stand[] = [
 
 // ─── Entrances ───────────────────────────────────────────────────────
 const entrances: Entrance[] = [
-  { label: "Entrance", position: { x: -24, z: -5 } },
-  { label: "Entrance", position: { x: -24, z: 5 } },
+  { label: "Entrance", position: { x: -24, z: -5 }, rotation: 90 },
+  { label: "Entrance", position: { x: -24, z: 5 }, rotation: 90 },
   { label: "Entrance", position: { x: 13, z: 15.4 } },
 ];
 
@@ -476,7 +477,7 @@ const days: DayConfig[] = [
 
 // ─── Full venue config ───────────────────────────────────────────────
 export const venueConfig: VenueConfig = {
-  floor: { width: 55, depth: 45 },
+  floor: { width: 44.5, depth: 40 },
   zones,
   stands,
   entrances,
