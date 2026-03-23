@@ -132,6 +132,8 @@ export function getSessionColor(sessionKind: string) {
       return config.theme.extend.colors.sinfo.quaternary;
     case "Keynote":
       return config.theme.extend.colors.sinfo.secondary;
+    case "Q&A":
+      return config.theme.extend.colors.sinfo.primary;
     default:
       return "#000";
   }
