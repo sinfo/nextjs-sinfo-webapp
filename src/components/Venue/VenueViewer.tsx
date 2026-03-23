@@ -80,6 +80,7 @@ export default function VenueViewer() {
         width?: number;
         height?: number;
         bold?: boolean;
+        borderRadius?: number;
       } = {},
     ) => {
       const {
@@ -89,6 +90,7 @@ export default function VenueViewer() {
         width = 512,
         height = 128,
         bold = true,
+        borderRadius = 0,
       } = opts;
       const canvas = document.createElement("canvas");
       canvas.width = width;
@@ -97,7 +99,13 @@ export default function VenueViewer() {
 
       if (bgColor !== "transparent") {
         ctx.fillStyle = bgColor;
-        ctx.fillRect(0, 0, width, height);
+        if (borderRadius > 0) {
+          ctx.beginPath();
+          ctx.roundRect(0, 0, width, height, borderRadius);
+          ctx.fill();
+        } else {
+          ctx.fillRect(0, 0, width, height);
+        }
       }
 
       ctx.fillStyle = color;
@@ -154,6 +162,7 @@ export default function VenueViewer() {
       });
       renderer.setSize(w, h);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       renderer.setClearColor(0xf0f2f5);
@@ -203,9 +212,9 @@ export default function VenueViewer() {
       mouseRef.current = new THREE.Vector2();
 
       // Lighting
-      scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+      scene.add(new THREE.AmbientLight(0xffffff, 0.4));
       const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
-      dirLight.position.set(20, 30, 10);
+      dirLight.position.set(20, 35, 15);
       dirLight.castShadow = true;
       dirLight.shadow.mapSize.set(2048, 2048);
       dirLight.shadow.camera.left = -40;
@@ -299,9 +308,11 @@ export default function VenueViewer() {
           color: "#ffffff",
           width: 512,
           height: 96,
+          borderRadius: 16,
         });
         const labelTexture = new THREE.CanvasTexture(labelCanvas);
         labelTexture.minFilter = THREE.LinearFilter;
+        labelTexture.colorSpace = THREE.SRGBColorSpace;
         const labelMat = new THREE.SpriteMaterial({
           map: labelTexture,
           transparent: true,
@@ -317,7 +328,7 @@ export default function VenueViewer() {
       const osbColor = new THREE.Color(0xc9a96e);
       const frameColor = new THREE.Color(0x2a2a2a);
       const carpetColor = new THREE.Color(0x1c2b70);
-      const logoPlaceholderColor = new THREE.Color(0x1c2b70);
+      const logoPlaceholderColor = new THREE.Color(0xffffff);
 
       venueConfig.stands.forEach((stand) => {
         const group = new THREE.Group();
@@ -388,7 +399,7 @@ export default function VenueViewer() {
           new THREE.PlaneGeometry(0.96, 0.96),
           new THREE.MeshStandardMaterial({
             color: logoPlaceholderColor,
-            roughness: 0.6,
+            roughness: 0.4,
           }),
         );
         logoPanel.position.set(-w / 2 - 0.05, 0.5, -d / 2 + 0.5);
@@ -415,7 +426,7 @@ export default function VenueViewer() {
         });
         const labelSprite = new THREE.Sprite(labelMat);
         labelSprite.position.set(stand.position.x, 4, stand.position.z);
-        labelSprite.scale.set(3, 1.5, 1);
+        labelSprite.scale.set(2.3, 1.15, 1);
         scene.add(labelSprite);
         labelSpritesRef.current.set(stand.id, labelSprite);
       });
@@ -491,15 +502,18 @@ export default function VenueViewer() {
         canvas.height = ch;
         const ctx = canvas.getContext("2d")!;
         const bg = company
-          ? "rgba(28, 43, 112, 0.95)"
-          : "rgba(28, 43, 112, 0.7)";
+          ? "rgba(255, 255, 255, 0.95)"
+          : "rgba(255, 255, 255, 0.7)";
 
-        // Fill background
+        // Fill background (rounded)
         ctx.fillStyle = bg;
-        ctx.fillRect(0, 0, cw, ch);
+        ctx.beginPath();
+        ctx.roundRect(0, 0, cw, ch, 16);
+        ctx.fill();
 
         const tex = new THREE.CanvasTexture(canvas);
         tex.minFilter = THREE.LinearFilter;
+        tex.colorSpace = THREE.SRGBColorSpace;
         (sprite.material as THREE_TYPES.SpriteMaterial).map?.dispose();
         (sprite.material as THREE_TYPES.SpriteMaterial).map = tex;
         (sprite.material as THREE_TYPES.SpriteMaterial).needsUpdate = true;
@@ -511,7 +525,9 @@ export default function VenueViewer() {
           img.src = company.logoUrl;
           img.onload = () => {
             ctx.fillStyle = bg;
-            ctx.fillRect(0, 0, cw, ch);
+            ctx.beginPath();
+            ctx.roundRect(0, 0, cw, ch, 16);
+            ctx.fill();
             const maxW = 200;
             const maxH = 90;
             const ratio = Math.min(maxW / img.width, maxH / img.height);
@@ -531,7 +547,7 @@ export default function VenueViewer() {
           };
         } else {
           // No logo — draw text label
-          ctx.fillStyle = "#ffffff";
+          ctx.fillStyle = "#1c2b70";
           ctx.font = `bold ${company ? 28 : 38}px "Montserrat", Arial, sans-serif`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
@@ -552,6 +568,7 @@ export default function VenueViewer() {
         });
         const nameTex = new THREE.CanvasTexture(nameCanvas);
         nameTex.minFilter = THREE.LinearFilter;
+        nameTex.colorSpace = THREE.SRGBColorSpace;
         const oldMat = sign.material as THREE_TYPES.MeshStandardMaterial;
         oldMat.map?.dispose();
         sign.material = new THREE.MeshStandardMaterial({
@@ -575,12 +592,13 @@ export default function VenueViewer() {
         const loader = new THREE.TextureLoader();
         loader.load(company.logoUrl, (logoTex) => {
           logoTex.minFilter = THREE.LinearFilter;
+          logoTex.colorSpace = THREE.SRGBColorSpace;
           const oldMat = logoPanel.material as THREE_TYPES.MeshStandardMaterial;
           oldMat.map?.dispose();
           logoPanel.material = new THREE.MeshStandardMaterial({
             map: logoTex,
             color: 0xffffff,
-            roughness: 0.6,
+            roughness: 0.4,
           });
           oldMat.dispose();
         });
@@ -588,7 +606,7 @@ export default function VenueViewer() {
         const oldMat = logoPanel.material as THREE_TYPES.MeshStandardMaterial;
         oldMat.map?.dispose();
         logoPanel.material = new THREE.MeshStandardMaterial({
-          color: 0x1c2b70,
+          color: 0xffffff,
           roughness: 0.6,
         });
         oldMat.dispose();
@@ -795,9 +813,11 @@ export default function VenueViewer() {
           width: 512,
           height: 48,
           bold: false,
+          borderRadius: 12,
         });
         const tex = new THREE.CanvasTexture(canvas);
         tex.minFilter = THREE.LinearFilter;
+        tex.colorSpace = THREE.SRGBColorSpace;
         const mat = new THREE.SpriteMaterial({
           map: tex,
           transparent: true,

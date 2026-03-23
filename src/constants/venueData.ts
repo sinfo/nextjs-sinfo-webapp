@@ -421,12 +421,66 @@ const days: DayConfig[] = [
         },
       },
       {
+        standId: "2",
+        company: {
+          name: "Axians",
+          logoUrl: "/images/companies/plats/axians.svg",
+          description: "ICT solutions and services",
+          siteUrl: "https://axians.com",
+        },
+      },
+      {
         standId: "3",
         company: {
           name: "Premium Minds",
           logoUrl: "/images/companies/plats/premium-minds.svg",
           description: "Software engineering for critical systems",
           siteUrl: "https://premium-minds.com",
+        },
+      },
+      {
+        standId: "4",
+        company: {
+          name: "Dremio",
+          logoUrl: "/images/companies/plats/dremio.png",
+          description: "The data lakehouse platform",
+          siteUrl: "https://dremio.com",
+        },
+      },
+      {
+        standId: "5",
+        company: {
+          name: "Freiheit",
+          logoUrl: "/images/companies/plats/freiheit.svg",
+          description: "Digital product engineering",
+          siteUrl: "https://freiheit.com",
+        },
+      },
+      {
+        standId: "6",
+        company: {
+          name: "CNN",
+          logoUrl: "/images/companies/partners/cnn.png",
+          description: "Global news and information",
+          siteUrl: "https://cnn.com",
+        },
+      },
+      {
+        standId: "7",
+        company: {
+          name: "Oracle",
+          logoUrl: "/images/companies/partners/oracle.svg",
+          description: "Integrated cloud applications and platform services",
+          siteUrl: "https://oracle.com",
+        },
+      },
+      {
+        standId: "8",
+        company: {
+          name: "Elgato",
+          logoUrl: "/images/companies/partners/elgato.svg",
+          description: "AV technology for content creators",
+          siteUrl: "https://elgato.com",
         },
       },
       {
@@ -439,6 +493,51 @@ const days: DayConfig[] = [
         },
       },
       {
+        standId: "10",
+        company: {
+          name: "Corsair",
+          logoUrl: "/images/companies/partners/corsair.png",
+          description: "High-performance gear for gamers and creators",
+          siteUrl: "https://corsair.com",
+        },
+      },
+      {
+        standId: "11",
+        company: {
+          name: "American Corner",
+          logoUrl: "/images/companies/partners/american-corner.png",
+          description: "A bridge between the US and the local community",
+          siteUrl: "https://www.facebook.com/AmericanCornerPortugal/",
+        },
+      },
+      {
+        standId: "12",
+        company: {
+          name: "Ducky",
+          logoUrl: "/images/companies/partners/ducky.png",
+          description: "Mechanical keyboards and high-end peripherals",
+          siteUrl: "https://duckychannel.com.tw",
+        },
+      },
+      {
+        standId: "13",
+        company: {
+          name: "Noblechairs",
+          logoUrl: "/images/companies/partners/noblechairs.png",
+          description: "Premium ergonomic gaming chairs",
+          siteUrl: "https://noblechairs.com",
+        },
+      },
+      {
+        standId: "14",
+        company: {
+          name: "Next Big Idea",
+          logoUrl: "/images/companies/partners/the-next-big-idea.png",
+          description: "Ecosystem of technology, innovation and startups",
+          siteUrl: "https://thenextbigidea.pt/",
+        },
+      },
+      {
         standId: "15",
         company: {
           name: "Sky",
@@ -448,12 +547,84 @@ const days: DayConfig[] = [
         },
       },
       {
+        standId: "16",
+        company: {
+          name: "Repeated Premium Minds",
+          logoUrl: "/images/companies/plats/premium-minds.svg",
+          description: "Software engineering for critical systems",
+          siteUrl: "https://premium-minds.com",
+        },
+      },
+      {
+        standId: "17",
+        company: {
+          name: "Repeated Axians",
+          logoUrl: "/images/companies/plats/axians.svg",
+          description: "ICT solutions and services",
+          siteUrl: "https://axians.com",
+        },
+      },
+      {
+        standId: "18",
+        company: {
+          name: "Repeated Cloudflare",
+          logoUrl: "/images/companies/plats/cloudflare.svg",
+          description: "Web security and performance",
+          siteUrl: "https://cloudflare.com",
+        },
+      },
+      {
+        standId: "19",
+        company: {
+          name: "Repeated Freiheit",
+          logoUrl: "/images/companies/plats/freiheit.svg",
+          description: "Digital product engineering",
+          siteUrl: "https://freiheit.com",
+        },
+      },
+      {
+        standId: "20",
+        company: {
+          name: "Repeated Single Store",
+          logoUrl: "/images/companies/plats/single-store.svg",
+          description: "The database for data-intensive apps",
+          siteUrl: "https://singlestore.com",
+        },
+      },
+      {
         standId: "21",
         company: {
           name: "Start Campus",
           logoUrl: "/images/companies/plats/start-campus.svg",
           description: "Sustainable hyperscale data centers",
           siteUrl: "https://startcampus.pt",
+        },
+      },
+      {
+        standId: "22",
+        company: {
+          name: "Repeated Start Campus",
+          logoUrl: "/images/companies/plats/start-campus.svg",
+          description: "Sustainable hyperscale data centers",
+          siteUrl: "https://startcampus.pt",
+        },
+      },
+      {
+        standId: "23",
+        company: {
+          name: "Repeated Dremio",
+          logoUrl: "/images/companies/plats/dremio.png",
+          description: "The data lakehouse platform",
+          siteUrl: "https://dremio.com",
+        },
+      },
+      {
+        standId: "24",
+        company: {
+          name: "Repeated Sky",
+          logoUrl: "/images/companies/plats/sky.svg",
+          description: "Entertainment and communications",
+          siteUrl: "https://sky.com",
         },
       },
     ],
