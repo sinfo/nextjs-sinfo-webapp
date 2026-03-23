@@ -35,6 +35,7 @@ export default function VenueViewer() {
   const speakerSpritesRef = useRef<Map<string, THREE_TYPES.Sprite[]>>(
     new Map(),
   );
+  const debugRef = useRef<HTMLDivElement>(null);
   const animFrameRef = useRef<number>(0);
   const threeRef = useRef<typeof THREE_TYPES | null>(null);
   const is3DRef = useRef(false);
@@ -167,8 +168,8 @@ export default function VenueViewer() {
       // Cameras
       const aspect = w / h;
       const perspCamera = new THREE.PerspectiveCamera(50, aspect, 0.1, 200);
-      perspCamera.position.set(30, 30, 30);
-      perspCamera.lookAt(4, 0, 0);
+      perspCamera.position.set(-2, 20, 5);
+      perspCamera.lookAt(-11.03, 20, -9.02);
       perspCameraRef.current = perspCamera;
 
       const frustumSize = 30;
@@ -180,9 +181,9 @@ export default function VenueViewer() {
         0.1,
         200,
       );
-      orthoCamera.position.set(4, 50, 0);
-      orthoCamera.lookAt(4, 0, 0);
-      orthoCamera.zoom = 1;
+      orthoCamera.position.set(-11.03, 50, -9.02);
+      orthoCamera.lookAt(-11.03, 0, -9.02);
+      orthoCamera.zoom = 1.67;
       orthoCamera.updateProjectionMatrix();
       orthoCameraRef.current = orthoCamera;
 
@@ -190,10 +191,10 @@ export default function VenueViewer() {
       const controls = new OrbitControls(perspCamera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.08;
-      controls.maxPolarAngle = Math.PI / 2.1;
+      controls.maxPolarAngle = Math.PI / 2.5;
       controls.minDistance = 5;
-      controls.maxDistance = 80;
-      controls.target.set(4, 0, 0);
+      controls.maxDistance = 50;
+      controls.target.set(-11.03, 50, -9.02);
       controls.enabled = false;
       controlsRef.current = controls;
 
@@ -389,6 +390,13 @@ export default function VenueViewer() {
         controls.update();
         const camera = is3DRef.current ? perspCamera : orthoCamera;
         renderer.render(scene, camera);
+
+        if (debugRef.current) {
+          const pos = camera.position;
+          const target = controls.target;
+          const zoom = (camera as any).zoom || 1;
+          debugRef.current.innerText = `Pos: ${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)} | Target: ${target.x.toFixed(2)}, ${target.y.toFixed(2)}, ${target.z.toFixed(2)} | Zoom: ${zoom.toFixed(2)}`;
+        }
       }
       animate();
 
@@ -562,14 +570,14 @@ export default function VenueViewer() {
     const controls = controlsRef.current;
     if (is3D) {
       controls.enabled = true;
-      perspCameraRef.current.position.set(20, 16, 22);
-      controls.target.set(4, 0, 1);
+      perspCameraRef.current.position.set(-2, 28, 5);
+      controls.target.set(-11.03, 20, -9.02);
       controls.update();
     } else {
       controls.enabled = false;
-      orthoCameraRef.current.position.set(4, 50, 0);
-      orthoCameraRef.current.lookAt(4, 0, 0);
-      orthoCameraRef.current.zoom = 1;
+      orthoCameraRef.current.position.set(-11.03, 50, -9.02);
+      orthoCameraRef.current.lookAt(-11.03, 0, -9.02);
+      orthoCameraRef.current.zoom = 1.67;
       orthoCameraRef.current.updateProjectionMatrix();
     }
     labelSpritesRef.current.forEach((sprite) => {
@@ -805,6 +813,12 @@ export default function VenueViewer() {
         <div
           ref={containerRef}
           className="relative w-full h-full overflow-hidden"
+        />
+
+        {/* ═══ Debug Overlay ═══ */}
+        <div
+          ref={debugRef}
+          className="absolute bottom-4 left-4 z-[60] bg-black/70 text-white font-mono text-[10px] px-2 py-1 rounded backdrop-blur-sm pointer-events-none border border-white/10"
         />
 
         {/* ═══ Company Dialog (Centered Modal) ═══ */}
