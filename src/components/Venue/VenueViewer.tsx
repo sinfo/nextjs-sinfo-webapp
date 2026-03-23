@@ -167,9 +167,9 @@ export default function VenueViewer() {
 
       // Cameras
       const aspect = w / h;
-      const perspCamera = new THREE.PerspectiveCamera(50, aspect, 0.1, 200);
-      perspCamera.position.set(-2, 20, 5);
-      perspCamera.lookAt(-11.03, 20, -9.02);
+      const perspCamera = new THREE.PerspectiveCamera(50, aspect, 0.1, 250);
+      perspCamera.position.set(25, 35, 35);
+      perspCamera.lookAt(0, 0, 0);
       perspCameraRef.current = perspCamera;
 
       const frustumSize = 30;
@@ -181,9 +181,9 @@ export default function VenueViewer() {
         0.1,
         200,
       );
-      orthoCamera.position.set(-11.03, 50, -9.02);
-      orthoCamera.lookAt(-11.03, 0, -9.02);
-      orthoCamera.zoom = 1.67;
+      orthoCamera.position.set(0, 50, 0);
+      orthoCamera.lookAt(0, 0, 0);
+      orthoCamera.zoom = 0.55;
       orthoCamera.updateProjectionMatrix();
       orthoCameraRef.current = orthoCamera;
 
@@ -194,7 +194,7 @@ export default function VenueViewer() {
       controls.maxPolarAngle = Math.PI / 2.5;
       controls.minDistance = 5;
       controls.maxDistance = 50;
-      controls.target.set(-11.03, 50, -9.02);
+      controls.target.set(0, 0, 0);
       controls.enabled = false;
       controlsRef.current = controls;
 
@@ -231,18 +231,49 @@ export default function VenueViewer() {
       scene.add(ground);
 
       // Grid
-      const grid = new THREE.GridHelper(
-        venueConfig.floor.width,
-        venueConfig.floor.width,
-        0xcccccc,
-        0xdddddd,
-      );
+      const grid = new THREE.GridHelper(55, 55, 0xcccccc, 0xdddddd);
       grid.position.y = 0.01;
       scene.add(grid);
 
-      // Zones — all zones are flat floor areas (no walls/cube)
+      // Entrances
+      venueConfig.entrances.forEach((ent) => {
+        const entGeo = new THREE.PlaneGeometry(3, 1.2);
+        const entMat = new THREE.MeshStandardMaterial({
+          color: 0x444444,
+          roughness: 0.5,
+        });
+        const entMesh = new THREE.Mesh(entGeo, entMat);
+        entMesh.rotation.x = -Math.PI / 2;
+        entMesh.position.set(ent.position.x, 0.03, ent.position.z);
+        scene.add(entMesh);
+
+        // Entrance label sprite
+        const labelCanvas = createTextCanvas(ent.label, {
+          fontSize: 32,
+          color: "#ffffff",
+          width: 256,
+          height: 64,
+        });
+        const labelTexture = new THREE.CanvasTexture(labelCanvas);
+        const labelMat = new THREE.SpriteMaterial({
+          map: labelTexture,
+          transparent: true,
+        });
+        const labelSprite = new THREE.Sprite(labelMat);
+        labelSprite.position.set(ent.position.x, 0.2, ent.position.z);
+        labelSprite.scale.set(1.5, 0.4, 1);
+        scene.add(labelSprite);
+      });
+
+      // Zones
       venueConfig.zones.forEach((zone) => {
-        const zoneGeo = new THREE.PlaneGeometry(zone.size.w, zone.size.d);
+        const h = zone.height || 0.01;
+        const isBox = zone.height && zone.height > 0.05;
+
+        const zoneGeo = isBox
+          ? new THREE.BoxGeometry(zone.size.w, h, zone.size.d)
+          : new THREE.PlaneGeometry(zone.size.w, zone.size.d);
+
         const zoneMat = new THREE.MeshStandardMaterial({
           color: new THREE.Color(zone.color),
           roughness: 0.8,
@@ -250,8 +281,14 @@ export default function VenueViewer() {
           opacity: 0.85,
         });
         const zoneMesh = new THREE.Mesh(zoneGeo, zoneMat);
-        zoneMesh.rotation.x = -Math.PI / 2;
-        zoneMesh.position.set(zone.position.x, 0.02, zone.position.z);
+
+        if (isBox) {
+          zoneMesh.position.set(zone.position.x, h / 2, zone.position.z);
+        } else {
+          zoneMesh.rotation.x = -Math.PI / 2;
+          zoneMesh.position.set(zone.position.x, 0.02, zone.position.z);
+        }
+
         zoneMesh.receiveShadow = true;
         scene.add(zoneMesh);
 
@@ -270,7 +307,7 @@ export default function VenueViewer() {
           depthTest: false,
         });
         const labelSprite = new THREE.Sprite(labelMat);
-        labelSprite.position.set(zone.position.x, 0.5, zone.position.z);
+        labelSprite.position.set(zone.position.x, h + 0.5, zone.position.z);
         labelSprite.scale.set(6, 1.5, 1);
         scene.add(labelSprite);
       });
@@ -570,14 +607,14 @@ export default function VenueViewer() {
     const controls = controlsRef.current;
     if (is3D) {
       controls.enabled = true;
-      perspCameraRef.current.position.set(-2, 28, 5);
-      controls.target.set(-11.03, 20, -9.02);
+      perspCameraRef.current.position.set(25, 35, 35);
+      controls.target.set(0, 0, 0);
       controls.update();
     } else {
       controls.enabled = false;
-      orthoCameraRef.current.position.set(-11.03, 50, -9.02);
-      orthoCameraRef.current.lookAt(-11.03, 0, -9.02);
-      orthoCameraRef.current.zoom = 1.67;
+      orthoCameraRef.current.position.set(0, 50, 0);
+      orthoCameraRef.current.lookAt(0, 0, 0);
+      orthoCameraRef.current.zoom = 0.55;
       orthoCameraRef.current.updateProjectionMatrix();
     }
     labelSpritesRef.current.forEach((sprite) => {
