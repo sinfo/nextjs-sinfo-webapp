@@ -168,8 +168,8 @@ export default function VenueViewer() {
       // Cameras
       const aspect = w / h;
       const perspCamera = new THREE.PerspectiveCamera(50, aspect, 0.1, 250);
-      perspCamera.position.set(25, 35, 35);
-      perspCamera.lookAt(0, 0, 0);
+      perspCamera.position.set(-19.3, 35, -11.97);
+      perspCamera.zoom = 1.2;
       perspCameraRef.current = perspCamera;
 
       const frustumSize = 30;
@@ -181,9 +181,9 @@ export default function VenueViewer() {
         0.1,
         200,
       );
-      orthoCamera.position.set(0, 50, 0);
-      orthoCamera.lookAt(0, 0, 0);
-      orthoCamera.zoom = 0.55;
+      orthoCamera.position.set(-18.3, 50, -11.97);
+      orthoCamera.lookAt(-18.3, 0, -11.97);
+      orthoCamera.zoom = 1.2;
       orthoCamera.updateProjectionMatrix();
       orthoCameraRef.current = orthoCamera;
 
@@ -194,7 +194,7 @@ export default function VenueViewer() {
       controls.maxPolarAngle = Math.PI / 2.5;
       controls.minDistance = 5;
       controls.maxDistance = 50;
-      controls.target.set(0, 0, 0);
+      controls.target.set(-3.1, 20, -2.6);
       controls.enabled = false;
       controlsRef.current = controls;
 
@@ -227,23 +227,24 @@ export default function VenueViewer() {
         new THREE.MeshStandardMaterial({ color: 0xe8eaed, roughness: 0.9 }),
       );
       ground.rotation.x = -Math.PI / 2;
+      ground.position.set(-3.1, 0, -2.6);
       ground.receiveShadow = true;
       scene.add(ground);
 
-      // Grid
-      const grid = new THREE.GridHelper(55, 55, 0xcccccc, 0xdddddd);
-      grid.position.y = 0.01;
-      scene.add(grid);
-
       // Entrances
       venueConfig.entrances.forEach((ent) => {
-        const entGeo = new THREE.PlaneGeometry(3, 1.2);
+        const entGeo = new THREE.PlaneGeometry(4.5, 1.8);
         const entMat = new THREE.MeshStandardMaterial({
           color: 0x444444,
           roughness: 0.5,
+          transparent: true,
+          opacity: 0.8,
         });
         const entMesh = new THREE.Mesh(entGeo, entMat);
         entMesh.rotation.x = -Math.PI / 2;
+        if (ent.rotation) {
+          entMesh.rotation.z = (ent.rotation * Math.PI) / 180;
+        }
         entMesh.position.set(ent.position.x, 0.03, ent.position.z);
         scene.add(entMesh);
 
@@ -261,7 +262,7 @@ export default function VenueViewer() {
         });
         const labelSprite = new THREE.Sprite(labelMat);
         labelSprite.position.set(ent.position.x, 0.2, ent.position.z);
-        labelSprite.scale.set(1.5, 0.4, 1);
+        labelSprite.scale.set(2.0, 0.5, 1);
         scene.add(labelSprite);
       });
 
@@ -607,14 +608,16 @@ export default function VenueViewer() {
     const controls = controlsRef.current;
     if (is3D) {
       controls.enabled = true;
-      perspCameraRef.current.position.set(25, 35, 35);
-      controls.target.set(0, 0, 0);
+      perspCameraRef.current.position.set(-18.3, 35, -11.97);
+      perspCameraRef.current.zoom = 1.2;
+      perspCameraRef.current.updateProjectionMatrix();
+      controls.target.set(-18.3, 20, -11.97);
       controls.update();
     } else {
       controls.enabled = false;
-      orthoCameraRef.current.position.set(0, 50, 0);
-      orthoCameraRef.current.lookAt(0, 0, 0);
-      orthoCameraRef.current.zoom = 0.55;
+      orthoCameraRef.current.position.set(-18.3, 50, -11.97);
+      orthoCameraRef.current.lookAt(-18.3, 0, -11.97);
+      orthoCameraRef.current.zoom = 1.2;
       orthoCameraRef.current.updateProjectionMatrix();
     }
     labelSpritesRef.current.forEach((sprite) => {
