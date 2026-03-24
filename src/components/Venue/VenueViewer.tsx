@@ -5,7 +5,6 @@ import {
   venueConfig,
   type Stand,
   type Company,
-  type Speaker,
   type DayConfig,
 } from "@/constants/venueData";
 import type * as THREE_TYPES from "three";
@@ -32,9 +31,7 @@ export default function VenueViewer() {
   const labelSpritesRef = useRef<Map<string, THREE_TYPES.Sprite>>(new Map());
   const standSignsRef = useRef<Map<string, THREE_TYPES.Mesh>>(new Map());
   const standLogoPanelsRef = useRef<Map<string, THREE_TYPES.Mesh>>(new Map());
-  const speakerSpritesRef = useRef<Map<string, THREE_TYPES.Sprite[]>>(
-    new Map(),
-  );
+  const speakerCardsRef = useRef<Map<string, THREE_TYPES.Mesh[]>>(new Map());
   const debugRef = useRef<HTMLDivElement>(null);
   const animFrameRef = useRef<number>(0);
   const threeRef = useRef<typeof THREE_TYPES | null>(null);
@@ -133,6 +130,179 @@ export default function VenueViewer() {
       });
 
       return canvas;
+    },
+    [],
+  );
+
+  // ── Create a SpeakerCard texture ──
+  const createSpeakerCardTexture = useCallback(
+    (speaker: Speaker, index: number, THREE: any) => {
+      const w = 560;
+      const h = 760;
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d")!;
+
+      const blobColors = [
+        "#c0392b",
+        "#2980b9",
+        "#27ae60",
+        "#f39c12",
+        "#8e44ad",
+      ];
+      const blobColor = blobColors[index % blobColors.length];
+
+      const drawBase = () => {
+        ctx.clearRect(0, 0, w, h);
+
+        // Background (white rounded rect)
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.roundRect(0, 0, w, h, 60);
+        ctx.fill();
+
+        // Bottom organic blob area (Using SpeakerBlob exact path)
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(0, 0, w, h, 60);
+        ctx.clip();
+
+        const blobPath = new Path2D(
+          "M42.5,-62.1C54.1,-50,62,-36.3,65.3,-22.2C68.6,-8,67.3,6.7,64.1,22.2C61,37.6,55.9,53.8,44.9,61.1C33.9,68.5,16.9,66.9,-1.1,68.4C-19.1,69.9,-38.2,74.3,-53.8,68.5C-69.4,62.7,-81.6,46.6,-82.1,30.2C-82.5,13.8,-71.2,-2.8,-60.5,-14.7C-49.8,-26.5,-39.6,-33.5,-29.6,-46.1C-19.6,-58.8,-9.8,-77,2.8,-80.9C15.4,-84.8,30.8,-74.2,42.5,-62.1Z",
+        );
+
+        ctx.fillStyle = blobColor;
+        ctx.translate(w / 2, h - 300 + 120); // Center at w/2, offset from bottom
+        ctx.scale(3, 3);
+        ctx.fill(blobPath);
+        ctx.restore();
+
+        // Name (Big, blue, top-left)
+        ctx.fillStyle = "#1c2b70";
+        ctx.font = 'bold 50px "Montserrat", Arial, sans-serif';
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+
+        const paddingLeft = 50;
+
+        const wrapText = (
+          text: string,
+          x: number,
+          y: number,
+          maxWidth: number,
+          lineHeight: number,
+        ) => {
+          const words = text.split(" ");
+          let line = "";
+          let currentY = y;
+          for (let n = 0; n < words.length; n++) {
+            const testLine = line + words[n] + " ";
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth && n > 0) {
+              ctx.fillText(line.trim(), x, currentY);
+              line = words[n] + " ";
+              currentY += lineHeight;
+            } else {
+              line = testLine;
+            }
+          }
+          ctx.fillText(line.trim(), x, currentY);
+          return currentY + lineHeight;
+        };
+
+        const topOfTitleY = wrapText(
+          speaker.name,
+          paddingLeft,
+          70,
+          w - paddingLeft * 2,
+          60,
+        );
+
+        // Title (Smaller, grey)
+        ctx.fillStyle = "#6b7280";
+        ctx.font = '500 28px "Montserrat", Arial, sans-serif';
+        const topOfCompY = wrapText(
+          speaker.title,
+          paddingLeft,
+          topOfTitleY + 15,
+          w - paddingLeft * 2,
+          40,
+        );
+
+        // Company
+        if (speaker.company?.name) {
+          ctx.fillStyle = "#9ca3af";
+          ctx.font = '24px "Montserrat", Arial, sans-serif';
+          wrapText(
+            speaker.company.name,
+            paddingLeft,
+            topOfCompY + 10,
+            w - paddingLeft * 2,
+            34,
+          );
+        }
+      };
+
+      drawBase();
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.minFilter = THREE.LinearFilter;
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.generateMipmaps = true;
+
+      // Image (Big, bottom)
+      const imgY = 504;
+      const imgR = 192;
+
+      const drawImagePlaceholder = () => {
+        ctx.fillStyle = "#e5e7eb";
+        ctx.beginPath();
+        ctx.arc(w / 2, imgY, imgR, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 12;
+        ctx.strokeStyle = "#ffffff";
+        ctx.stroke();
+        tex.needsUpdate = true;
+      };
+
+      if (speaker.img) {
+        const img = new window.Image();
+        img.crossOrigin = "anonymous";
+        img.src = speaker.img;
+        img.onload = () => {
+          drawBase();
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(w / 2, imgY, imgR, 0, Math.PI * 2);
+          ctx.closePath();
+          ctx.clip();
+
+          const ratio = Math.max(
+            (imgR * 2) / img.width,
+            (imgR * 2) / img.height,
+          );
+          const dw = img.width * ratio;
+          const dh = img.height * ratio;
+          ctx.drawImage(img, w / 2 - dw / 2, imgY - dh / 2, dw, dh);
+          ctx.restore();
+
+          // Border
+          ctx.beginPath();
+          ctx.arc(w / 2, imgY, imgR, 0, Math.PI * 2);
+          ctx.lineWidth = 12;
+          ctx.strokeStyle = "#ffffff";
+          ctx.stroke();
+
+          tex.needsUpdate = true;
+        };
+        img.onerror = drawImagePlaceholder;
+      } else {
+        drawImagePlaceholder();
+      }
+
+      return tex;
     },
     [],
   );
@@ -318,7 +488,12 @@ export default function VenueViewer() {
           depthTest: false,
         });
         const labelSprite = new THREE.Sprite(labelMat);
-        labelSprite.position.set(zone.position.x, h + 0.5, zone.position.z);
+        let labelZ = zone.position.z;
+        if (zone.id === "main-stage") {
+          labelZ = zone.position.z + zone.size.d / 2 - 1.5;
+        }
+
+        labelSprite.position.set(zone.position.x, h + 0.5, labelZ);
         labelSprite.scale.set(6, 1.5, 1);
         scene.add(labelSprite);
       });
@@ -933,6 +1108,25 @@ export default function VenueViewer() {
       sprite.scale.set(is3D ? 2 : 3, is3D ? 1 : 1.5, 1);
       sprite.position.y = is3D ? 3.5 : 4;
     });
+
+    // Update speaker cards layout for 2D/3D
+    speakerCardsRef.current.forEach((cards, zoneId) => {
+      const zone = venueConfig.zones.find((z) => z.id === zoneId);
+      if (!zone) return;
+
+      const cardW = 2.8;
+      const cardH = 3.8;
+
+      cards.forEach((mesh) => {
+        if (is3D) {
+          mesh.position.y = (zone.height || 0.01) + cardH / 2 + 0.5;
+          mesh.rotation.x = -Math.PI / 8; // Light tilt
+        } else {
+          mesh.position.y = (zone.height || 0.01) + 0.02;
+          mesh.rotation.x = -Math.PI / 2; // Flat on floor
+        }
+      });
+    });
   }, [is3D]);
 
   // ── Pointer interaction — hover to show popup ──
@@ -1124,51 +1318,69 @@ export default function VenueViewer() {
     const scene = sceneRef.current;
     if (!THREE || !scene) return;
 
-    // Remove old speaker sprites
-    speakerSpritesRef.current.forEach((sprites) => {
-      sprites.forEach((s) => scene.remove(s));
+    // Remove old speaker cards
+    speakerCardsRef.current.forEach((cards) => {
+      cards.forEach((c) => scene.remove(c));
     });
-    speakerSpritesRef.current.clear();
+    speakerCardsRef.current.clear();
 
-    // Add new speaker sprites for each zone
+    // Add new speaker cards for each zone
     venueConfig.zones.forEach((zone) => {
       const speakers = getSpeakersForZone(zone.id);
       if (speakers.length === 0) return;
 
-      const sprites: THREE_TYPES.Sprite[] = [];
-      const lineH = 1;
-      const totalH = speakers.length * lineH;
-      const startZ = zone.position.z - totalH / 2 + lineH / 2;
+      const cards: THREE_TYPES.Mesh[] = [];
+      const cardW = 2.8;
+      const cardH = 3.8;
+
+      const totalW = speakers.length * cardW + (speakers.length - 1) * 0.5;
+      const startX = zone.position.x - totalW / 2 + cardW / 2;
 
       speakers.forEach((speaker, i) => {
-        const text = `${speaker.time || ""} ${speaker.name} — ${speaker.title}`;
-        const canvas = createTextCanvas(text, {
-          fontSize: 22,
-          color: "#ffffff",
-          bgColor: "rgba(0,0,0,0.5)",
-          width: 512,
-          height: 48,
-          bold: false,
-          borderRadius: 12,
-        });
-        const tex = new THREE.CanvasTexture(canvas);
-        tex.minFilter = THREE.LinearFilter;
-        tex.colorSpace = THREE.SRGBColorSpace;
-        const mat = new THREE.SpriteMaterial({
+        const tex = createSpeakerCardTexture(speaker, i, THREE);
+        const mat = new THREE.MeshStandardMaterial({
           map: tex,
+          emissiveMap: tex, // Keep vibrant colors by putting them in the emissive layer
+          roughness: 0.6,
+          color: 0xffffff,
+          emissive: 0xffffff,
+          emissiveIntensity: 0.3, // Brightness boost that preserves saturation
           transparent: true,
-          depthTest: false,
+          alphaTest: 0.5, // Critical for planes casting shadows that have transparent unrendered parts
+          side: THREE.DoubleSide,
         });
-        const sprite = new THREE.Sprite(mat);
-        sprite.position.set(zone.position.x, 1.5, startZ + i * lineH);
-        sprite.scale.set(8, 0.75, 1);
-        scene.add(sprite);
-        sprites.push(sprite);
+
+        // Use PlaneGeometry to avoid box side visible artifacts behind rounded transparent corners
+        const geo = new THREE.PlaneGeometry(cardW, cardH);
+
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.castShadow = true;
+        mesh.receiveShadow = false; // Prevent self-shadowing acne on the thin plane geometry
+
+        if (is3DRef.current) {
+          mesh.position.set(
+            startX + i * (cardW + 0.5),
+            (zone.height || 0.01) + cardH / 2 + 0.5,
+            zone.position.z,
+          );
+          mesh.rotation.x = -Math.PI / 8; // slight tilt back for better lighting and viewing angle
+          mesh.rotation.y = 0;
+        } else {
+          mesh.position.set(
+            startX + i * (cardW + 0.5),
+            (zone.height || 0.01) + 0.02,
+            zone.position.z,
+          );
+          mesh.rotation.x = -Math.PI / 2;
+        }
+
+        scene.add(mesh);
+        cards.push(mesh);
       });
 
-      speakerSpritesRef.current.set(zone.id, sprites);
+      speakerCardsRef.current.set(zone.id, cards);
     });
-  }, [selectedDay, getSpeakersForZone, createTextCanvas, isLoading]);
+  }, [selectedDay, getSpeakersForZone, createSpeakerCardTexture, isLoading]);
 
   return (
     <div className="flex flex-col">
@@ -1337,7 +1549,7 @@ export default function VenueViewer() {
                 : "bg-white/90 text-gray-700 hover:bg-white"
             }`}
           >
-            2D View
+            2D
           </button>
           <button
             onClick={() => setIs3D(true)}
@@ -1347,7 +1559,7 @@ export default function VenueViewer() {
                 : "bg-white/90 text-gray-700 hover:bg-white"
             }`}
           >
-            3D View
+            3D
           </button>
         </div>
 

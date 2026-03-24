@@ -10,6 +10,8 @@
  * Origin (0,0) is placed at the centre of the booth area for easy framing.
  */
 
+import { MOCK_SPEAKERS } from "@/mocks/data";
+
 // ─── Types ───────────────────────────────────────────────────────────
 
 export interface Company {
@@ -17,15 +19,6 @@ export interface Company {
   logoUrl?: string;
   siteUrl?: string;
   description?: string;
-}
-
-export interface Speaker {
-  name: string;
-  title: string;
-  description: string;
-  imgUrl?: string;
-  companyName?: string;
-  time?: string;
 }
 
 export interface Stand {
@@ -657,18 +650,37 @@ const days: DayConfig[] = [
     zoneSchedules: [
       {
         zoneId: "main-stage",
-        speakers: [
-          {
-            name: "Ana Silva",
-            title: "Keynote: The Future of AI in Portugal",
-            description:
-              "Exploring how AI is reshaping the Portuguese tech ecosystem.",
-            companyName: "Cloudflare",
-            time: "10:00",
-          },
-        ],
+        speakers: MOCK_SPEAKERS.slice(0, 3),
       },
     ],
+  },
+  {
+    date: "2026-04-21",
+    label: "Apr 21",
+    longLabel: "Sunday, April 21",
+    standAssignments: [],
+    zoneSchedules: [],
+  },
+  {
+    date: "2026-04-22",
+    label: "Apr 22",
+    longLabel: "Sunday, April 22",
+    standAssignments: [],
+    zoneSchedules: [],
+  },
+  {
+    date: "2026-04-23",
+    label: "Apr 23",
+    longLabel: "Sunday, April 23",
+    standAssignments: [],
+    zoneSchedules: [],
+  },
+  {
+    date: "2026-04-24",
+    label: "Apr 24",
+    longLabel: "Sunday, April 24",
+    standAssignments: [],
+    zoneSchedules: [],
   },
 ];
 
