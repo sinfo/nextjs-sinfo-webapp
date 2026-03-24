@@ -984,7 +984,7 @@ export default function VenueViewer() {
       if (!pointerStartRef.current) return;
       const dx = Math.abs(e.clientX - pointerStartRef.current.x);
       const dy = Math.abs(e.clientY - pointerStartRef.current.y);
-      if (dx > 5 || dy > 5) return; // It was a drag, don't open dialog
+      if (dx > 10 || dy > 10) return; // Increased to 10 for better touch tolerance
 
       const standId = getIntersectedStandId(e);
       if (standId) {
@@ -1021,6 +1021,11 @@ export default function VenueViewer() {
     let startCamX = 0;
     let startCamZ = 0;
 
+    // For pinch-to-zoom
+    const activePointers = new Map<number, PointerEvent>();
+    let startDistance = 0;
+    let startZoom = 1;
+
     function onWheel(e: WheelEvent) {
       e.preventDefault();
       const cam = orthoCameraRef.current;
@@ -1030,44 +1035,86 @@ export default function VenueViewer() {
     }
 
     function onPointerDown(e: PointerEvent) {
-      if (e.button !== 0) return;
-      isPanning = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      const cam = orthoCameraRef.current;
-      if (cam) {
-        startCamX = cam.position.x;
-        startCamZ = cam.position.z;
+      activePointers.set(e.pointerId, e);
+
+      if (activePointers.size === 1 && e.button === 0) {
+        isPanning = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        const cam = orthoCameraRef.current;
+        if (cam) {
+          startCamX = cam.position.x;
+          startCamZ = cam.position.z;
+        }
+        container!.style.cursor = "grabbing";
+      } else if (activePointers.size === 2) {
+        isPanning = false;
+        const pointers = Array.from(activePointers.values());
+        startDistance = Math.hypot(
+          pointers[0].clientX - pointers[1].clientX,
+          pointers[0].clientY - pointers[1].clientY,
+        );
+        const cam = orthoCameraRef.current;
+        if (cam) {
+          startZoom = cam.zoom;
+        }
       }
-      container!.style.cursor = "grabbing";
     }
 
     function onPointerMoveHandler(e: PointerEvent) {
-      if (!isPanning) return;
+      activePointers.set(e.pointerId, e);
       const cam = orthoCameraRef.current;
       if (!cam) return;
-      const dx = ((e.clientX - startX) * 0.05) / cam.zoom;
-      const dy = ((e.clientY - startY) * 0.05) / cam.zoom;
-      cam.position.x = startCamX - dx;
-      cam.position.z = startCamZ - dy;
-      cam.lookAt(cam.position.x, 0, cam.position.z);
+
+      if (activePointers.size === 2) {
+        const pointers = Array.from(activePointers.values());
+        const currentDistance = Math.hypot(
+          pointers[0].clientX - pointers[1].clientX,
+          pointers[0].clientY - pointers[1].clientY,
+        );
+        const zoomDelta = currentDistance / startDistance;
+        cam.zoom = Math.max(0.3, Math.min(5, startZoom * zoomDelta));
+        cam.updateProjectionMatrix();
+      } else if (isPanning && activePointers.size === 1) {
+        const dx = ((e.clientX - startX) * 0.05) / cam.zoom;
+        const dy = ((e.clientY - startY) * 0.05) / cam.zoom;
+        cam.position.x = startCamX - dx;
+        cam.position.z = startCamZ - dy;
+        cam.lookAt(cam.position.x, 0, cam.position.z);
+      }
     }
 
-    function onPointerUp() {
-      isPanning = false;
-      container!.style.cursor = "default";
+    function onPointerUp(e: PointerEvent) {
+      activePointers.delete(e.pointerId);
+
+      if (activePointers.size === 0) {
+        isPanning = false;
+        container!.style.cursor = "default";
+      } else if (activePointers.size === 1) {
+        const remaining = Array.from(activePointers.values())[0];
+        startX = remaining.clientX;
+        startY = remaining.clientY;
+        const cam = orthoCameraRef.current;
+        if (cam) {
+          startCamX = cam.position.x;
+          startCamZ = cam.position.z;
+        }
+        isPanning = true;
+      }
     }
 
     container.addEventListener("wheel", onWheel, { passive: false });
     container.addEventListener("pointerdown", onPointerDown);
     container.addEventListener("pointermove", onPointerMoveHandler);
     container.addEventListener("pointerup", onPointerUp);
+    container.addEventListener("pointercancel", onPointerUp);
     container.addEventListener("pointerleave", onPointerUp);
     return () => {
       container.removeEventListener("wheel", onWheel);
       container.removeEventListener("pointerdown", onPointerDown);
       container.removeEventListener("pointermove", onPointerMoveHandler);
       container.removeEventListener("pointerup", onPointerUp);
+      container.removeEventListener("pointercancel", onPointerUp);
       container.removeEventListener("pointerleave", onPointerUp);
     };
   }, [is3D]);
@@ -1162,7 +1209,7 @@ export default function VenueViewer() {
 
         <div
           ref={containerRef}
-          className="relative w-full h-full overflow-hidden"
+          className="relative w-full h-full overflow-hidden touch-none"
         />
 
         {/* ═══ Debug Overlay ═══ */}
@@ -1329,13 +1376,13 @@ export default function VenueViewer() {
         </div>
 
         {/* Mobile hint */}
-        {is3D && (
-          <div className="absolute bottom-4 right-4 z-20 sm:hidden">
-            <div className="bg-black/60 text-white text-xs px-3 py-1.5 rounded-full">
-              Pinch to zoom · Drag to rotate
-            </div>
+        <div className="absolute bottom-4 right-4 z-20 sm:hidden pointer-events-none">
+          <div className="bg-black/60 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm shadow-lg border border-white/10">
+            {is3D
+              ? "Pinch to zoom · Drag to rotate"
+              : "Pinch to zoom · Drag to pan"}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
