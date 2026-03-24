@@ -435,10 +435,11 @@ export default function VenueViewer() {
 
         // Top sign
         const sign = new THREE.Mesh(
-          new THREE.BoxGeometry(w - 0.2, 0.4, 0.05),
+          new THREE.BoxGeometry(w * 0.7, 0.3, 0.05),
           new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 }),
         );
-        sign.position.set(0, h_ + 0.2, -d / 2 + zOff);
+        // Place sign right below the top rim, in front of the vertical frame
+        sign.position.set(0, h_ - 0.15, -d / 2 + zOff + 0.05 + 0.026);
         group.add(sign);
 
         return { boothGroup: group, logoPanel, sign };
@@ -677,8 +678,8 @@ export default function VenueViewer() {
             standLogoPanelsRef.current.set(sortedMembers[i].id, logoPanel);
         });
 
-        // 4 individual signs on top, facing East/West
-        const signGeo = new THREE.BoxGeometry(0.05, 0.4, 2.3);
+        // 4 individual signs on top, in the diagonal
+        const signGeo = new THREE.BoxGeometry(0.05, 0.3, 1.8);
         const signMat = new THREE.MeshStandardMaterial({
           color: 0xffffff,
           roughness: 0.3,
@@ -686,10 +687,11 @@ export default function VenueViewer() {
 
         sortedMembers.forEach((member) => {
           const sign = new THREE.Mesh(signGeo, signMat.clone());
-          const relZ = member.position.z - cz;
           const faceX = member.position.x < cx ? -1 : 1;
+          const faceZ = member.position.z < cz ? -1 : 1;
 
-          sign.position.set(faceX * 0.15, h_ + 0.2, relZ);
+          sign.position.set(faceX * 0.625, h_ - 0.15, faceZ * 0.625);
+          sign.rotation.y = faceX === faceZ ? -Math.PI / 4 : Math.PI / 4;
 
           quadGroup.add(sign);
           standSignsRef.current.set(member.id, sign);
