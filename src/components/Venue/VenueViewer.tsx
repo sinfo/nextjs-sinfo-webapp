@@ -18,7 +18,7 @@ interface PopupInfo {
 }
 
 /* ━━━ Component ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
+const shouldDebug = false;
 export default function VenueViewer() {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<THREE_TYPES.WebGLRenderer | null>(null);
@@ -44,7 +44,6 @@ export default function VenueViewer() {
   const [popup, setPopup] = useState<PopupInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDay, setSelectedDay] = useState(0);
-  const hoveredStandIdRef = useRef<string | null>(null);
   const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const currentDay: DayConfig | undefined = venueConfig.days[selectedDay];
@@ -1213,10 +1212,12 @@ export default function VenueViewer() {
         />
 
         {/* ═══ Debug Overlay ═══ */}
-        <div
-          ref={debugRef}
-          className="absolute bottom-4 left-4 z-[60] bg-black/70 text-white font-mono text-[10px] px-2 py-1 rounded backdrop-blur-sm pointer-events-none border border-white/10"
-        />
+        {shouldDebug && (
+          <div
+            ref={debugRef}
+            className="absolute bottom-4 left-4 z-[60] bg-black/70 text-white font-mono text-[10px] px-2 py-1 rounded backdrop-blur-sm pointer-events-none border border-white/10"
+          />
+        )}
 
         {/* ═══ Company Dialog (Centered Modal) ═══ */}
         {popup && (
@@ -1348,31 +1349,6 @@ export default function VenueViewer() {
           >
             3D View
           </button>
-        </div>
-
-        {/* Legend */}
-        <div className="absolute bottom-4 left-4 z-20 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-3 sm:p-4">
-          <p className="text-xs font-bold text-gray-900 mb-2 uppercase tracking-wider">
-            Legend
-          </p>
-          <div className="flex flex-col gap-1.5">
-            {venueConfig.zones.map((zone) => (
-              <div key={zone.id} className="flex items-center gap-2">
-                <div
-                  className="w-3 h-3 rounded-sm flex-shrink-0"
-                  style={{ backgroundColor: zone.color }}
-                />
-                <span className="text-xs text-gray-700">{zone.label}</span>
-              </div>
-            ))}
-            <div className="flex items-center gap-2">
-              <div
-                className="w-3 h-3 rounded-sm flex-shrink-0"
-                style={{ backgroundColor: "#c9a96e" }}
-              />
-              <span className="text-xs text-gray-700">Company Stands</span>
-            </div>
-          </div>
         </div>
 
         {/* Mobile hint */}
