@@ -233,7 +233,7 @@ export default function VenueViewer() {
       );
       const ground = new THREE.Mesh(
         groundGeo,
-        new THREE.MeshStandardMaterial({ color: 0xe8eaed, roughness: 0.9 }),
+        new THREE.MeshStandardMaterial({ color: 0xffffff, opacity: 0.5 }),
       );
       ground.rotation.x = -Math.PI / 2;
       ground.position.set(-3.1, 0, -2.6);
@@ -330,13 +330,14 @@ export default function VenueViewer() {
       const carpetColor = new THREE.Color(0x1c2b70);
       const logoPlaceholderColor = new THREE.Color(0xffffff);
 
-      venueConfig.stands.forEach((stand) => {
+      // ── Reusable Single Booth Builder ──
+      const buildSingleBooth = (
+        w: number,
+        d: number,
+        h_: number,
+        isSharedBack: boolean = false,
+      ) => {
         const group = new THREE.Group();
-        group.position.set(stand.position.x, 0, stand.position.z);
-        group.userData = { standId: stand.id };
-
-        const { w, d } = stand.size;
-        const h_ = stand.height;
 
         // Carpet
         const carpet = new THREE.Mesh(
@@ -351,50 +352,73 @@ export default function VenueViewer() {
         carpet.receiveShadow = true;
         group.add(carpet);
 
+        // Materials
+        const wallMat = new THREE.MeshStandardMaterial({
+          color: osbColor,
+          roughness: 0.85,
+          metalness: 0.05,
+        });
+        const frameMat = new THREE.MeshStandardMaterial({
+          color: frameColor,
+          roughness: 0.5,
+          metalness: 0.3,
+        });
+
         // Back wall
+        const zOff = isSharedBack ? 0.02 : 0;
+        const thck = isSharedBack ? 0.04 : 0.08;
         const backWall = new THREE.Mesh(
-          new THREE.BoxGeometry(w, h_, 0.08),
-          new THREE.MeshStandardMaterial({
-            color: osbColor,
-            roughness: 0.85,
-            metalness: 0.05,
-          }),
+          new THREE.BoxGeometry(w, h_, thck),
+          wallMat,
         );
-        backWall.position.set(0, h_ / 2, -d / 2);
+        backWall.position.set(0, h_ / 2, -d / 2 + zOff);
         backWall.castShadow = true;
         backWall.receiveShadow = true;
         group.add(backWall);
 
         // Frame strips
         const frameGeo = new THREE.BoxGeometry(0.06, h_, 0.1);
-        const frameMat = new THREE.MeshStandardMaterial({
-          color: frameColor,
-          roughness: 0.5,
-          metalness: 0.3,
-        });
         [-w / 2, 0, w / 2].forEach((xPos) => {
           const frame = new THREE.Mesh(frameGeo, frameMat);
-          frame.position.set(xPos, h_ / 2, -d / 2);
+          frame.position.set(xPos, h_ / 2, -d / 2 + zOff);
           frame.castShadow = true;
           group.add(frame);
         });
 
-        // Side walls
+        // Short side wall (on the right)
+        const sideMat = wallMat.clone();
         const sideGeo = new THREE.BoxGeometry(0.08, 1, 1);
-        const sideMat = new THREE.MeshStandardMaterial({
-          color: osbColor,
-          roughness: 0.85,
-        });
-        const leftWall = new THREE.Mesh(sideGeo, sideMat);
-        leftWall.position.set(-w / 2, 0.5, -d / 2 + 0.5);
-        leftWall.castShadow = true;
-        group.add(leftWall);
-        const rightWall = new THREE.Mesh(sideGeo, sideMat.clone());
+        const rightWall = new THREE.Mesh(sideGeo, sideMat);
         rightWall.position.set(w / 2, 0.5, -d / 2 + 0.5);
         rightWall.castShadow = true;
         group.add(rightWall);
 
-        // Logo panel on left side
+        // Full Left side wall
+        const leftWall = new THREE.Mesh(
+          new THREE.BoxGeometry(0.08, 1, 1.5),
+          sideMat,
+        );
+        leftWall.position.set(-w / 2, 0.5, -d / 2 + 0.75);
+        leftWall.castShadow = true;
+        group.add(leftWall);
+
+        // Front-Left Logo Cube
+        const cubeSide = 1;
+        const cubeGeo = new THREE.BoxGeometry(cubeSide, cubeSide, cubeSide);
+        const cubeMat = new THREE.MeshStandardMaterial({
+          color: carpetColor,
+          roughness: 0.5,
+        });
+        const leftCube = new THREE.Mesh(cubeGeo, cubeMat);
+        leftCube.position.set(
+          -w / 2 + cubeSide / 2,
+          cubeSide / 2,
+          d / 2 - cubeSide / 2,
+        );
+        leftCube.castShadow = true;
+        group.add(leftCube);
+
+        // Logo panel facing front
         const logoPanel = new THREE.Mesh(
           new THREE.PlaneGeometry(0.96, 0.96),
           new THREE.MeshStandardMaterial({
@@ -402,24 +426,63 @@ export default function VenueViewer() {
             roughness: 0.4,
           }),
         );
-        logoPanel.position.set(-w / 2 - 0.05, 0.5, -d / 2 + 0.5);
-        logoPanel.rotation.y = -Math.PI / 2;
+        logoPanel.position.set(
+          -w / 2 + cubeSide / 2,
+          cubeSide / 2,
+          d / 2 - cubeSide / 2 + cubeSide / 2 + 0.01,
+        );
         group.add(logoPanel);
-        standLogoPanelsRef.current.set(stand.id, logoPanel);
 
         // Top sign
         const sign = new THREE.Mesh(
           new THREE.BoxGeometry(w - 0.2, 0.4, 0.05),
           new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 }),
         );
-        sign.position.set(0, h_ + 0.2, -d / 2);
+        sign.position.set(0, h_ + 0.2, -d / 2 + zOff);
         group.add(sign);
-        standSignsRef.current.set(stand.id, sign);
+
+        return { boothGroup: group, logoPanel, sign };
+      };
+
+      venueConfig.stands.forEach((stand) => {
+        const group = new THREE.Group();
+        group.position.set(stand.position.x, 0, stand.position.z);
+        group.userData = { standId: stand.id };
+
+        const w = stand.size?.w || 2.5;
+        const d = stand.size?.d || 2.5;
+        const h_ = stand.height || 2.5;
+
+        if (!stand.quadGroup && !stand.doubleGroup) {
+          // ── SINGLE BOOTH rendering ──
+          const { boothGroup, logoPanel, sign } = buildSingleBooth(
+            w,
+            d,
+            h_,
+            false,
+          );
+
+          if (stand.rotation !== undefined) {
+            boothGroup.rotation.y = stand.rotation;
+          }
+
+          group.add(boothGroup);
+          standLogoPanelsRef.current.set(stand.id, logoPanel);
+          standSignsRef.current.set(stand.id, sign);
+        } else {
+          // ── QUAD/DOUBLE BOOTH — invisible mesh for raycasting ──
+          const invisibleBox = new THREE.Mesh(
+            new THREE.BoxGeometry(w, 0.5, d),
+            new THREE.MeshBasicMaterial({ visible: false }),
+          );
+          invisibleBox.position.y = 0.25;
+          group.add(invisibleBox);
+        }
 
         scene.add(group);
         standMeshesRef.current.set(stand.id, group);
 
-        // 2D label sprite (updated per day)
+        // 2D label sprite
         const labelMat = new THREE.SpriteMaterial({
           transparent: true,
           depthTest: false,
@@ -429,6 +492,210 @@ export default function VenueViewer() {
         labelSprite.scale.set(2.3, 1.15, 1);
         scene.add(labelSprite);
         labelSpritesRef.current.set(stand.id, labelSprite);
+      });
+
+      // ── Render DOUBLE BOOTH shared geometry ──
+      const doubleGroups = new Map<string, typeof venueConfig.stands>();
+      venueConfig.stands.forEach((s) => {
+        if (s.doubleGroup) {
+          if (!doubleGroups.has(s.doubleGroup))
+            doubleGroups.set(s.doubleGroup, []);
+          doubleGroups.get(s.doubleGroup)!.push(s);
+        }
+      });
+
+      doubleGroups.forEach((members) => {
+        const xs = members.map((m) => m.position.x);
+        const zs = members.map((m) => m.position.z);
+        const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+        const cz = (Math.min(...zs) + Math.max(...zs)) / 2;
+        const h_ = members[0].height || 2.5;
+        const isVertical =
+          Math.abs(members[0].position.z - members[1].position.z) > 0.1;
+
+        const doubleGroup = new THREE.Group();
+        doubleGroup.position.set(cx, 0, cz);
+
+        if (isVertical) {
+          doubleGroup.rotation.y = -Math.PI / 2;
+        }
+
+        const sortedMembers = [...members].sort((a, b) =>
+          isVertical
+            ? a.position.z - b.position.z
+            : a.position.x - b.position.x,
+        );
+
+        // Left booth (faces West)
+        const left = buildSingleBooth(2.5, 2.5, h_, true);
+        left.boothGroup.position.set(-1.25, 0, 0);
+        left.boothGroup.rotation.y = -Math.PI / 2;
+        doubleGroup.add(left.boothGroup);
+        if (sortedMembers[0]) {
+          standLogoPanelsRef.current.set(sortedMembers[0].id, left.logoPanel);
+          standSignsRef.current.set(sortedMembers[0].id, left.sign);
+        }
+
+        // Right booth (faces East)
+        const right = buildSingleBooth(2.5, 2.5, h_, true);
+        right.boothGroup.position.set(1.25, 0, 0);
+        right.boothGroup.rotation.y = Math.PI / 2;
+        doubleGroup.add(right.boothGroup);
+        if (sortedMembers[1]) {
+          standLogoPanelsRef.current.set(sortedMembers[1].id, right.logoPanel);
+          standSignsRef.current.set(sortedMembers[1].id, right.sign);
+        }
+
+        scene.add(doubleGroup);
+      });
+
+      // ── Render QUAD ISLAND shared geometry (Image 2) ──
+      const quadGroups = new Map<string, typeof venueConfig.stands>();
+      venueConfig.stands.forEach((s) => {
+        if (s.quadGroup) {
+          if (!quadGroups.has(s.quadGroup)) quadGroups.set(s.quadGroup, []);
+          quadGroups.get(s.quadGroup)!.push(s);
+        }
+      });
+
+      quadGroups.forEach((members) => {
+        const xs = members.map((m) => m.position.x);
+        const zs = members.map((m) => m.position.z);
+        const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+        const cz = (Math.min(...zs) + Math.max(...zs)) / 2;
+        const totalW = 5.0; // Math.max(...xs) - Math.min(...xs) + 2.5
+        const totalD = 5.0; // Math.max(...zs) - Math.min(...zs) + 2.5
+        const h_ = members[0].height;
+
+        const quadGroup = new THREE.Group();
+        quadGroup.position.set(cx, 0, cz);
+
+        // Shared carpet
+        const qCarpet = new THREE.Mesh(
+          new THREE.PlaneGeometry(totalW + 0.4, totalD + 0.4),
+          new THREE.MeshStandardMaterial({
+            color: carpetColor,
+            roughness: 0.95,
+          }),
+        );
+        qCarpet.rotation.x = -Math.PI / 2;
+        qCarpet.position.y = 0.02;
+        qCarpet.receiveShadow = true;
+        quadGroup.add(qCarpet);
+
+        const wallMat = new THREE.MeshStandardMaterial({
+          color: osbColor,
+          roughness: 0.85,
+          metalness: 0.05,
+        });
+
+        // Two crossing shared back walls (no gap, forming a cross separating all 4 booths)
+        const wallX = new THREE.Mesh(
+          new THREE.BoxGeometry(totalW, h_, 0.08),
+          wallMat,
+        );
+        wallX.position.set(0, h_ / 2, 0);
+        wallX.castShadow = true;
+        wallX.receiveShadow = true;
+        quadGroup.add(wallX);
+
+        const wallZ = new THREE.Mesh(
+          new THREE.BoxGeometry(0.08, h_, totalD),
+          wallMat.clone(),
+        );
+        wallZ.position.set(0, h_ / 2, 0);
+        wallZ.castShadow = true;
+        wallZ.receiveShadow = true;
+        quadGroup.add(wallZ);
+
+        // Frame strips
+        const qFrameGeo = new THREE.BoxGeometry(0.06, h_, 0.1);
+        const qFrameMat = new THREE.MeshStandardMaterial({
+          color: frameColor,
+          roughness: 0.5,
+          metalness: 0.3,
+        });
+        [-totalW / 2, 0, totalW / 2].forEach((xPos) => {
+          const f1 = new THREE.Mesh(qFrameGeo, qFrameMat);
+          f1.position.set(xPos, h_ / 2, 0);
+          f1.castShadow = true;
+          quadGroup.add(f1);
+        });
+        [-totalD / 2, 0, totalD / 2].forEach((zPos) => {
+          const f2 = new THREE.Mesh(
+            new THREE.BoxGeometry(0.1, h_, 0.06),
+            qFrameMat,
+          );
+          f2.position.set(0, h_ / 2, zPos);
+          f2.castShadow = true;
+          quadGroup.add(f2);
+        });
+
+        // Four corner logo cubes
+        const cubeSide = 1;
+        const cubeGeo = new THREE.BoxGeometry(cubeSide, cubeSide, cubeSide);
+        const cubeMat = new THREE.MeshStandardMaterial({
+          color: carpetColor,
+          roughness: 0.5,
+        });
+        const corners = [
+          { x: -totalW / 2 + cubeSide / 2, z: -totalD / 2 + cubeSide / 2 },
+          { x: totalW / 2 - cubeSide / 2, z: -totalD / 2 + cubeSide / 2 },
+          { x: -totalW / 2 + cubeSide / 2, z: totalD / 2 - cubeSide / 2 },
+          { x: totalW / 2 - cubeSide / 2, z: totalD / 2 - cubeSide / 2 },
+        ];
+
+        const sortedMembers = [...members].sort((a, b) => {
+          if (Math.abs(a.position.z - b.position.z) > 0.1)
+            return a.position.z - b.position.z;
+          return a.position.x - b.position.x;
+        }); // 0: Top-Left, 1: Top-Right, 2: Bot-Left, 3: Bot-Right
+
+        corners.forEach((corner, i) => {
+          const cube = new THREE.Mesh(cubeGeo, cubeMat.clone());
+          cube.position.set(corner.x, cubeSide / 2, corner.z);
+          cube.castShadow = true;
+          quadGroup.add(cube);
+
+          const faceX = corner.x < 0 ? -1 : 1;
+          const logoPanel = new THREE.Mesh(
+            new THREE.PlaneGeometry(0.96, 0.96),
+            new THREE.MeshStandardMaterial({
+              color: logoPlaceholderColor,
+              roughness: 0.4,
+            }),
+          );
+          logoPanel.position.set(
+            corner.x + faceX * (cubeSide / 2 + 0.01),
+            cubeSide / 2,
+            corner.z,
+          );
+          logoPanel.rotation.y = faceX < 0 ? -Math.PI / 2 : Math.PI / 2; // Face East/West
+          quadGroup.add(logoPanel);
+
+          if (sortedMembers[i])
+            standLogoPanelsRef.current.set(sortedMembers[i].id, logoPanel);
+        });
+
+        // 4 individual signs on top, facing East/West
+        const signGeo = new THREE.BoxGeometry(0.05, 0.4, 2.3);
+        const signMat = new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 0.3,
+        });
+
+        sortedMembers.forEach((member) => {
+          const sign = new THREE.Mesh(signGeo, signMat.clone());
+          const relZ = member.position.z - cz;
+          const faceX = member.position.x < cx ? -1 : 1;
+
+          sign.position.set(faceX * 0.15, h_ + 0.2, relZ);
+
+          quadGroup.add(sign);
+          standSignsRef.current.set(member.id, sign);
+        });
+
+        scene.add(quadGroup);
       });
 
       setIsLoading(false);
@@ -643,8 +910,6 @@ export default function VenueViewer() {
       sprite.position.y = is3D ? 3.5 : 4;
     });
   }, [is3D]);
-
-  // ── No more hover popup scheduling logic ──
 
   // ── Pointer interaction — hover to show popup ──
   useEffect(() => {
