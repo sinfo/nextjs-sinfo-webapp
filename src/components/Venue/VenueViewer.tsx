@@ -403,18 +403,11 @@ export default function VenueViewer() {
         group.add(leftWall);
 
         // Front-Left Logo Cube
-        const cubeSide = 1;
-        const cubeGeo = new THREE.BoxGeometry(cubeSide, cubeSide, cubeSide);
-        const cubeMat = new THREE.MeshStandardMaterial({
-          color: carpetColor,
-          roughness: 0.5,
-        });
-        const leftCube = new THREE.Mesh(cubeGeo, cubeMat);
-        leftCube.position.set(
-          -w / 2 + cubeSide / 2,
-          cubeSide / 2,
-          d / 2 - cubeSide / 2,
+        const leftCube = new THREE.Mesh(
+          new THREE.BoxGeometry(1, 1, 0.3),
+          wallMat.clone(),
         );
+        leftCube.position.set(-w / 2 + 0.5, 0.5, d / 2 - 0.15);
         leftCube.castShadow = true;
         group.add(leftCube);
 
@@ -427,9 +420,9 @@ export default function VenueViewer() {
           }),
         );
         logoPanel.position.set(
-          -w / 2 + cubeSide / 2,
-          cubeSide / 2,
-          d / 2 - cubeSide / 2 + cubeSide / 2 + 0.01,
+          -w / 2 + 0.5,
+          0.5,
+          d / 2 - 0.15 + 0.16, // Half of 0.3 depth + 0.01 gap
         );
         group.add(logoPanel);
 
@@ -632,13 +625,8 @@ export default function VenueViewer() {
           quadGroup.add(f2);
         });
 
-        // Four corner logo cubes
-        const cubeSide = 1;
-        const cubeGeo = new THREE.BoxGeometry(cubeSide, cubeSide, cubeSide);
-        const cubeMat = new THREE.MeshStandardMaterial({
-          color: carpetColor,
-          roughness: 0.5,
-        });
+        // Four corner logo cubes (now rectangular)
+        const cubeSide = 1; // Used for corner area targeting
         const corners = [
           { x: -totalW / 2 + cubeSide / 2, z: -totalD / 2 + cubeSide / 2 },
           { x: totalW / 2 - cubeSide / 2, z: -totalD / 2 + cubeSide / 2 },
@@ -653,12 +641,17 @@ export default function VenueViewer() {
         }); // 0: Top-Left, 1: Top-Right, 2: Bot-Left, 3: Bot-Right
 
         corners.forEach((corner, i) => {
-          const cube = new THREE.Mesh(cubeGeo, cubeMat.clone());
-          cube.position.set(corner.x, cubeSide / 2, corner.z);
+          const faceX = corner.x < 0 ? -1 : 1;
+          const rectCubeCenter = faceX * (totalW / 2 - 0.15); // Width is 0.3, so flush with outer edge +/- 2.5
+
+          const cube = new THREE.Mesh(
+            new THREE.BoxGeometry(0.3, 1, 1),
+            wallMat.clone(),
+          );
+          cube.position.set(rectCubeCenter, 0.5, corner.z);
           cube.castShadow = true;
           quadGroup.add(cube);
 
-          const faceX = corner.x < 0 ? -1 : 1;
           const logoPanel = new THREE.Mesh(
             new THREE.PlaneGeometry(0.96, 0.96),
             new THREE.MeshStandardMaterial({
@@ -667,8 +660,8 @@ export default function VenueViewer() {
             }),
           );
           logoPanel.position.set(
-            corner.x + faceX * (cubeSide / 2 + 0.01),
-            cubeSide / 2,
+            rectCubeCenter + faceX * 0.16, // Half of 0.3 width + 0.01
+            0.5,
             corner.z,
           );
           logoPanel.rotation.y = faceX < 0 ? -Math.PI / 2 : Math.PI / 2; // Face East/West
@@ -855,23 +848,11 @@ export default function VenueViewer() {
         oldMat.dispose();
       }
 
-      // Logo panel on stand side — load logo texture
+      // Logo panel on stand side — load logo texture centered without stretching
       const logoPanel = standLogoPanelsRef.current.get(stand.id);
-      if (logoPanel && company?.logoUrl) {
-        const loader = new THREE.TextureLoader();
-        loader.load(company.logoUrl, (logoTex) => {
-          logoTex.minFilter = THREE.LinearFilter;
-          logoTex.colorSpace = THREE.SRGBColorSpace;
-          const oldMat = logoPanel.material as THREE_TYPES.MeshStandardMaterial;
-          oldMat.map?.dispose();
-          logoPanel.material = new THREE.MeshStandardMaterial({
-            map: logoTex,
-            color: 0xffffff,
-            roughness: 0.4,
-          });
-          oldMat.dispose();
-        });
-      } else if (logoPanel) {
+
+      const setFallbackWhite = () => {
+        if (!logoPanel) return;
         const oldMat = logoPanel.material as THREE_TYPES.MeshStandardMaterial;
         oldMat.map?.dispose();
         logoPanel.material = new THREE.MeshStandardMaterial({
@@ -879,6 +860,48 @@ export default function VenueViewer() {
           roughness: 0.6,
         });
         oldMat.dispose();
+      };
+
+      if (logoPanel && company?.logoUrl) {
+        const img = new window.Image();
+        img.crossOrigin = "anonymous";
+        img.src = company.logoUrl;
+        img.onload = () => {
+          const cw = 512;
+          const ch = 512;
+          const canvas = document.createElement("canvas");
+          canvas.width = cw;
+          canvas.height = ch;
+          const ctx = canvas.getContext("2d")!;
+
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, cw, ch);
+
+          const padding = 32;
+          const maxW = cw - padding * 2;
+          const maxH = ch - padding * 2;
+          const ratio = Math.min(maxW / img.width, maxH / img.height);
+          const dw = img.width * ratio;
+          const dh = img.height * ratio;
+          ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+
+          const logoTex = new THREE.CanvasTexture(canvas);
+          logoTex.minFilter = THREE.LinearFilter;
+          logoTex.colorSpace = THREE.SRGBColorSpace;
+          logoTex.generateMipmaps = true;
+
+          const oldMat = logoPanel.material as THREE_TYPES.MeshStandardMaterial;
+          oldMat.map?.dispose();
+          logoPanel.material = new THREE.MeshStandardMaterial({
+            map: logoTex,
+            roughness: 0.4,
+            color: 0xffffff,
+          });
+          oldMat.dispose();
+        };
+        img.onerror = setFallbackWhite;
+      } else if (logoPanel) {
+        setFallbackWhite();
       }
     });
   }, [selectedDay, getStandCompany, createTextCanvas, isLoading]);
