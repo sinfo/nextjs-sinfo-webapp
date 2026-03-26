@@ -19,6 +19,12 @@ export default async function Discounts() {
     return `${discount.company}-${discount.code}-${getExpireDate(discount)}`;
   };
 
+  const formatExpireDate = (discount: DiscountCode): string =>
+    new Date(getExpireDate(discount)).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+    });
+
   if (!discounts || discounts.length === 0) {
     return <BlankPageWithMessage message="No discount codes available!" />;
   }
@@ -27,20 +33,17 @@ export default async function Discounts() {
     (companies ?? []).map((company) => [company.id, company]),
   );
 
-  // Enriquecer discounts com dados da empresa
   const enrichedDiscounts = discounts.map((discount) => ({
     ...discount,
     companyData: companiesById.get(discount.company),
   }));
 
-  // Ordenar por data de expiração (mais recentes primeiro)
   const sortedDiscounts = enrichedDiscounts.sort((a, b) => {
     const dateA = new Date(getExpireDate(a));
     const dateB = new Date(getExpireDate(b));
     return dateB.getTime() - dateA.getTime();
   });
 
-  // Manter apenas descontos ativos
   const now = new Date();
   const activeDiscounts = sortedDiscounts.filter(
     (discount) => new Date(getExpireDate(discount)) > now,
@@ -77,6 +80,9 @@ export default async function Discounts() {
             </p>
             <p className="text-xs text-gray-600 line-clamp-1 text-center">
               {discount.companyData?.name || "Company"}
+            </p>
+            <p className="text-xs text-gray-500 text-center">
+              Valid until {formatExpireDate(discount)}
             </p>
           </div>
 
