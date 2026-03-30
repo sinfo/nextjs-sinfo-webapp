@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import styles from "@/styles/redeem-code.module.css";
 
 interface RedeemCodeProps {
   code: string;
@@ -18,9 +19,7 @@ function copyWithFallback(text: string): Promise<void> {
     try {
       const textArea = document.createElement("textarea");
       textArea.value = text;
-      textArea.style.position = "fixed";
-      textArea.style.left = "-9999px";
-      textArea.style.opacity = "0";
+      textArea.className = styles.copyTextarea;
       document.body.appendChild(textArea);
       textArea.focus();
       textArea.select();

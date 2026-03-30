@@ -96,6 +96,19 @@ export function getEventFullDate(date: string): string {
   });
 }
 
+export function getDiscountExpireDate(discount: DiscountCode): string {
+  return typeof discount.expire === "string"
+    ? discount.expire
+    : discount.expire.$date;
+}
+
+export function formatDiscountExpireDate(discount: DiscountCode): string {
+  return new Date(getDiscountExpireDate(discount)).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+  });
+}
+
 // TODO: Implement this correctly
 export function isValidQRCode(
   data: string,
