@@ -1,0 +1,5 @@
+.copyTextarea {
+  position: fixed;
+  left: -9999px;
+  opacity: 0;
+}

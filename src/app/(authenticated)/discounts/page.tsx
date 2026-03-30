@@ -9,21 +9,10 @@ export default async function Discounts() {
   const discounts = await DiscountService.getDiscounts();
   const companies = await CompanyService.getCompanies();
 
-  const getExpireDate = (discount: DiscountCode): string =>
-    typeof discount.expire === "string"
-      ? discount.expire
-      : discount.expire.$date;
-
   const getDiscountKey = (discount: DiscountCode): string => {
     if (discount._id?.$oid) return discount._id.$oid;
-    return `${discount.company}-${discount.code}-${getExpireDate(discount)}`;
+    return `${discount.company}-${discount.code}`;
   };
-
-  const formatExpireDate = (discount: DiscountCode): string =>
-    new Date(getExpireDate(discount)).toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-    });
 
   if (!discounts || discounts.length === 0) {
     return <BlankPageWithMessage message="No discount codes available!" />;
@@ -38,27 +27,7 @@ export default async function Discounts() {
     companyData: companiesById.get(discount.company),
   }));
 
-  const sortedDiscounts = enrichedDiscounts.sort((a, b) => {
-    const dateA = new Date(getExpireDate(a));
-    const dateB = new Date(getExpireDate(b));
-    return dateB.getTime() - dateA.getTime();
-  });
-
-  const now = new Date();
-  const activeDiscounts = sortedDiscounts.filter(
-    (discount) => new Date(getExpireDate(discount)) > now,
-  );
-
-  function hasValidUrl(value: string): boolean {
-    try {
-      const parsed = new URL(value);
-      return parsed.protocol === "http:" || parsed.protocol === "https:";
-    } catch {
-      return false;
-    }
-  }
-
-  const renderDiscountCard = (discount: (typeof sortedDiscounts)[number]) => (
+  const renderDiscountCard = (discount: (typeof enrichedDiscounts)[number]) => (
     <div
       key={getDiscountKey(discount)}
       className="h-full w-full max-w-[320px] sm:max-w-none"
@@ -81,16 +50,11 @@ export default async function Discounts() {
             <p className="text-xs text-gray-600 line-clamp-1 text-center">
               {discount.companyData?.name || "Company"}
             </p>
-            <p className="text-xs text-gray-500 text-center">
-              Valid until {formatExpireDate(discount)}
-            </p>
+            {/* Future use: use formatDiscountExpireDate from utils once API sends real expiration dates. */}
           </div>
 
           <div className="mt-3">
-            <RedeemCode
-              code={discount.code}
-              isUrl={hasValidUrl(discount.code)}
-            />
+            <RedeemCode code={discount.code} isUrl={false} />
           </div>
         </div>
       </div>
@@ -107,11 +71,10 @@ export default async function Discounts() {
         </p>
       </div>
 
-      {/* Active Discounts */}
-      {activeDiscounts.length > 0 && (
-        <List title="Active Offers" description="Valid discount codes">
+      {enrichedDiscounts.length > 0 && (
+        <List title="Offers" description="Discount codes">
           <div className="mt-3 grid grid-cols-1 justify-items-center gap-3 px-2 sm:grid-cols-2 sm:justify-items-stretch sm:px-0 lg:grid-cols-3 xl:grid-cols-4">
-            {activeDiscounts.map((discount) => renderDiscountCard(discount))}
+            {enrichedDiscounts.map((discount) => renderDiscountCard(discount))}
           </div>
         </List>
       )}
