@@ -147,8 +147,8 @@ const zones: Zone[] = [
 
   // ── Bottom Row (unified 30m section aligned with Room 2 middle) ──
   {
-    id: "startup-zone",
-    label: "Startup Zone",
+    id: "showcase-zone",
+    label: "Showcase Zone",
     type: "stands",
     position: { x: -17.6, z: 12 },
     size: { w: 10, d: 8 },
