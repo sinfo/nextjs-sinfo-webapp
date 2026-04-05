@@ -781,6 +781,19 @@ export default function VenueViewer({
           standSignsRef.current.set(sortedMembers[1].id, right.sign);
         }
 
+        // Shared junction pillar
+        const junctionPillar = new THREE.Mesh(
+          new THREE.BoxGeometry(0.12, h_, 0.12),
+          new THREE.MeshStandardMaterial({
+            color: frameColor,
+            roughness: 0.5,
+            metalness: 0.3,
+          }),
+        );
+        junctionPillar.position.set(0, h_ / 2, 0);
+        junctionPillar.castShadow = true;
+        doubleGroup.add(junctionPillar);
+
         scene.add(doubleGroup);
       });
 
@@ -824,7 +837,7 @@ export default function VenueViewer({
           metalness: 0.05,
         });
 
-        // Two crossing shared back walls (no gap, forming a cross separating all 4 booths)
+        // Shared crossing shared back walls
         const wallX = new THREE.Mesh(
           new THREE.BoxGeometry(totalW, h_, 0.08),
           wallMat,
@@ -850,13 +863,17 @@ export default function VenueViewer({
           roughness: 0.5,
           metalness: 0.3,
         });
-        [-totalW / 2, 0, totalW / 2].forEach((xPos) => {
+
+        // Horizontal wall bars (along X axis)
+        [-2.5, -1.25, 0, 1.25, 2.5].forEach((xPos) => {
           const f1 = new THREE.Mesh(qFrameGeo, qFrameMat);
           f1.position.set(xPos, h_ / 2, 0);
           f1.castShadow = true;
           quadGroup.add(f1);
         });
-        [-totalD / 2, 0, totalD / 2].forEach((zPos) => {
+
+        // Vertical wall bars (along Z axis)
+        [-2.5, -1.25, 0, 1.25, 2.5].forEach((zPos) => {
           const f2 = new THREE.Mesh(
             new THREE.BoxGeometry(0.1, h_, 0.06),
             qFrameMat,
@@ -865,6 +882,15 @@ export default function VenueViewer({
           f2.castShadow = true;
           quadGroup.add(f2);
         });
+
+        // Central Junction Pillar (where all 4 meet)
+        const centralPillar = new THREE.Mesh(
+          new THREE.BoxGeometry(0.12, h_, 0.12),
+          qFrameMat.clone(),
+        );
+        centralPillar.position.set(0, h_ / 2, 0);
+        centralPillar.castShadow = true;
+        quadGroup.add(centralPillar);
 
         // Four corner logo cubes (now rectangular)
         const cubeSide = 1; // Used for corner area targeting
