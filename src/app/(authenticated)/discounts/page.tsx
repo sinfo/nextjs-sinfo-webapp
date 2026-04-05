@@ -22,6 +22,28 @@ export default async function Discounts() {
     (companies ?? []).map((company) => [company.id, company]),
   );
 
+  // Some promo-code company IDs may be absent from the list endpoint.
+  // Resolve missing companies individually to keep cards populated.
+  const missingCompanyIds = Array.from(
+    new Set(
+      discounts
+        .map((discount) => discount.company)
+        .filter((companyId) => !companiesById.has(companyId)),
+    ),
+  );
+
+  if (missingCompanyIds.length > 0) {
+    const missingCompanies = await Promise.all(
+      missingCompanyIds.map((companyId) =>
+        CompanyService.getCompany(companyId),
+      ),
+    );
+
+    missingCompanies.forEach((company) => {
+      if (company) companiesById.set(company.id, company);
+    });
+  }
+
   const enrichedDiscounts = discounts.map((discount) => ({
     ...discount,
     companyData: companiesById.get(discount.company),
