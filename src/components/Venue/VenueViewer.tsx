@@ -1171,7 +1171,7 @@ export default function VenueViewer({
       orthoCameraRef.current.updateProjectionMatrix();
     }
     labelSpritesRef.current.forEach((sprite) => {
-      const scale = is3D ? 2 : 2.5;
+      const scale = 2;
       sprite.scale.set(scale, scale, 1);
       sprite.position.y = is3D ? 3.5 : 4;
     });
