@@ -1,24 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import {
-  venueConfig,
-  type Stand,
-  type Company,
-  type DayConfig,
-} from "@/constants/venueData";
+import { venueConfig, type Stand, type DayConfig } from "@/constants/venueData";
 import type * as THREE_TYPES from "three";
+import { useRouter } from "next/navigation";
 
-/* ━━━ Types ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-interface PopupInfo {
-  stand: Stand;
-  company?: Company;
+interface VenueViewerProps {
+  companies?: Company[];
+  speakers?: Speaker[];
 }
 
-/* ━━━ Component ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const shouldDebug = false;
-export default function VenueViewer() {
+export default function VenueViewer({ companies, speakers }: VenueViewerProps) {
+  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<THREE_TYPES.WebGLRenderer | null>(null);
   const sceneRef = useRef<THREE_TYPES.Scene | null>(null);
@@ -38,7 +32,6 @@ export default function VenueViewer() {
   const is3DRef = useRef(false);
 
   const [is3D, setIs3D] = useState(false);
-  const [popup, setPopup] = useState<PopupInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDay, setSelectedDay] = useState(0);
   const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -48,21 +41,39 @@ export default function VenueViewer() {
   // ── Resolve stand → company for current day ──
   const getStandCompany = useCallback(
     (standId: string): Company | undefined => {
+      if (companies) {
+        const dayDate = currentDay?.date; // e.g. "2026-04-20"
+        return companies.find((c) =>
+          c.stands?.some(
+            (s) =>
+              s.standId === standId &&
+              (!dayDate || s.date?.startsWith(dayDate)),
+          ),
+        );
+      }
       return currentDay?.standAssignments.find((a) => a.standId === standId)
         ?.company;
     },
-    [currentDay],
+    [companies, currentDay],
   );
 
   // ── Get speakers for a zone on the current day ──
   const getSpeakersForZone = useCallback(
     (zoneId: string): Speaker[] => {
+      if (speakers) {
+        const dayDate = currentDay?.date; // e.g. "2026-04-20"
+        console.log("daydate", dayDate, speakers);
+        if (!dayDate) return speakers;
+        return speakers.filter((sp) =>
+          sp.sessions?.some((s) => s.date?.startsWith(dayDate)),
+        );
+      }
       return (
         currentDay?.zoneSchedules.find((zs) => zs.zoneId === zoneId)
           ?.speakers ?? []
       );
     },
-    [currentDay],
+    [speakers, currentDay],
   );
 
   // ── Create a text canvas ──
@@ -657,7 +668,7 @@ export default function VenueViewer() {
         });
         const labelSprite = new THREE.Sprite(labelMat);
         labelSprite.position.set(stand.position.x, 4, stand.position.z);
-        labelSprite.scale.set(2.3, 1.15, 1);
+        labelSprite.scale.set(2, 2, 1);
         scene.add(labelSprite);
         labelSpritesRef.current.set(stand.id, labelSprite);
       });
@@ -932,7 +943,7 @@ export default function VenueViewer() {
       const sprite = labelSpritesRef.current.get(stand.id);
       if (sprite) {
         const cw = 256;
-        const ch = 128;
+        const ch = 256;
         const canvas = document.createElement("canvas");
         canvas.width = cw;
         canvas.height = ch;
@@ -954,18 +965,18 @@ export default function VenueViewer() {
         (sprite.material as THREE_TYPES.SpriteMaterial).map = tex;
         (sprite.material as THREE_TYPES.SpriteMaterial).needsUpdate = true;
 
-        if (company?.logoUrl) {
+        if (company?.img) {
           // Load logo image and draw it onto the canvas
           const img = new window.Image();
           img.crossOrigin = "anonymous";
-          img.src = company.logoUrl;
+          img.src = company.img;
           img.onload = () => {
             ctx.fillStyle = bg;
             ctx.beginPath();
             ctx.roundRect(0, 0, cw, ch, 16);
             ctx.fill();
-            const maxW = 200;
-            const maxH = 90;
+            const maxW = 220;
+            const maxH = 220;
             const ratio = Math.min(maxW / img.width, maxH / img.height);
             const dw = img.width * ratio;
             const dh = img.height * ratio;
@@ -973,8 +984,7 @@ export default function VenueViewer() {
             tex.needsUpdate = true;
           };
           img.onerror = () => {
-            // Fallback: draw text
-            ctx.fillStyle = "#ffffff";
+            ctx.fillStyle = "#1c2b70";
             ctx.font = `bold 28px "Montserrat", Arial, sans-serif`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -1036,10 +1046,10 @@ export default function VenueViewer() {
         oldMat.dispose();
       };
 
-      if (logoPanel && company?.logoUrl) {
+      if (logoPanel && company?.img) {
         const img = new window.Image();
         img.crossOrigin = "anonymous";
-        img.src = company.logoUrl;
+        img.src = company.img;
         img.onload = () => {
           const cw = 512;
           const ch = 512;
@@ -1105,7 +1115,8 @@ export default function VenueViewer() {
       orthoCameraRef.current.updateProjectionMatrix();
     }
     labelSpritesRef.current.forEach((sprite) => {
-      sprite.scale.set(is3D ? 2 : 3, is3D ? 1 : 1.5, 1);
+      const scale = is3D ? 2 : 2.5;
+      sprite.scale.set(scale, scale, 1);
       sprite.position.y = is3D ? 3.5 : 4;
     });
 
@@ -1183,12 +1194,11 @@ export default function VenueViewer() {
       if (standId) {
         const stand = venueConfig.stands.find((s) => s.id === standId);
         if (stand) {
-          setPopup({
-            stand,
-            company: currentDay?.standAssignments.find(
-              (a) => a.standId === stand.id,
-            )?.company,
-          });
+          // Goto company page
+          const company = getStandCompany(standId);
+          if (company) {
+            router.push(`/companies/${company.id}`);
+          }
         }
       }
     }
@@ -1201,7 +1211,7 @@ export default function VenueViewer() {
       container.removeEventListener("pointerdown", onPointerDown);
       container.removeEventListener("click", onClick);
     };
-  }, [is3D, currentDay]);
+  }, [is3D, currentDay, getStandCompany]);
 
   // ── 2D manual pan & zoom (only active when !is3D) ──
   useEffect(() => {
@@ -1391,7 +1401,6 @@ export default function VenueViewer() {
             key={day.date}
             onClick={() => {
               setSelectedDay(idx);
-              setPopup(null);
             }}
             className={`
               px-3 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap
@@ -1429,114 +1438,6 @@ export default function VenueViewer() {
             ref={debugRef}
             className="absolute bottom-4 left-4 z-[60] bg-black/70 text-white font-mono text-[10px] px-2 py-1 rounded backdrop-blur-sm pointer-events-none border border-white/10"
           />
-        )}
-
-        {/* ═══ Company Dialog (Centered Modal) ═══ */}
-        {popup && (
-          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300"
-              onClick={() => setPopup(null)}
-            />
-
-            {/* Dialog Content */}
-            <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden w-full max-w-lg animate-in zoom-in-95 fade-in duration-300">
-              {/* Header */}
-              <div className="bg-sinfo-primary px-6 py-5 flex items-center justify-between">
-                <div>
-                  <p className="text-white font-bold text-xl leading-tight">
-                    {popup.company?.name || popup.stand.label}
-                  </p>
-                  <p className="text-white/70 text-sm">
-                    Stand {popup.stand.label}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setPopup(null)}
-                  className="p-2 hover:bg-white/10 rounded-full transition-colors text-white"
-                >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-
-              {popup.company ? (
-                <div className="p-6 text-left">
-                  {popup.company.logoUrl && (
-                    <div className="w-full h-32 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 border border-gray-100 p-4 font-normal">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={popup.company.logoUrl}
-                        alt={popup.company.name}
-                        className="max-h-full max-w-full object-contain"
-                      />
-                    </div>
-                  )}
-                  {popup.company.description && (
-                    <p className="text-gray-600 mb-6 leading-relaxed">
-                      {popup.company.description}
-                    </p>
-                  )}
-                  {popup.company.siteUrl && (
-                    <a
-                      href={popup.company.siteUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-sinfo-primary text-white font-bold px-6 py-3 rounded-xl hover:bg-sinfo-primary/90 transition-all hover:scale-[1.02] active:scale-[0.98] w-full justify-center shadow-lg shadow-sinfo-primary/20"
-                    >
-                      Visit Website
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </a>
-                  )}
-                </div>
-              ) : (
-                <div className="p-12 text-center">
-                  <div className="inline-flex p-3 bg-gray-50 rounded-full mb-3 text-gray-400">
-                    <svg
-                      className="w-8 h-8"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </div>
-                  <p className="text-gray-500 font-medium italic">
-                    Available for {currentDay?.longLabel || "this day"}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
         )}
 
         {/* 2D/3D toggle */}
