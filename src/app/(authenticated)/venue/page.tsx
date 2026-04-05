@@ -1,5 +1,6 @@
 import { CompanyService } from "@/services/CompanyService";
 import { SpeakerService } from "@/services/SpeakerService";
+import { SessionService } from "@/services/SessionService";
 import VenueViewer from "@/components/Venue/VenueViewer";
 
 export default async function VenuePage() {
@@ -35,6 +36,7 @@ export default async function VenuePage() {
   ).filter((company): company is Company => company !== null);
 
   const speakers = (await SpeakerService.getSpeakers()) ?? [];
+  const sessions = (await SessionService.getSessions()) ?? [];
 
   return (
     <div className="container m-auto h-full">
@@ -42,7 +44,11 @@ export default async function VenuePage() {
         <h1 className="text-2xl font-bold">Venue</h1>
       </div>
 
-      <VenueViewer companies={uniqueCompanies} speakers={speakers} />
+      <VenueViewer
+        companies={uniqueCompanies}
+        speakers={speakers}
+        sessions={sessions}
+      />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { venueConfig, type Stand, type DayConfig } from "@/constants/venueData";
 import type * as THREE_TYPES from "three";
 import { useRouter } from "next/navigation";
@@ -8,10 +8,15 @@ import { useRouter } from "next/navigation";
 interface VenueViewerProps {
   companies?: Company[];
   speakers?: Speaker[];
+  sessions?: SINFOSession[];
 }
 
 const shouldDebug = false;
-export default function VenueViewer({ companies, speakers }: VenueViewerProps) {
+export default function VenueViewer({
+  companies,
+  speakers,
+  sessions,
+}: VenueViewerProps) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<THREE_TYPES.WebGLRenderer | null>(null);
@@ -38,6 +43,19 @@ export default function VenueViewer({ companies, speakers }: VenueViewerProps) {
 
   const currentDay: DayConfig | undefined = venueConfig.days[selectedDay];
 
+  // ── Enrich speakers with sessions ──
+  const enrichedSpeakers = useMemo(() => {
+    if (!speakers) return [];
+    if (!sessions) return speakers;
+
+    return speakers.map((speaker) => {
+      const speakerSessions = sessions.filter((session) =>
+        session.speakers?.some((s) => s.id === speaker.id),
+      );
+      return { ...speaker, sessions: speakerSessions };
+    });
+  }, [speakers, sessions]);
+
   // ── Resolve stand → company for current day ──
   const getStandCompany = useCallback(
     (standId: string): Company | undefined => {
@@ -59,21 +77,30 @@ export default function VenueViewer({ companies, speakers }: VenueViewerProps) {
 
   // ── Get speakers for a zone on the current day ──
   const getSpeakersForZone = useCallback(
-    (zoneId: string): Speaker[] => {
-      if (speakers) {
+    (zoneId: string): Array<{ speaker: Speaker; session: SINFOSession }> => {
+      const zone = venueConfig.zones.find((z) => z.id === zoneId);
+      const zoneLabel = zone?.label;
+
+      if (enrichedSpeakers) {
         const dayDate = currentDay?.date; // e.g. "2026-04-20"
-        console.log("daydate", dayDate, speakers);
-        if (!dayDate) return speakers;
-        return speakers.filter((sp) =>
-          sp.sessions?.some((s) => s.date?.startsWith(dayDate)),
-        );
+        if (!dayDate) return [];
+
+        const results: Array<{ speaker: Speaker; session: SINFOSession }> = [];
+        enrichedSpeakers.forEach((sp) => {
+          const session = sp.sessions?.find(
+            (s) =>
+              s.date?.startsWith(dayDate) &&
+              (s.place === zoneId || s.place === zoneLabel),
+          );
+          if (session) {
+            results.push({ speaker: sp, session });
+          }
+        });
+        return results;
       }
-      return (
-        currentDay?.zoneSchedules.find((zs) => zs.zoneId === zoneId)
-          ?.speakers ?? []
-      );
+      return [];
     },
-    [speakers, currentDay],
+    [enrichedSpeakers, currentDay],
   );
 
   // ── Create a text canvas ──
@@ -147,7 +174,12 @@ export default function VenueViewer({ companies, speakers }: VenueViewerProps) {
 
   // ── Create a SpeakerCard texture ──
   const createSpeakerCardTexture = useCallback(
-    (speaker: Speaker, index: number, THREE: any) => {
+    (
+      speaker: Speaker,
+      session: SINFOSession | undefined,
+      index: number,
+      THREE: any,
+    ) => {
       const w = 560;
       const h = 760;
       const canvas = document.createElement("canvas");
@@ -252,6 +284,29 @@ export default function VenueViewer({ companies, speakers }: VenueViewerProps) {
             w - paddingLeft * 2,
             34,
           );
+        }
+
+        // Session Time (on the blob area)
+        if (session) {
+          ctx.fillStyle = "#ffffff";
+          ctx.font = 'bold 32px "Montserrat", Arial, sans-serif';
+          ctx.textAlign = "center";
+
+          const date = new Date(session.date);
+          const startTime = date.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          });
+
+          const endDate = new Date(date.getTime() + session.duration * 60000);
+          const endTime = endDate.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          });
+
+          ctx.fillText(`${startTime} - ${endTime}`, w / 2, h - 60);
         }
       };
 
@@ -1336,18 +1391,20 @@ export default function VenueViewer({ companies, speakers }: VenueViewerProps) {
 
     // Add new speaker cards for each zone
     venueConfig.zones.forEach((zone) => {
-      const speakers = getSpeakersForZone(zone.id);
-      if (speakers.length === 0) return;
+      const speakersData = getSpeakersForZone(zone.id);
+      if (speakersData.length === 0) return;
 
       const cards: THREE_TYPES.Mesh[] = [];
       const cardW = 2.8;
       const cardH = 3.8;
 
-      const totalW = speakers.length * cardW + (speakers.length - 1) * 0.5;
+      const totalW =
+        speakersData.length * cardW + (speakersData.length - 1) * 0.5;
       const startX = zone.position.x - totalW / 2 + cardW / 2;
 
-      speakers.forEach((speaker, i) => {
-        const tex = createSpeakerCardTexture(speaker, i, THREE);
+      speakersData.forEach((data, i) => {
+        const { speaker, session } = data;
+        const tex = createSpeakerCardTexture(speaker, session, i, THREE);
         const mat = new THREE.MeshStandardMaterial({
           map: tex,
           emissiveMap: tex, // Keep vibrant colors by putting them in the emissive layer
