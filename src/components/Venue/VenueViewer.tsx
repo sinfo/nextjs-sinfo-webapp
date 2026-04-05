@@ -96,6 +96,7 @@ export default function VenueViewer({
             results.push({ speaker: sp, session });
           }
         });
+        results.sort((a, b) => a.session.date.localeCompare(b.session.date));
         return results;
       }
       return [];
@@ -1183,13 +1184,13 @@ export default function VenueViewer({
       const cardW = 2.8;
       const cardH = 3.8;
 
-      cards.forEach((mesh) => {
+      cards.forEach((sprite) => {
         if (is3D) {
-          mesh.position.y = (zone.height || 0.01) + cardH / 2 + 0.5;
-          mesh.rotation.x = -Math.PI / 8; // Light tilt
+          sprite.position.y = (zone.height || 0.01) + cardH / 2 + 0.5;
+          sprite.scale.set(cardW, cardH, 1);
         } else {
-          mesh.position.y = (zone.height || 0.01) + 0.02;
-          mesh.rotation.x = -Math.PI / 2; // Flat on floor
+          sprite.position.y = (zone.height || 0.01) + 2.0; // Higher in 2D to avoid ground clipping
+          sprite.scale.set(cardW, cardH, 1);
         }
       });
     });
@@ -1385,7 +1386,11 @@ export default function VenueViewer({
 
     // Remove old speaker cards
     speakerCardsRef.current.forEach((cards) => {
-      cards.forEach((c) => scene.remove(c));
+      cards.forEach((c) => {
+        scene.remove(c);
+        if ((c as any).material.map) (c as any).material.map.dispose();
+        if ((c as any).material) (c as any).material.dispose();
+      });
     });
     speakerCardsRef.current.clear();
 
@@ -1394,7 +1399,7 @@ export default function VenueViewer({
       const speakersData = getSpeakersForZone(zone.id);
       if (speakersData.length === 0) return;
 
-      const cards: THREE_TYPES.Mesh[] = [];
+      const cards: THREE_TYPES.Sprite[] = [];
       const cardW = 2.8;
       const cardH = 3.8;
 
@@ -1405,47 +1410,34 @@ export default function VenueViewer({
       speakersData.forEach((data, i) => {
         const { speaker, session } = data;
         const tex = createSpeakerCardTexture(speaker, session, i, THREE);
-        const mat = new THREE.MeshStandardMaterial({
+        const mat = new THREE.SpriteMaterial({
           map: tex,
-          emissiveMap: tex, // Keep vibrant colors by putting them in the emissive layer
-          roughness: 0.6,
-          color: 0xffffff,
-          emissive: 0xffffff,
-          emissiveIntensity: 0.3, // Brightness boost that preserves saturation
           transparent: true,
-          alphaTest: 0.5, // Critical for planes casting shadows that have transparent unrendered parts
-          side: THREE.DoubleSide,
+          alphaTest: 0.1,
         });
 
-        // Use PlaneGeometry to avoid box side visible artifacts behind rounded transparent corners
-        const geo = new THREE.PlaneGeometry(cardW, cardH);
-
-        const mesh = new THREE.Mesh(geo, mat);
-        mesh.castShadow = true;
-        mesh.receiveShadow = false; // Prevent self-shadowing acne on the thin plane geometry
+        const sprite = new THREE.Sprite(mat);
 
         if (is3DRef.current) {
-          mesh.position.set(
+          sprite.position.set(
             startX + i * (cardW + 0.5),
             (zone.height || 0.01) + cardH / 2 + 0.5,
             zone.position.z,
           );
-          mesh.rotation.x = -Math.PI / 8; // slight tilt back for better lighting and viewing angle
-          mesh.rotation.y = 0;
         } else {
-          mesh.position.set(
+          sprite.position.set(
             startX + i * (cardW + 0.5),
-            (zone.height || 0.01) + 0.02,
+            (zone.height || 0.01) + 2.0,
             zone.position.z,
           );
-          mesh.rotation.x = -Math.PI / 2;
         }
+        sprite.scale.set(cardW, cardH, 1);
 
-        scene.add(mesh);
-        cards.push(mesh);
+        scene.add(sprite);
+        cards.push(sprite);
       });
 
-      speakerCardsRef.current.set(zone.id, cards);
+      speakerCardsRef.current.set(zone.id, cards as any);
     });
   }, [selectedDay, getSpeakersForZone, createSpeakerCardTexture, isLoading]);
 
