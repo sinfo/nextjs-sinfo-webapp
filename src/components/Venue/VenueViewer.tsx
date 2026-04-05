@@ -634,12 +634,12 @@ export default function VenueViewer({
         rightWall.castShadow = true;
         group.add(rightWall);
 
-        // Full Left side wall
+        // Side walls (100cm from back wall)
         const leftWall = new THREE.Mesh(
-          new THREE.BoxGeometry(0.08, 1, 1.5),
+          new THREE.BoxGeometry(0.08, 1, 1),
           sideMat,
         );
-        leftWall.position.set(-w / 2, 0.5, -d / 2 + 0.75);
+        leftWall.position.set(-w / 2, 0.5, -d / 2 + 0.5);
         leftWall.castShadow = true;
         group.add(leftWall);
 
@@ -891,6 +891,32 @@ export default function VenueViewer({
         centralPillar.position.set(0, h_ / 2, 0);
         centralPillar.castShadow = true;
         quadGroup.add(centralPillar);
+
+        // --- Perimeter Sidewalls (50cm) ---
+        // North & South edges
+        [-2.5, 2.5].forEach((zVal) => {
+          [-0.25, 0.25].forEach((xVal) => {
+            const wall = new THREE.Mesh(
+              new THREE.BoxGeometry(0.5, 1, 0.08),
+              wallMat.clone(),
+            );
+            wall.position.set(xVal, 0.5, zVal);
+            wall.castShadow = true;
+            quadGroup.add(wall);
+          });
+        });
+        // West & East edges
+        [-2.5, 2.5].forEach((xVal) => {
+          [-0.25, 0.25].forEach((zVal) => {
+            const wall = new THREE.Mesh(
+              new THREE.BoxGeometry(0.08, 1, 0.5),
+              wallMat.clone(),
+            );
+            wall.position.set(xVal, 0.5, zVal);
+            wall.castShadow = true;
+            quadGroup.add(wall);
+          });
+        });
 
         // Four corner logo cubes (now rectangular)
         const cubeSide = 1; // Used for corner area targeting
