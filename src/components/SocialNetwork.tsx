@@ -29,7 +29,7 @@ const socialNetworks: Record<SocialNetworkType, SocialNetwork> = {
       if (!text.startsWith("http")) return `https://${text}`;
       return text;
     },
-    extraProps: { bgColor: "#323363" },
+    extraProps: { bgColor: "#1C2B70" },
   },
 };
 
