@@ -420,15 +420,6 @@ export default function VenueViewer({
             3D
           </button>
         </div>
-
-        {/* Mobile hint */}
-        <div className="absolute bottom-4 right-4 z-20 sm:hidden pointer-events-none">
-          <div className="bg-black/60 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm shadow-lg border border-white/10">
-            {is3D
-              ? "Pinch to zoom · Drag to rotate"
-              : "Pinch to zoom · Drag to pan"}
-          </div>
-        </div>
       </div>
     </div>
   );
