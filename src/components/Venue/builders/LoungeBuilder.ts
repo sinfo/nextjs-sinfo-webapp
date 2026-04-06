@@ -96,40 +96,6 @@ export function buildLoungeDecorations(
     loungeGroup.add(tableGroup);
   };
 
-  const createPlant = (x: number, z: number, y: number = 0.02) => {
-    const plantGroup = new THREE.Group();
-    const potSize = 0.5;
-
-    // Pot
-    const potGeo = new THREE.BoxGeometry(potSize, 0.5, potSize);
-    const potMat = new THREE.MeshStandardMaterial({ color: colorPot });
-    const pot = new THREE.Mesh(potGeo, potMat);
-    pot.position.y = 0.25;
-    plantGroup.add(pot);
-
-    // Stem
-    const stemGeo = new THREE.CylinderGeometry(0.02, 0.02, 1.2, 8);
-    const stemMat = new THREE.MeshStandardMaterial({ color: 0x4a3728 });
-    const stem = new THREE.Mesh(stemGeo, stemMat);
-    stem.position.y = 1.0;
-    plantGroup.add(stem);
-
-    // Foliage (Simplified Palm-like)
-    const leafGeo = new THREE.ConeGeometry(0.4, 0.8, 8);
-    const leafMat = new THREE.MeshStandardMaterial({ color: colorLeaf });
-    for (let i = 0; i < 4; i++) {
-      const leaf = new THREE.Mesh(leafGeo, leafMat);
-      leaf.position.y = 1.2 + i * 0.15;
-      leaf.rotation.x = Math.PI / 4 + Math.random() * 0.5;
-      leaf.rotation.y = (i * Math.PI) / 2;
-      leaf.scale.set(1 - i * 0.1, 1, 1 - i * 0.1);
-      plantGroup.add(leaf);
-    }
-
-    plantGroup.position.set(x, y, z);
-    loungeGroup.add(plantGroup);
-  };
-
   // ── Placement ──
 
   // 1. Plants on Connect Stage corners (Enlarged to 6m width)
@@ -138,10 +104,6 @@ export function buildLoungeDecorations(
   const stageZ = connectStage.position.z;
   const stageW = connectStage.size.w;
   const stageD = connectStage.size.d;
-
-  // Front corners of the enlarged stage
-  createPlant(stageX - stageW / 2 + 0.5, stageZ + stageD / 2 - 0.4, stageTop);
-  createPlant(stageX + stageW / 2 - 0.5, stageZ + stageD / 2 - 0.4, stageTop);
 
   // 2. High Tables (Row on the NORTH edge)
   const northZ = loungeZone.position.z - loungeZone.size.d / 2 + 1.2;
