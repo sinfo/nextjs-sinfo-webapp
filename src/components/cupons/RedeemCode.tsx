@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import styles from "@/styles/redeem-code.module.css";
 
 interface RedeemCodeProps {
   code: string;
@@ -10,31 +9,16 @@ interface RedeemCodeProps {
 
 type CopyState = "idle" | "copied" | "error";
 
-function copyWithFallback(text: string): Promise<void> {
-  if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
-    return navigator.clipboard.writeText(text);
+function copyToClipboard(text: string): Promise<void> {
+  if (
+    typeof window === "undefined" ||
+    !window.isSecureContext ||
+    !navigator.clipboard?.writeText
+  ) {
+    return Promise.reject(new Error("Clipboard API is not available."));
   }
 
-  return new Promise((resolve, reject) => {
-    try {
-      const textArea = document.createElement("textarea");
-      textArea.value = text;
-      textArea.className = styles.copyTextarea;
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      const didCopy = document.execCommand("copy");
-      document.body.removeChild(textArea);
-
-      if (didCopy) {
-        resolve();
-      } else {
-        reject(new Error("Clipboard copy command failed."));
-      }
-    } catch (error) {
-      reject(error);
-    }
-  });
+  return navigator.clipboard.writeText(text);
 }
 
 export default function RedeemCode({ code, isUrl }: RedeemCodeProps) {
@@ -61,7 +45,7 @@ export default function RedeemCode({ code, isUrl }: RedeemCodeProps) {
 
   const handleRedeemClick = useCallback(async () => {
     try {
-      await copyWithFallback(code);
+      await copyToClipboard(code);
       setCopyState("copied");
     } catch {
       setCopyState("error");
