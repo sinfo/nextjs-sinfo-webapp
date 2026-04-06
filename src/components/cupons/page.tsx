@@ -21,8 +21,6 @@ export default async function Discounts() {
     (companies ?? []).map((company) => [company.id, company]),
   );
 
-  // Some promo-code company IDs may be absent from the list endpoint.
-  // Resolve missing companies individually to keep cards populated.
   const missingCompanyIds = Array.from(
     new Set(
       discounts
