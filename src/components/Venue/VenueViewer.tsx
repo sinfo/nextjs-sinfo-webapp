@@ -131,7 +131,8 @@ export default function VenueViewer({
           const session = sp.sessions?.find(
             (s) =>
               s.date?.startsWith(dayDate) &&
-              (s.place === zoneId || s.place === zoneLabel),
+              (s.place === zoneId || s.place === zoneLabel) &&
+              !(zoneId === "connect-stage" && s.kind === "Q&A"),
           );
           if (session) {
             results.push({ speaker: sp, session });
