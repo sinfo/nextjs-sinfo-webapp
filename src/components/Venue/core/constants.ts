@@ -44,6 +44,7 @@ export const ORTHO_INITIAL_ZOOM = 1.2;
 // ── Controls ──
 
 export const CONTROLS_DAMPING_FACTOR = 0.08;
+export const CONTROLS_ROTATE_SPEED = 1.5;
 export const CONTROLS_MAX_POLAR_ANGLE = Math.PI / 2.5;
 export const CONTROLS_MIN_DISTANCE = 5;
 export const CONTROLS_MAX_DISTANCE = 50;

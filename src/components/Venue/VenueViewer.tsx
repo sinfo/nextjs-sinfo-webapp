@@ -34,6 +34,8 @@ import {
 // ── Interaction ──
 import { setupRaycastHandler } from "./interaction/RaycastHandler";
 import { setupPanZoom } from "./interaction/PanZoomHandler";
+import { setupModifierHandler } from "./interaction/ModifierHandler";
+import { setupTouchHandler } from "./interaction/TouchHandler";
 
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -303,10 +305,20 @@ export default function VenueViewer({
   // ═══════════════════════════════════════════════════════════════════════════
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || is3D || !orthoCameraRef.current || isLoading) return;
+    if (!container || !controlsRef.current || !threeRef.current) return;
 
-    return setupPanZoom(container, orthoCameraRef.current);
-  }, [is3D, isLoading]);
+    const cleanupModifier = setupModifierHandler(
+      container,
+      threeRef.current,
+      controlsRef.current,
+    );
+    const cleanupTouch = setupTouchHandler(container, controlsRef.current);
+
+    return () => {
+      cleanupModifier();
+      cleanupTouch();
+    };
+  }, [isLoading]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // Effect 6: Speaker cards (create/remove on day change)
