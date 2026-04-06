@@ -23,6 +23,7 @@ import { buildAllStands } from "./builders/StandManager";
 import { buildChairs } from "./builders/ChairBuilder";
 import { buildTVs } from "./builders/TelevisionBuilder";
 import { buildMainStage } from "./builders/StageBuilder";
+import { buildLoungeDecorations } from "./builders/LoungeBuilder";
 
 // ── Updaters ──
 import { updateLabels } from "./updaters/LabelUpdater";
@@ -48,7 +49,7 @@ interface VenueViewerProps {
   sessions?: SINFOSession[];
 }
 
-const shouldDebug = false;
+const shouldDebug = true;
 
 export default function VenueViewer({
   companies,
@@ -188,6 +189,7 @@ export default function VenueViewer({
         await buildChairs(THREE, scene);
         buildTVs(THREE, scene);
         buildMainStage(THREE, scene);
+        buildLoungeDecorations(THREE, scene);
 
         const standRefs = buildAllStands(THREE, scene);
         standMeshesRef.current = standRefs.standMeshes;

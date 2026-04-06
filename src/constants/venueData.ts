@@ -174,9 +174,9 @@ const zones: Zone[] = [
     id: "connect-stage",
     label: "Connect Stage",
     type: "stage",
-    position: { x: -7.6, z: 14.5 },
-    size: { w: 7, d: 3 },
-    color: "#ffcc00",
+    position: { x: -7.6, z: 14.75 },
+    size: { w: 6, d: 2.5 },
+    color: "#1a1a2e",
     height: 0.4,
   },
 ];

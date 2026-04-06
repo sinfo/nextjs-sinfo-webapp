@@ -18,12 +18,14 @@ export function buildZones(
       ? new THREE.BoxGeometry(zone.size.w, h, zone.size.d)
       : new THREE.PlaneGeometry(zone.size.w, zone.size.d);
 
+    const isStage = zone.type === "stage" || isBox;
     const zoneMat = new THREE.MeshStandardMaterial({
       color: new THREE.Color(zone.color),
       roughness: 0.8,
-      transparent: true,
-      opacity: 0.85,
+      transparent: !isStage,
+      opacity: isStage ? 1.0 : 0.85,
     });
+
     const zoneMesh = new THREE.Mesh(zoneGeo, zoneMat);
 
     if (isBox) {
