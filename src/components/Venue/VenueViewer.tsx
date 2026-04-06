@@ -73,7 +73,9 @@ export default function VenueViewer({
   const labelSpritesRef = useRef<Map<string, THREE_TYPES.Sprite>>(new Map());
   const standSignsRef = useRef<Map<string, THREE_TYPES.Mesh>>(new Map());
   const standLogoPanelsRef = useRef<Map<string, THREE_TYPES.Mesh>>(new Map());
-  const speakerCardsRef = useRef<Map<string, THREE_TYPES.Mesh[]>>(new Map());
+  const speakerCardsRef = useRef<Map<string, THREE_TYPES.Object3D[]>>(
+    new Map(),
+  );
 
   const is3DRef = useRef(false);
 
@@ -300,10 +302,12 @@ export default function VenueViewer({
       perspCamera: perspCameraRef.current,
       orthoCamera: orthoCameraRef.current,
       standMeshes: standMeshesRef.current,
+      speakerCards: speakerCardsRef.current,
       is3DRef,
       getStandCompany,
       onNavigateToCompany: (companyId) =>
         router.push(`/companies/${companyId}`),
+      onNavigateToSession: (sessionId) => router.push(`/sessions/${sessionId}`),
     });
   }, [is3D, currentDay, getStandCompany, router, isLoading]);
 

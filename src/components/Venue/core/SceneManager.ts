@@ -215,6 +215,18 @@ export function startAnimationLoop(
   function animate() {
     frameId = requestAnimationFrame(animate);
     const camera = is3DRef.current ? ctx.perspCamera : ctx.orthoCamera;
+    const time = performance.now() * 0.001;
+
+    // ── Bobbing animation ──
+    if (is3DRef.current) {
+      ctx.scene.traverse((child) => {
+        if (child.userData.isSpeakerCard) {
+          const { baseY, animOffset } = child.userData;
+          const bob = Math.sin(time * 1.5 + animOffset) * 0.15;
+          child.position.y = baseY + bob;
+        }
+      });
+    }
 
     ctx.controls.update();
     ctx.renderer.render(ctx.scene, camera);
