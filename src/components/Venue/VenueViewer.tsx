@@ -24,6 +24,7 @@ import { buildChairs } from "./builders/ChairBuilder";
 import { buildTVs } from "./builders/TelevisionBuilder";
 import { buildMainStage } from "./builders/StageBuilder";
 import { buildLoungeDecorations } from "./builders/LoungeBuilder";
+import { buildPlants } from "./builders/PlantBuilder";
 
 // ── Updaters ──
 import { updateLabels } from "./updaters/LabelUpdater";
@@ -190,6 +191,7 @@ export default function VenueViewer({
         buildTVs(THREE, scene);
         buildMainStage(THREE, scene);
         buildLoungeDecorations(THREE, scene);
+        await buildPlants(THREE, scene);
 
         const standRefs = buildAllStands(THREE, scene);
         standMeshesRef.current = standRefs.standMeshes;

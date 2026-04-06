@@ -144,41 +144,4 @@ export function buildMainStage(
   const table = new THREE.Mesh(tableGeo, tableMat);
   table.position.set(centerX, zoneHeight + stageElevation + 0.2, centerZ);
   stageGroup.add(table);
-
-  // 5. Decorative Plants
-  const createPlant = (x: number, z: number) => {
-    const plantGroup = new THREE.Group();
-
-    // Pot
-    const potGeo = new THREE.CylinderGeometry(0.2, 0.15, 0.4, 12);
-    const potMat = new THREE.MeshStandardMaterial({ color: 0xdddddd });
-    const pot = new THREE.Mesh(potGeo, potMat);
-    pot.position.y = 0.2;
-    plantGroup.add(pot);
-
-    // Stem
-    const stemGeo = new THREE.CylinderGeometry(0.02, 0.02, 1.2, 8);
-    const stemMat = new THREE.MeshStandardMaterial({ color: 0x4a3728 });
-    const stem = new THREE.Mesh(stemGeo, stemMat);
-    stem.position.y = 0.8;
-    plantGroup.add(stem);
-
-    // Leaves (Simplified)
-    const leafGeo = new THREE.ConeGeometry(0.4, 1.0, 8);
-    const leafMat = new THREE.MeshStandardMaterial({ color: 0x27ae60 });
-    for (let i = 0; i < 3; i++) {
-      const leaf = new THREE.Mesh(leafGeo, leafMat);
-      leaf.position.y = 1.2 + i * 0.2;
-      leaf.rotation.x = Math.random() * 0.5;
-      leaf.rotation.z = Math.random() * 0.5;
-      leaf.scale.set(1 - i * 0.2, 1, 1 - i * 0.2);
-      plantGroup.add(leaf);
-    }
-
-    plantGroup.position.set(x, zoneHeight + stageElevation, z);
-    stageGroup.add(plantGroup);
-  };
-
-  createPlant(centerX - 0.2, centerZ - 3.5);
-  createPlant(centerX - 0.2, centerZ + 3.5);
 }
