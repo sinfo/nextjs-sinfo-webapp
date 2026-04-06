@@ -321,7 +321,17 @@ export default function VenueViewer({
   }, [isLoading]);
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // Effect 6: Speaker cards (create/remove on day change)
+  // Effect 6: 2D manual pan & zoom
+  // ═══════════════════════════════════════════════════════════════════════════
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || is3D || !orthoCameraRef.current || isLoading) return;
+
+    return setupPanZoom(container, orthoCameraRef.current);
+  }, [is3D, isLoading]);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Effect 7: Speaker cards (create/remove on day change)
   // ═══════════════════════════════════════════════════════════════════════════
   useEffect(() => {
     const THREE = threeRef.current;
