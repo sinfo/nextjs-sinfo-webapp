@@ -20,6 +20,8 @@ import { buildGround } from "./builders/GroundBuilder";
 import { buildEntrances } from "./builders/EntranceBuilder";
 import { buildZones } from "./builders/ZoneBuilder";
 import { buildAllStands } from "./builders/StandManager";
+import { buildChairs } from "./builders/ChairBuilder";
+import { buildTVs } from "./builders/TelevisionBuilder";
 
 // ── Updaters ──
 import { updateLabels } from "./updaters/LabelUpdater";
@@ -179,6 +181,8 @@ export default function VenueViewer({
         buildGround(THREE, scene);
         buildEntrances(THREE, scene);
         buildZones(THREE, scene);
+        await buildChairs(THREE, scene);
+        buildTVs(THREE, scene);
 
         const standRefs = buildAllStands(THREE, scene);
         standMeshesRef.current = standRefs.standMeshes;
