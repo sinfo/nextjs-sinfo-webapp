@@ -60,7 +60,10 @@ export default async function Discounts() {
         <List title="Offers" description="Discount codes">
           <div className="mt-3 grid grid-cols-1 justify-items-center gap-3 px-2 sm:grid-cols-2 sm:justify-items-stretch sm:px-0 lg:grid-cols-3 xl:grid-cols-4">
             {enrichedDiscounts.map((discount) => (
-              <DiscountCard key={getDiscountKey(discount)} discount={discount} />
+              <DiscountCard
+                key={getDiscountKey(discount)}
+                discount={discount}
+              />
             ))}
           </div>
         </List>
