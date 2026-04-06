@@ -76,21 +76,7 @@ export function buildTVs(
   tvsGroup.name = "tvs-group";
   scene.add(tvsGroup);
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // 1. Main Stage (TV at West edge, facing East)
-  // ─────────────────────────────────────────────────────────────────────────────
-  const mainStage = venueConfig.zones.find((z) => z.id === "main-stage");
-  if (mainStage) {
-    const tv = createTelevisionModel(THREE, 2.4, 1.35);
-    // Positioned at the west side of the stage
-    tv.position.set(
-      mainStage.position.x - mainStage.size.w / 2 + 1.2,
-      mainStage.height || 0.15,
-      mainStage.position.z,
-    );
-    tv.rotation.y = rotateCW(DIR.EAST);
-    tvsGroup.add(tv);
-  }
+  // TVs are now only placed in Rooms 1 & 2. Main Stage uses StageBuilder.
 
   // ─────────────────────────────────────────────────────────────────────────────
   // 2. Room 1 (TV at North/Top edge, facing South/Bottom)

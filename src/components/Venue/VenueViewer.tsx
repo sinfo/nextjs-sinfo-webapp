@@ -22,6 +22,7 @@ import { buildZones } from "./builders/ZoneBuilder";
 import { buildAllStands } from "./builders/StandManager";
 import { buildChairs } from "./builders/ChairBuilder";
 import { buildTVs } from "./builders/TelevisionBuilder";
+import { buildMainStage } from "./builders/StageBuilder";
 
 // ── Updaters ──
 import { updateLabels } from "./updaters/LabelUpdater";
@@ -183,6 +184,7 @@ export default function VenueViewer({
         buildZones(THREE, scene);
         await buildChairs(THREE, scene);
         buildTVs(THREE, scene);
+        buildMainStage(THREE, scene);
 
         const standRefs = buildAllStands(THREE, scene);
         standMeshesRef.current = standRefs.standMeshes;
