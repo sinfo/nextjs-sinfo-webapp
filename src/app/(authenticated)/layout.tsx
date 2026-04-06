@@ -18,7 +18,7 @@ export default async function AuthenticatedLayout({
 
   if (MAINTENANCE_MODE) {
     const user = await UserService.getMe(session.cannonToken);
-    if (!user || !isMember(user.role)) {
+    if (user && !isMember(user.role)) {
       return <MaintenancePage />;
     }
   }

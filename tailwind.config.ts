@@ -13,10 +13,10 @@ const config = {
       },
       colors: {
         sinfo: {
-          primary: "#323363",
-          secondary: "#A8381B",
-          tertiary: "#DB836E",
-          quaternary: "#E0B485",
+          primary: "#1C2B70",
+          secondary: "#BF2C21",
+          tertiary: "#F1853A",
+          quaternary: "#FCBD14",
         },
       },
     },

@@ -41,12 +41,12 @@ export default async function QR() {
     switch (convertToAppRole(user.role)) {
       case "Member":
       case "Admin":
-        return "#A73939"; // SINFO Secondary
+        return "#BF2C21"; // SINFO Secondary
       case "Company":
-        return "#DB836E"; // SINFO Tertiary
+        return "#F1853A"; // SINFO Tertiary
       case "Attendee":
       default:
-        return "#323363"; // SINFO Primary
+        return "#1C2B70"; // SINFO Primary
     }
   })();
 
