@@ -28,6 +28,7 @@ import {
   ORTHO_INITIAL_POSITION,
   ORTHO_INITIAL_ZOOM,
   CONTROLS_DAMPING_FACTOR,
+  CONTROLS_ROTATE_SPEED,
   CONTROLS_MAX_POLAR_ANGLE,
   CONTROLS_MIN_DISTANCE,
   CONTROLS_MAX_DISTANCE,
@@ -102,14 +103,35 @@ export async function initScene(
   orthoCamera.updateProjectionMatrix();
 
   // ── Controls ──
-  const controls = new OrbitControls(perspCamera, renderer.domElement);
+  const { MapControls } =
+    await import("three/examples/jsm/controls/MapControls.js");
+
+  const controls = new MapControls(perspCamera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = CONTROLS_DAMPING_FACTOR;
+  controls.rotateSpeed = CONTROLS_ROTATE_SPEED;
   controls.maxPolarAngle = CONTROLS_MAX_POLAR_ANGLE;
   controls.minDistance = CONTROLS_MIN_DISTANCE;
   controls.maxDistance = CONTROLS_MAX_DISTANCE;
   controls.target.set(CONTROLS_TARGET.x, CONTROLS_TARGET.y, CONTROLS_TARGET.z);
   controls.enabled = false; // starts in 2D mode
+
+  // Google Maps style: Left = Pan, Right = Rotate
+  controls.mouseButtons = {
+    LEFT: THREE.MOUSE.PAN,
+    MIDDLE: THREE.MOUSE.DOLLY,
+    RIGHT: THREE.MOUSE.ROTATE,
+  };
+
+  // Google Maps style: One finger = Pan, Two fingers = Rotate/Zoom
+  // MapControls natively handles these gestures well
+  controls.touches = {
+    ONE: THREE.TOUCH.PAN,
+    TWO: THREE.TOUCH.DOLLY_ROTATE,
+  };
+
+  // Restrict panning to ground plane (X/Z)
+  controls.screenSpacePanning = false;
 
   // ── Raycaster ──
   const raycaster = new THREE.Raycaster();
@@ -192,8 +214,9 @@ export function startAnimationLoop(
 
   function animate() {
     frameId = requestAnimationFrame(animate);
-    ctx.controls.update();
     const camera = is3DRef.current ? ctx.perspCamera : ctx.orthoCamera;
+
+    ctx.controls.update();
     ctx.renderer.render(ctx.scene, camera);
 
     if (debugEl) {
