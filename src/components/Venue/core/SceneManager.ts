@@ -223,7 +223,8 @@ export function startAnimationLoop(
       const pos = camera.position;
       const target = ctx.controls.target;
       const zoom = (camera as any).zoom || 1;
-      debugEl.innerText = `Pos: ${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)} | Target: ${target.x.toFixed(2)}, ${target.y.toFixed(2)}, ${target.z.toFixed(2)} | Zoom: ${zoom.toFixed(2)}`;
+      const { triangles, calls } = ctx.renderer.info.render;
+      debugEl.innerText = `Pos: ${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)} | Target: ${target.x.toFixed(2)}, ${target.y.toFixed(2)}, ${target.z.toFixed(2)} | Zoom: ${zoom.toFixed(2)} | Tris: ${triangles.toLocaleString()} | Calls: ${calls}`;
     }
   }
 
