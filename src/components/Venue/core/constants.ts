@@ -32,8 +32,8 @@ export const SHADOW_CAMERA_EXTENT = 40;
 export const PERSP_FOV = 50;
 export const PERSP_NEAR = 0.1;
 export const PERSP_FAR = 250;
-export const PERSP_INITIAL_POSITION = { x: -19.3, y: 35, z: -11.97 } as const;
-export const PERSP_INITIAL_ZOOM = 1.2;
+export const PERSP_INITIAL_POSITION = { x: -30, y: 25, z: -1.97 } as const;
+export const PERSP_INITIAL_ZOOM = 1.0;
 
 export const ORTHO_FRUSTUM_SIZE = 30;
 export const ORTHO_NEAR = 0.1;
@@ -48,7 +48,7 @@ export const CONTROLS_ROTATE_SPEED = 1.5;
 export const CONTROLS_MAX_POLAR_ANGLE = Math.PI / 2.5;
 export const CONTROLS_MIN_DISTANCE = 5;
 export const CONTROLS_MAX_DISTANCE = 50;
-export const CONTROLS_TARGET = { x: -3.1, y: 20, z: -2.6 } as const;
+export const CONTROLS_TARGET = { x: -18.3, y: 20, z: -11.97 } as const;
 
 // ── Ground ──
 
