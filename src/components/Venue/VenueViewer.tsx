@@ -25,6 +25,7 @@ import { buildTVs } from "./builders/TelevisionBuilder";
 import { buildMainStage } from "./builders/StageBuilder";
 import { buildLoungeDecorations } from "./builders/LoungeBuilder";
 import { buildPlants } from "./builders/PlantBuilder";
+import { buildGamingZone } from "./builders/GamingBuilder";
 
 // ── Updaters ──
 import { updateLabels } from "./updaters/LabelUpdater";
@@ -192,6 +193,7 @@ export default function VenueViewer({
         buildMainStage(THREE, scene);
         buildLoungeDecorations(THREE, scene);
         await buildPlants(THREE, scene);
+        await buildGamingZone(THREE, scene);
 
         const standRefs = buildAllStands(THREE, scene);
         standMeshesRef.current = standRefs.standMeshes;
