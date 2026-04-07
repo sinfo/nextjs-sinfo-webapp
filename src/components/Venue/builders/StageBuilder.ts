@@ -55,16 +55,13 @@ export function buildMainStage(
   );
 
   // Backdrop texture with text
-  const canvas = createTextCanvas(
-    "SINFO 31\nPortugal's biggest free tech conference",
-    {
-      width: 1024,
-      height: 512,
-      fontSize: 64,
-      bgColor: "#2980b9",
-      color: "#ffffff",
-    },
-  );
+  const canvas = createTextCanvas("SINFO 33", {
+    width: 1024,
+    height: 512,
+    fontSize: 64,
+    bgColor: "#2980b9",
+    color: "#ffffff",
+  });
   const backdropTex = new THREE.CanvasTexture(canvas);
 
   const backdropMat = new THREE.MeshStandardMaterial({
