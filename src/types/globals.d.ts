@@ -146,7 +146,7 @@ type SINFOSession = {
   kind: string;
   event: string;
   date: string;
-  duration: int; // minutes
+  duration: number; // minutes
   place: string;
   img?: string;
   company?: Company;
