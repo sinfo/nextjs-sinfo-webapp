@@ -10,21 +10,19 @@ export default async function Discounts() {
     CompanyService.getPartners(),
   ]);
 
+  if (!discounts || discounts.length === 0) {
+    return <BlankPageWithMessage message="No promo codes available!" />;
+  }
+
   const getDiscountKey = (discount: DiscountCode): string => {
     if (discount._id?.$oid) return discount._id.$oid;
     return `${discount.company}-${discount.code}`;
   };
 
-  if (!discounts) {
-    return <BlankPageWithMessage message="No promo codes available!" />;
-  }
-
   const companiesById = new Map(
     (companies ?? []).map((company) => [company.id, company]),
   );
 
-  // Some promo-code company IDs may be absent from the list endpoint.
-  // Resolve missing companies individually to keep cards populated.
   const missingCompanyIds = Array.from(
     new Set(
       discounts
@@ -49,10 +47,6 @@ export default async function Discounts() {
     ...discount,
     companyData: companiesById.get(discount.company),
   }));
-
-  if (enrichedDiscounts.length === 0) {
-    return <BlankPageWithMessage message="No promo codes available!" />;
-  }
 
   return (
     <div className="container mx-auto">
