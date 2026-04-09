@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface RedeemCodeProps {
   code: string;
-  isUrl: boolean;
 }
 
 type CopyState = "idle" | "copied" | "error";
@@ -21,7 +20,7 @@ function copyToClipboard(text: string): Promise<void> {
   return navigator.clipboard.writeText(text);
 }
 
-export default function RedeemCode({ code, isUrl }: RedeemCodeProps) {
+export default function RedeemCode({ code }: RedeemCodeProps) {
   const [copyState, setCopyState] = useState<CopyState>("idle");
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -33,26 +32,22 @@ export default function RedeemCode({ code, isUrl }: RedeemCodeProps) {
     };
   }, []);
 
-  const resetStateLater = useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    timeoutRef.current = setTimeout(() => {
-      setCopyState("idle");
-    }, 1800);
-  }, []);
-
-  const handleRedeemClick = useCallback(async () => {
+  const handleRedeemClick = async () => {
     try {
       await copyToClipboard(code);
       setCopyState("copied");
     } catch {
       setCopyState("error");
     } finally {
-      resetStateLater();
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        setCopyState("idle");
+      }, 1800);
     }
-  }, [code, resetStateLater]);
+  };
 
   return (
     <details className="group">
@@ -66,20 +61,9 @@ export default function RedeemCode({ code, isUrl }: RedeemCodeProps) {
       <div className="grid opacity-0 transition-all duration-300 [grid-template-rows:0fr] group-open:mt-2 group-open:opacity-100 group-open:[grid-template-rows:1fr]">
         <div className="overflow-hidden">
           <div className="rounded-md border border-sinfo-primary/20 bg-white px-3 py-2 text-center">
-            {isUrl ? (
-              <a
-                href={code}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-semibold text-sinfo-primary underline"
-              >
-                Open redeem link
-              </a>
-            ) : (
-              <span className="block truncate text-sm font-bold tracking-wide text-sinfo-primary">
-                {code}
-              </span>
-            )}
+            <span className="block truncate text-sm font-bold tracking-wide text-sinfo-primary">
+              {code}
+            </span>
           </div>
 
           {copyState === "copied" && (
@@ -90,7 +74,7 @@ export default function RedeemCode({ code, isUrl }: RedeemCodeProps) {
 
           {copyState === "error" && (
             <p className="mt-2 text-center text-xs text-red-600">
-              Could not copy automatically
+              Could not copy automatically. Please copy manually.
             </p>
           )}
         </div>

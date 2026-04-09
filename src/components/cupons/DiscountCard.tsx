@@ -28,11 +28,11 @@ export default function DiscountCard({ discount }: DiscountCardProps) {
             <p className="text-xs text-gray-600 line-clamp-1 text-center">
               {discount.companyData?.name || "Company"}
             </p>
-            {/* Future use: use formatDiscountExpireDate from utils once API sends real expiration dates. */}
+            {/* TODO: use formatDiscountExpireDate from utils once API sends real expiration dates. */}
           </div>
 
           <div className="mt-3">
-            <RedeemCode code={discount.code} isUrl={false} />
+            <RedeemCode code={discount.code} />
           </div>
         </div>
       </div>
