@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "SINFO Web Application",
     start_url: "/",
     display: "standalone",
-    background_color: "#323363", // SINFO Primary
-    theme_color: "#323363", // SINFO Primary
+    background_color: "#1C2B70", // SINFO Primary
+    theme_color: "#1C2B70", // SINFO Primary
     icons: [
       {
         src: "/web-app-manifest-192x192.png",

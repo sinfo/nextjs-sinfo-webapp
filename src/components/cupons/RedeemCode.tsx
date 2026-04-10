@@ -1,0 +1,84 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+interface RedeemCodeProps {
+  code: string;
+}
+
+type CopyState = "idle" | "copied" | "error";
+
+function copyToClipboard(text: string): Promise<void> {
+  if (
+    typeof window === "undefined" ||
+    !window.isSecureContext ||
+    !navigator.clipboard?.writeText
+  ) {
+    return Promise.reject(new Error("Clipboard API is not available."));
+  }
+
+  return navigator.clipboard.writeText(text);
+}
+
+export default function RedeemCode({ code }: RedeemCodeProps) {
+  const [copyState, setCopyState] = useState<CopyState>("idle");
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleRedeemClick = async () => {
+    try {
+      await copyToClipboard(code);
+      setCopyState("copied");
+    } catch {
+      setCopyState("error");
+    } finally {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        setCopyState("idle");
+      }, 1800);
+    }
+  };
+
+  return (
+    <details className="group">
+      <summary
+        onClick={handleRedeemClick}
+        className="cursor-pointer list-none rounded-md border border-dashed border-sinfo-primary bg-sinfo-primary/10 px-3 py-2 text-center text-sm font-bold tracking-wide text-sinfo-primary transition-all duration-300 hover:bg-sinfo-primary/15 group-open:hidden"
+      >
+        Click to redeem
+      </summary>
+
+      <div className="grid opacity-0 transition-all duration-300 [grid-template-rows:0fr] group-open:mt-2 group-open:opacity-100 group-open:[grid-template-rows:1fr]">
+        <div className="overflow-hidden">
+          <div className="rounded-md border border-sinfo-primary/20 bg-white px-3 py-2 text-center">
+            <span className="block truncate text-sm font-bold tracking-wide text-sinfo-primary">
+              {code}
+            </span>
+          </div>
+
+          {copyState === "copied" && (
+            <p className="mt-2 text-center text-xs text-emerald-600">
+              Copied to clipboard
+            </p>
+          )}
+
+          {copyState === "error" && (
+            <p className="mt-2 text-center text-xs text-red-600">
+              Could not copy automatically. Please copy manually.
+            </p>
+          )}
+        </div>
+      </div>
+    </details>
+  );
+}

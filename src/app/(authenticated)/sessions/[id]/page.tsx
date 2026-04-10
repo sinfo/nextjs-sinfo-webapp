@@ -89,7 +89,7 @@ export default async function Session({ params }: { params: SessionParams }) {
       )}
       <div className="flex justify-center items-center p-4 gap-2">
         <AddToCalendarButton
-          name={`[SINFO 32] - ${sinfoSession.name} (${sinfoSession.kind})`}
+          name={`[SINFO] - ${sinfoSession.name} (${sinfoSession.kind})`}
           startDate={sinfoSession.date}
           duration={sinfoSession.duration}
           location={sinfoSession.place}

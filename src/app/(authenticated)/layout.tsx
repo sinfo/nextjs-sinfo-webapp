@@ -3,6 +3,10 @@ import authOptions from "../api/auth/[...nextauth]/authOptions";
 import { redirect } from "next/navigation";
 import Toolbar from "@/components/Toolbar";
 import BottomNavbar from "@/components/BottomNavbar";
+import { MAINTENANCE_MODE } from "@/constants";
+import { UserService } from "@/services/UserService";
+import { isMember } from "@/utils/utils";
+import MaintenancePage from "@/components/MaintenancePage";
 
 export default async function AuthenticatedLayout({
   children,
@@ -11,6 +15,13 @@ export default async function AuthenticatedLayout({
 }) {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
+
+  if (MAINTENANCE_MODE) {
+    const user = await UserService.getMe(session.cannonToken);
+    if (user && !isMember(user.role)) {
+      return <MaintenancePage />;
+    }
+  }
 
   return (
     <div className="min-h-dvh text-white flex flex-col">

@@ -1,5 +1,7 @@
 import { CompanyService } from "@/services/CompanyService";
-import VenueStands from "./VenueStands";
+import { SpeakerService } from "@/services/SpeakerService";
+import { SessionService } from "@/services/SessionService";
+import VenueViewer from "@/components/Venue/VenueViewer";
 
 export default async function VenuePage() {
   const all_companies = await CompanyService.getCompanies();
@@ -21,7 +23,7 @@ export default async function VenuePage() {
       all_companies.map(async (company) => {
         const detailedCompany = await CompanyService.getCompany(company.id);
         return detailedCompany;
-      })
+      }),
     )
   ).filter(Boolean);
 
@@ -30,15 +32,23 @@ export default async function VenuePage() {
   }
 
   const uniqueCompanies = Array.from(
-    new Map(companies.map((company) => [company?.id, company])).values()
-  ).filter((company): company is Company => company !== null); // Remove nulls
+    new Map(companies.map((company) => [company?.id, company])).values(),
+  ).filter((company): company is Company => company !== null);
+
+  const speakers = (await SpeakerService.getSpeakers()) ?? [];
+  const sessions = (await SessionService.getSessions()) ?? [];
 
   return (
     <div className="container m-auto h-full">
       <div className="flex flex-col items-start gap-y-2 p-4 text-start text-sm">
         <h1 className="text-2xl font-bold">Venue</h1>
       </div>
-      <VenueStands companies={uniqueCompanies} />
+
+      <VenueViewer
+        companies={uniqueCompanies}
+        speakers={speakers}
+        sessions={sessions}
+      />
     </div>
   );
 }

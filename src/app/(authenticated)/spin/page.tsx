@@ -61,7 +61,7 @@ export default async function Spin() {
       <GridList>
         {spinWheelCompanies.length === 0 && <div>No companies to show</div>}
         {spinWheelCompanies.map(
-          (c) => c && <CompanyTile key={c.id} company={c} />
+          (c) => c && <CompanyTile key={c.id} company={c} />,
         )}
       </GridList>
     </div>

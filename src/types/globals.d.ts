@@ -146,7 +146,7 @@ type SINFOSession = {
   kind: string;
   event: string;
   date: string;
-  duration: int; // minutes
+  duration: number; // minutes
   place: string;
   img?: string;
   company?: Company;
@@ -177,6 +177,17 @@ type Prize = {
   sessions?: string[];
   days?: string[];
   cv?: boolean;
+};
+
+type DiscountCode = {
+  _id?: {
+    $oid: string;
+  };
+  edition: string;
+  company: string;
+  expire: string | { $date: string };
+  description: string;
+  code: string;
 };
 
 type SINFOEvent = {

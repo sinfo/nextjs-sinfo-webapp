@@ -38,14 +38,14 @@ export function PrizeTile({
   // Prevent body scroll when overlay is open
   useEffect(() => {
     if (isOverlayOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
-    
+
     // Cleanup on unmount
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOverlayOpen]);
 
@@ -54,17 +54,17 @@ export function PrizeTile({
       // Open overlay immediately to create a full-screen experience
       if (!disableAnimation) {
         setIsOverlayOpen(true);
-      
+
         // Fetch all participant user data for the animation
         // TODO: send image url on participants
         const userPromises = participants.map((p) =>
-          UserService.getUser(cannonToken, p.userId)
+          UserService.getUser(cannonToken, p.userId),
         );
         const users = await Promise.all(userPromises);
         const validUsers = users.filter((u): u is User => u !== null);
         setParticipantUsers(validUsers);
       }
-      
+
       // All the participants should at least have one entry
       const totalEntries = participants.reduce(
         (acc, p) => acc + (p.entries || 1),
@@ -81,14 +81,17 @@ export function PrizeTile({
         return selectedEntry < 0;
       })!;
 
-      const winnerUser = await UserService.getUser(cannonToken, winnerParticipant.userId);
+      const winnerUser = await UserService.getUser(
+        cannonToken,
+        winnerParticipant.userId,
+      );
       if (!winnerUser) {
         console.error("Failed to get prize winner", winnerParticipant.userId);
         return;
       }
 
       setWinner(winnerUser);
-      
+
       // Start animation after we have all the data
       setShowAnimation(!disableAnimation);
     }
@@ -106,7 +109,7 @@ export function PrizeTile({
       />
       {winner && !isOverlayOpen && (
         <div className="flex flex-col justify-center items-center text-center gap-y-2 w-full">
-          { disableAnimation && (
+          {disableAnimation && (
             <Confetti
               width={windowWidth}
               height={windowHeight}
@@ -222,8 +225,13 @@ export function PrizeTile({
             ) : (
               /* Loading state while fetching participants */
               <div className="flex flex-col items-center gap-3">
-                <Trophy className="animate-bounce text-sinfo-primary" size={48} />
-                <span className="text-sm text-gray-600">Preparing the draw…</span>
+                <Trophy
+                  className="animate-bounce text-sinfo-primary"
+                  size={48}
+                />
+                <span className="text-sm text-gray-600">
+                  Preparing the draw…
+                </span>
               </div>
             )}
           </div>

@@ -47,7 +47,7 @@ export function trimText(text: string, n: number): string {
 export function generateTimeInterval(
   timestamp: string,
   durationMinutes: number,
-  { onlyHours }: { onlyHours?: boolean } = {}
+  { onlyHours }: { onlyHours?: boolean } = {},
 ): string {
   // extract "HH:mm" from ISO string
   const formatTime = (date: Date) => date.toISOString().slice(11, 16);
@@ -96,10 +96,23 @@ export function getEventFullDate(date: string): string {
   });
 }
 
+export function getDiscountExpireDate(discount: DiscountCode): string {
+  return typeof discount.expire === "string"
+    ? discount.expire
+    : discount.expire.$date;
+}
+
+export function formatDiscountExpireDate(discount: DiscountCode): string {
+  return new Date(getDiscountExpireDate(discount)).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+  });
+}
+
 // TODO: Implement this correctly
 export function isValidQRCode(
   data: string,
-  kind?: "user" | "achievement"
+  kind?: "user" | "achievement",
 ): boolean {
   try {
     return (
@@ -132,6 +145,8 @@ export function getSessionColor(sessionKind: string) {
       return config.theme.extend.colors.sinfo.quaternary;
     case "Keynote":
       return config.theme.extend.colors.sinfo.secondary;
+    case "Q&A":
+      return config.theme.extend.colors.sinfo.primary;
     default:
       return "#000";
   }
