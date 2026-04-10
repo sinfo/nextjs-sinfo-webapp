@@ -26,7 +26,10 @@ export function SessionTile({
     <ListCard
       title={session.name}
       subtitle={session.company ? session.company.name : speakersNames}
-      img={(session.kind != "Panel" && (session.img || session.company?.img)) || undefined}
+      img={
+        (session.kind != "Panel" && (session.img || session.company?.img)) ||
+        undefined
+      }
       headtext={generateTimeInterval(session.date, session.duration, {
         onlyHours: onlyShowHours,
       })}
