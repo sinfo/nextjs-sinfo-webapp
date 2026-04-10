@@ -21,7 +21,7 @@ export default function QRCodeButton() {
     <Link href="/qr">
       <div className="absolute -top-20 right-4">
         <div className="p-4 rounded-full bg-sinfo-primary relative overflow-hidden">
-          <QrCode size={32} />
+          <QrCode size={32} className="text-white" />
           <div className="shine-effect" />
         </div>
       </div>
