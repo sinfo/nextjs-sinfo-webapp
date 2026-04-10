@@ -147,6 +147,8 @@ export function getSessionColor(sessionKind: string) {
       return config.theme.extend.colors.sinfo.secondary;
     case "Q&A":
       return config.theme.extend.colors.sinfo.primary;
+    case "Panel":
+      return config.theme.extend.colors.sinfo.quinary;
     default:
       return "#000";
   }

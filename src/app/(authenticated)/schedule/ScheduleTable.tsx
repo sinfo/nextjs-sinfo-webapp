@@ -16,6 +16,8 @@ function getPageHeading(kind: string | null) {
       return "Presentations";
     case "workshop":
       return "Workshops";
+    case "panel":
+      return "Panels";
     default:
       return "Schedule";
   }
