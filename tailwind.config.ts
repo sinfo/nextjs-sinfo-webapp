@@ -17,6 +17,7 @@ const config = {
           secondary: "#BF2C21",
           tertiary: "#F1853A",
           quaternary: "#FCBD14",
+          quinary: "#C465a2",
         },
       },
     },
