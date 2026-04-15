@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface AvatarProps {
   name: string;
@@ -35,6 +35,11 @@ export default function Avatar({
   fallbackClassName = "",
 }: AvatarProps) {
   const [hasImageError, setHasImageError] = useState(false);
+
+  useEffect(() => {
+    setHasImageError(false);
+  }, [src, name]);
+
   const initials = getInitials(name);
   const showImage = !!src && !hasImageError;
 
