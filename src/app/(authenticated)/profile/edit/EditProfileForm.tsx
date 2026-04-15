@@ -1,11 +1,11 @@
 "use client";
 
 import { useForm, useFieldArray } from "react-hook-form";
-import Image from "next/image";
 import { Plus, Save, Upload, X } from "lucide-react";
 import CountryList from "country-list";
 import { useEffect, useState } from "react";
 import Resizer from "react-image-file-resizer";
+import Avatar from "@/components/Avatar";
 
 interface EditProfileFormProps {
   user: User;
@@ -158,12 +158,12 @@ export default function EditProfileForm({
     <form className="flex flex-col gap-y-4 p-4" onSubmit={onSubmit}>
       {/* Image */}
       <div className="relative">
-        <Image
-          className="size-[150px] object-contain rounded-full mx-auto border-4 border-white"
-          width={150}
-          height={150}
+        <Avatar
+          name={user.name}
           src={profilePicturePreview}
-          alt="Profile picture"
+          alt={`${user.name} profile picture`}
+          size={150}
+          className="mx-auto border-4 border-white"
         />
         <label
           htmlFor="img"
