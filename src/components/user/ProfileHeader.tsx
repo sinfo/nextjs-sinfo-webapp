@@ -15,7 +15,7 @@ export default async function ProfileHeader({ user }: ProfileHeaderProps) {
 
   return (
     <>
-      <header className="bg-sinfo-primary h-[150px] mb-6">
+      <header className="relative bg-sinfo-primary h-[150px] mb-6">
         <Avatar
           name={user.name}
           src={user.img}
