@@ -28,20 +28,23 @@ export default async function Profile() {
     a.users?.includes(user.id),
   );
 
-  const { connections, suggestions } = (await UserService.getConnections(
+  const { connections } = (await UserService.getConnections(
     session.cannonToken,
   )) || { connections: [], suggestions: [] };
 
   return (
     <div className="container mx-auto">
       <ProfileHeader user={user} />
-      <div className="px-4 py-2">
-        <Link
-          className="button-primary text-sm w-full mt-2"
-          href="/profile/edit"
-        >
+      <div className="px-4 py-2 flex flex-col sm:flex-row gap-2">
+        <Link className="button-primary text-sm flex-1" href="/profile/edit">
           <UserPen size={16} />
           Edit profile
+        </Link>
+        <Link
+          className="button-secondary text-sm flex-1"
+          href="/profile/statistics"
+        >
+          Statistics
         </Link>
       </div>
 

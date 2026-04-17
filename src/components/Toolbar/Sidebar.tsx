@@ -30,6 +30,9 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
           <Link href="/profile" onClick={onClose}>
             Profile
           </Link>
+          <Link href="/profile/statistics" onClick={onClose}>
+            Statistics
+          </Link>
           <Link href="/profile/connections" onClick={onClose}>
             Connections
           </Link>
