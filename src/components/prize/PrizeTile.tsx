@@ -1,6 +1,7 @@
 "use client";
 
 import { UserService } from "@/services/UserService";
+import { isCompany } from "@/utils/utils";
 import { Mail, Trophy, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,19 +55,36 @@ export function PrizeTile({
       // Open overlay immediately to create a full-screen experience
       if (!disableAnimation) {
         setIsOverlayOpen(true);
+      }
 
-        // Fetch all participant user data for the animation
-        // TODO: send image url on participants
-        const userPromises = participants.map((p) =>
-          UserService.getUser(cannonToken, p.userId),
+      // Fetch participant user data to enforce eligibility rules
+      const userPromises = participants.map((p) =>
+        UserService.getUser(cannonToken, p.userId),
+      );
+      const users = await Promise.all(userPromises);
+      const validUsers = users.filter((u): u is User => u !== null);
+      const eligibleUserIds = new Set(
+        validUsers.filter((u) => !isCompany(u.role)).map((u) => u.id),
+      );
+
+      const eligibleParticipants = participants.filter((p) =>
+        eligibleUserIds.has(p.userId),
+      );
+
+      if (!disableAnimation) {
+        setParticipantUsers(
+          validUsers.filter((u) => eligibleUserIds.has(u.id)),
         );
-        const users = await Promise.all(userPromises);
-        const validUsers = users.filter((u): u is User => u !== null);
-        setParticipantUsers(validUsers);
+      }
+
+      if (eligibleParticipants.length === 0) {
+        console.error("No eligible participants available for this prize draw");
+        setIsOverlayOpen(false);
+        return;
       }
 
       // All the participants should at least have one entry
-      const totalEntries = participants.reduce(
+      const totalEntries = eligibleParticipants.reduce(
         (acc, p) => acc + (p.entries || 1),
         0,
       );
@@ -75,7 +93,7 @@ export function PrizeTile({
       // This function finds the winner by summing the entries
       // of each participant until the random number belongs
       // to the selected participant.
-      const winnerParticipant = participants.find((p) => {
+      const winnerParticipant = eligibleParticipants.find((p) => {
         const participantEntries = p.entries || 1;
         selectedEntry -= participantEntries;
         return selectedEntry < 0;
