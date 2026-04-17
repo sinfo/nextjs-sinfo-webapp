@@ -1,7 +1,7 @@
 "use client";
 
 import { UserService } from "@/services/UserService";
-import { isCompany } from "@/utils/utils";
+import { isAttendee } from "@/utils/utils";
 import { Mail, Trophy, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -64,7 +64,7 @@ export function PrizeTile({
       const users = await Promise.all(userPromises);
       const validUsers = users.filter((u): u is User => u !== null);
       const eligibleUserIds = new Set(
-        validUsers.filter((u) => !isCompany(u.role)).map((u) => u.id),
+        validUsers.filter((u) => isAttendee(u.role)).map((u) => u.id),
       );
 
       const eligibleParticipants = participants.filter((p) =>
