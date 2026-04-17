@@ -77,6 +77,9 @@ export default function CurriculumVitae({
     setFile(null);
   }
 
+  const isEligibleForCVPrize =
+    !!file && new Date(file.updated).getFullYear() === 2026;
+
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center bg-white shadow-md rounded-md animate-pulse p-4 gap-1">
@@ -98,26 +101,36 @@ export default function CurriculumVitae({
 
   if (file) {
     return (
-      <div className="flex flex-col justify-center items-center gap-y-1 rounded-md text-sm text-sinfo-primary">
-        {downloadURL && (
-          <Link className="button button-primary w-full" href={downloadURL}>
-            <Download size={16} />
-            Download
-          </Link>
+      <>
+        {currentUser && isEligibleForCVPrize && (
+          <MessageCard
+            type="success"
+            title="You are eligible for the CV Prize"
+            content="Check the Prizes page to know more."
+            onClick={() => router.push("/prizes")}
+          />
         )}
-        {currentUser && (
-          <button
-            className="button button-primary !bg-red-700 hover:!bg-red-800 w-full"
-            onClick={handleDeleteCV}
-          >
-            <Trash size={16} />
-            Delete
-          </button>
-        )}
-        <span className="text-gray-600 text-xs">
-          Updated at: {new Date(file.updated).toLocaleString()}
-        </span>
-      </div>
+        <div className="flex flex-col justify-center items-center gap-y-1 rounded-md text-sm text-sinfo-primary mt-2">
+          {downloadURL && (
+            <Link className="button button-primary w-full" href={downloadURL}>
+              <Download size={16} />
+              Download
+            </Link>
+          )}
+          {currentUser && (
+            <button
+              className="button button-primary !bg-red-700 hover:!bg-red-800 w-full"
+              onClick={handleDeleteCV}
+            >
+              <Trash size={16} />
+              Delete
+            </button>
+          )}
+          <span className="text-gray-600 text-xs">
+            Updated at: {new Date(file.updated).toLocaleString()}
+          </span>
+        </div>
+      </>
     );
   }
 
