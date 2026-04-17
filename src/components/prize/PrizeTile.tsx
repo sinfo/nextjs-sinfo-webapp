@@ -57,24 +57,22 @@ export function PrizeTile({
         setIsOverlayOpen(true);
       }
 
-      // Fetch participant user data to enforce eligibility rules
+      // Fetch participant user data and filter for eligible attendees only
       const userPromises = participants.map((p) =>
         UserService.getUser(cannonToken, p.userId),
       );
       const users = await Promise.all(userPromises);
-      const validUsers = users.filter((u): u is User => u !== null);
-      const eligibleUserIds = new Set(
-        validUsers.filter((u) => isAttendee(u.role)).map((u) => u.id),
+      const eligibleUsers = users.filter(
+        (u): u is User => u !== null && isAttendee(u.role),
       );
+      const eligibleUserIds = new Set(eligibleUsers.map((u) => u.id));
 
       const eligibleParticipants = participants.filter((p) =>
         eligibleUserIds.has(p.userId),
       );
 
       if (!disableAnimation) {
-        setParticipantUsers(
-          validUsers.filter((u) => eligibleUserIds.has(u.id)),
-        );
+        setParticipantUsers(eligibleUsers);
       }
 
       if (eligibleParticipants.length === 0) {
