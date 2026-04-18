@@ -141,8 +141,10 @@ export function getSessionColor(sessionKind: string) {
   switch (sessionKind) {
     case "Presentation":
       return config.theme.extend.colors.sinfo.tertiary;
-    case "Workshop":
+    case "Open":
       return config.theme.extend.colors.sinfo.quaternary;
+    case "Workshop":
+      return config.theme.extend.colors.sinfo.tertiary;
     case "Keynote":
       return config.theme.extend.colors.sinfo.secondary;
     case "Q&A":
