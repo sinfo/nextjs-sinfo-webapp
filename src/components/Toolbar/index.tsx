@@ -20,7 +20,11 @@ export default function Toolbar() {
 
   return (
     <>
-      <Sidebar show={isExpanded} onClose={() => setIsExpanded(false)} />
+      <Sidebar
+        show={isExpanded}
+        onClose={() => setIsExpanded(false)}
+        role={(session?.user as User | undefined)?.role}
+      />
       <div className="sticky top-0 z-10 bg-sinfo-primary">
         <div className="container mx-auto p-4 flex flex-col gap-4 text-white">
           <nav className="flex flex-row items-center">
