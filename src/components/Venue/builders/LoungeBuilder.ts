@@ -129,4 +129,37 @@ export function buildLoungeDecorations(
   createCubeSeat(pod2X + 0.8, pod2Z, 0.02);
   createCubeSeat(pod2X, pod2Z - 0.8, 0.02);
   createCubeSeat(pod2X, pod2Z + 0.8, 0.02);
+
+  // 5. Showcase Cubes (3 on each side of the Showcase Zone)
+  const showcaseZone = venueConfig.zones.find((z) => z.id === "showcase-zone");
+  if (showcaseZone) {
+    const createShowcaseCube = (x: number, z: number) => {
+      // 0.5m wide, 1m tall, 1m deep (rectangular oriented along the Z-axis walkway)
+      const geo = new THREE.BoxGeometry(0.5, 1, 1);
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0xc9a96e, // OSB_COLOR
+        roughness: 0.85,
+      });
+      const cube = new THREE.Mesh(geo, mat);
+      // Half-height in Y, sitting flush on the floor
+      cube.position.set(x, 0.5, z);
+      cube.castShadow = true;
+      cube.receiveShadow = true;
+      loungeGroup.add(cube);
+    };
+
+    const leftX = showcaseZone.position.x - 3.5;
+    const rightX = showcaseZone.position.x + 3.5;
+
+    const zPositions = [
+      showcaseZone.position.z - 1.8,
+      showcaseZone.position.z,
+      showcaseZone.position.z + 1.8,
+    ];
+
+    zPositions.forEach((zPos) => {
+      createShowcaseCube(leftX, zPos);
+      createShowcaseCube(rightX, zPos);
+    });
+  }
 }
