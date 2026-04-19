@@ -104,6 +104,35 @@ export async function buildPlants(
         plantsGroup.add(plant);
       });
     }
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // 3. Showcase Zone (x: -18.6, z: 12)
+    // ─────────────────────────────────────────────────────────────────────────────
+    const showcaseZone = venueConfig.zones.find(
+      (z) => z.id === "showcase-zone",
+    );
+    if (showcaseZone) {
+      const h = showcaseZone.height || 0.01;
+      const x = showcaseZone.position.x;
+      const z = showcaseZone.position.z;
+      const w = showcaseZone.size.w;
+      const d = showcaseZone.size.d;
+
+      // 4 corners, offset by 0.5m inwards so they bracket the OSB cubes nicely
+      const positions = [
+        { x: x - w / 2 + 0.5, z: z - d / 2 + 0.5 }, // Top-Left
+        { x: x + w / 2 - 0.5, z: z - d / 2 + 0.5 }, // Top-Right
+        { x: x - w / 2 + 0.5, z: z + d / 2 - 0.5 }, // Bottom-Left
+        { x: x + w / 2 - 0.5, z: z + d / 2 - 0.5 }, // Bottom-Right
+      ];
+
+      positions.forEach((p) => {
+        const plant = plantModel.clone();
+        plant.scale.set(0.7, 0.7, 0.7);
+        plant.position.set(p.x, h, p.z);
+        plantsGroup.add(plant);
+      });
+    }
   } catch (err) {
     console.error("Failed to build plants:", err);
   }
