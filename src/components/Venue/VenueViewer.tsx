@@ -51,7 +51,7 @@ interface VenueViewerProps {
   sessions?: SINFOSession[];
 }
 
-const shouldDebug = true;
+const shouldDebug = false;
 
 export default function VenueViewer({
   companies,
