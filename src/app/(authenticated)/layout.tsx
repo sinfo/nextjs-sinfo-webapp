@@ -16,8 +16,9 @@ export default async function AuthenticatedLayout({
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
 
+  const user = await UserService.getMe(session.cannonToken);
+
   if (MAINTENANCE_MODE) {
-    const user = await UserService.getMe(session.cannonToken);
     if (user && !isMember(user.role)) {
       return <MaintenancePage />;
     }
@@ -25,7 +26,7 @@ export default async function AuthenticatedLayout({
 
   return (
     <div className="min-h-dvh text-white flex flex-col">
-      <Toolbar />
+      <Toolbar role={user?.role} />
       <div className="flex-1 bg-gray-100 text-black flex">{children}</div>
       <BottomNavbar />
     </div>

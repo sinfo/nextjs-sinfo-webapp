@@ -9,7 +9,11 @@ import { useState } from "react";
 import Link from "next/link";
 import Sidebar from "./Sidebar";
 
-export default function Toolbar() {
+interface ToolbarProps {
+  role?: string;
+}
+
+export default function Toolbar({ role }: ToolbarProps) {
   const { data: session } = useSession();
   const router = useRouter();
   const currPath = usePathname();
@@ -20,7 +24,11 @@ export default function Toolbar() {
 
   return (
     <>
-      <Sidebar show={isExpanded} onClose={() => setIsExpanded(false)} />
+      <Sidebar
+        show={isExpanded}
+        onClose={() => setIsExpanded(false)}
+        role={role}
+      />
       <div className="sticky top-0 z-10 bg-sinfo-primary">
         <div className="container mx-auto p-4 flex flex-col gap-4 text-white">
           <nav className="flex flex-row items-center">

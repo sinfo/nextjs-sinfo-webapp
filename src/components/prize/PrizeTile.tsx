@@ -1,6 +1,7 @@
 "use client";
 
 import { UserService } from "@/services/UserService";
+import { isAttendee } from "@/utils/utils";
 import { Mail, Trophy, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,46 +55,76 @@ export function PrizeTile({
       // Open overlay immediately to create a full-screen experience
       if (!disableAnimation) {
         setIsOverlayOpen(true);
+      }
 
-        // Fetch all participant user data for the animation
-        // TODO: send image url on participants
+      try {
+        // Fetch participant user data and filter for attendees only
         const userPromises = participants.map((p) =>
           UserService.getUser(cannonToken, p.userId),
         );
         const users = await Promise.all(userPromises);
-        const validUsers = users.filter((u): u is User => u !== null);
-        setParticipantUsers(validUsers);
+        const eligibleUsers = users.filter(
+          (u): u is User => u !== null && isAttendee(u.role),
+        );
+        const eligibleUserIds = new Set(eligibleUsers.map((u) => u.id));
+
+        const eligibleParticipants = participants.filter((p) =>
+          eligibleUserIds.has(p.userId),
+        );
+        const eligibleUserMap = new Map(
+          eligibleUsers.map((user) => [user.id, user]),
+        );
+
+        if (!disableAnimation) {
+          setParticipantUsers(eligibleUsers);
+        }
+
+        if (eligibleParticipants.length === 0) {
+          console.error(
+            "No eligible participants available for this prize draw",
+          );
+          setIsOverlayOpen(false);
+          return;
+        }
+
+        // All the participants should at least have one entry
+        const totalEntries = eligibleParticipants.reduce(
+          (acc, p) => acc + (p.entries || 1),
+          0,
+        );
+        let selectedEntry = Math.floor(Math.random() * totalEntries);
+
+        // This function finds the winner by summing the entries
+        // of each participant until the random number belongs
+        // to the selected participant.
+        const winnerParticipant = eligibleParticipants.find((p) => {
+          const participantEntries = p.entries || 1;
+          selectedEntry -= participantEntries;
+          return selectedEntry < 0;
+        })!;
+
+        const winnerUser =
+          eligibleUserMap.get(winnerParticipant.userId) ?? null;
+        if (!winnerUser) {
+          console.error(
+            "Failed to resolve prize winner from loaded participants",
+            winnerParticipant.userId,
+          );
+          setIsOverlayOpen(false);
+          setShowAnimation(false);
+          return;
+        }
+
+        setWinner(winnerUser);
+
+        // Start animation after we have all the data
+        setShowAnimation(!disableAnimation);
+      } catch (error) {
+        console.error("Failed to pick prize winner", error);
+        setParticipantUsers([]);
+        setShowAnimation(false);
+        setIsOverlayOpen(false);
       }
-
-      // All the participants should at least have one entry
-      const totalEntries = participants.reduce(
-        (acc, p) => acc + (p.entries || 1),
-        0,
-      );
-      let selectedEntry = Math.floor(Math.random() * totalEntries);
-
-      // This function finds the winner by summing the entries
-      // of each participant until the random number belongs
-      // to the selected participant.
-      const winnerParticipant = participants.find((p) => {
-        const participantEntries = p.entries || 1;
-        selectedEntry -= participantEntries;
-        return selectedEntry < 0;
-      })!;
-
-      const winnerUser = await UserService.getUser(
-        cannonToken,
-        winnerParticipant.userId,
-      );
-      if (!winnerUser) {
-        console.error("Failed to get prize winner", winnerParticipant.userId);
-        return;
-      }
-
-      setWinner(winnerUser);
-
-      // Start animation after we have all the data
-      setShowAnimation(!disableAnimation);
     }
   }
 

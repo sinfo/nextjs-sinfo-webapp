@@ -1,13 +1,15 @@
 import { ExternalLink, LogOut, X } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { isCompany } from "@/utils/utils";
 
 interface SidebarProps {
   show: boolean;
   onClose: () => void;
+  role?: string;
 }
 
-export default function Sidebar({ show, onClose }: SidebarProps) {
+export default function Sidebar({ show, onClose, role }: SidebarProps) {
   async function handleLogout() {
     await signOut();
   }
@@ -104,6 +106,16 @@ export default function Sidebar({ show, onClose }: SidebarProps) {
           Privacy Policy
           <ExternalLink size={16} />
         </Link>
+        {role && isCompany(role) && (
+          <Link
+            href="https://youtu.be/zbwWVvlLbBQ?si=ebx-rrdPGpoNJJ-N"
+            target="_blank"
+            className="flex items-center gap-x-2"
+          >
+            How to use the Webapp
+            <ExternalLink size={16} />
+          </Link>
+        )}
         <button
           className="flex items-center gap-x-2 text-red-500"
           onClick={handleLogout}

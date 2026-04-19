@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Avatar from "@/components/Avatar";
 import { SocialNetwork } from "@/components/SocialNetwork";
 import { convertToAppRole, isCompany } from "@/utils/utils";
 import { CompanyService } from "@/services/CompanyService";
@@ -15,13 +15,13 @@ export default async function ProfileHeader({ user }: ProfileHeaderProps) {
 
   return (
     <>
-      <header className="bg-sinfo-primary h-[150px] mb-6">
-        <Image
-          className="size-[150px] object-contain relative left-4 -bottom-8 rounded-full border-white border-4"
-          width={150}
-          height={150}
+      <header className="relative bg-sinfo-primary h-[150px] mb-6">
+        <Avatar
+          name={user.name}
           src={user.img}
-          alt="User profile picture"
+          alt={`${user.name} profile picture`}
+          size={150}
+          className="absolute left-4 -bottom-8 border-4 border-white shadow-md"
         />
       </header>
       <div className="p-4">
