@@ -54,15 +54,10 @@ export function buildMainStage(
     backdropWidth,
   );
 
-  // Backdrop texture with text
-  const canvas = createTextCanvas("SINFO 33", {
-    width: 1024,
-    height: 512,
-    fontSize: 64,
-    bgColor: "#2980b9",
-    color: "#ffffff",
-  });
-  const backdropTex = new THREE.CanvasTexture(canvas);
+  // Backdrop texture
+  const textureLoader = new THREE.TextureLoader();
+  const backdropTex = textureLoader.load("/models/backgrounds/desktop.png");
+  backdropTex.colorSpace = THREE.SRGBColorSpace;
 
   const backdropMat = new THREE.MeshStandardMaterial({
     map: backdropTex,
@@ -141,4 +136,55 @@ export function buildMainStage(
   const table = new THREE.Mesh(tableGeo, tableMat);
   table.position.set(centerX, zoneHeight + stageElevation + 0.2, centerZ);
   stageGroup.add(table);
+}
+
+export function buildConnectStage(
+  THREE: typeof THREE_TYPES,
+  scene: THREE_TYPES.Scene,
+): void {
+  const connectStageZone = venueConfig.zones.find(
+    (z) => z.id === "connect-stage",
+  );
+  if (!connectStageZone) return;
+
+  const stageGroup = new THREE.Group();
+  stageGroup.name = "connect-stage-setup";
+  scene.add(stageGroup);
+
+  const zoneHeight = connectStageZone.height || 0.4;
+  const stageWidth = connectStageZone.size.w;
+  const stageDepth = connectStageZone.size.d;
+
+  const centerX = connectStageZone.position.x;
+  const centerZ = connectStageZone.position.z;
+
+  // Backdrop Wall
+  const backdropWidth = stageWidth - 0.5;
+  const backdropHeight = 3.0;
+  const backdropDepth = 0.1;
+  const backdropGeo = new THREE.BoxGeometry(
+    backdropWidth,
+    backdropHeight,
+    backdropDepth,
+  );
+
+  // Backdrop texture
+  const textureLoader = new THREE.TextureLoader();
+  const backdropTex = textureLoader.load("/models/backgrounds/desktop.png");
+  backdropTex.colorSpace = THREE.SRGBColorSpace;
+
+  const backdropMat = new THREE.MeshStandardMaterial({
+    map: backdropTex,
+    color: 0xffffff,
+  });
+  const backdrop = new THREE.Mesh(backdropGeo, backdropMat);
+
+  // Placed at the South edge of the connect stage
+  backdrop.position.set(
+    centerX,
+    zoneHeight + backdropHeight / 2,
+    centerZ + stageDepth / 2 - 0.2,
+  );
+  backdrop.castShadow = true;
+  stageGroup.add(backdrop);
 }

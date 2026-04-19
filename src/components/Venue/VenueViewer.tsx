@@ -22,7 +22,7 @@ import { buildZones } from "./builders/ZoneBuilder";
 import { buildAllStands } from "./builders/StandManager";
 import { buildChairs } from "./builders/ChairBuilder";
 import { buildTVs } from "./builders/TelevisionBuilder";
-import { buildMainStage } from "./builders/StageBuilder";
+import { buildMainStage, buildConnectStage } from "./builders/StageBuilder";
 import { buildLoungeDecorations } from "./builders/LoungeBuilder";
 import { buildPlants } from "./builders/PlantBuilder";
 import { buildGamingZone } from "./builders/GamingBuilder";
@@ -191,6 +191,7 @@ export default function VenueViewer({
         await buildChairs(THREE, scene);
         buildTVs(THREE, scene);
         buildMainStage(THREE, scene);
+        buildConnectStage(THREE, scene);
         buildLoungeDecorations(THREE, scene);
         await buildPlants(THREE, scene);
         await buildGamingZone(THREE, scene);
