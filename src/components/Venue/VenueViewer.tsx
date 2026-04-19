@@ -28,7 +28,7 @@ import { buildPlants } from "./builders/PlantBuilder";
 import { buildGamingZone } from "./builders/GamingBuilder";
 
 // ── Updaters ──
-import { updateLabels } from "./updaters/LabelUpdater";
+import { updateLabels, updateZoneLabels } from "./updaters/LabelUpdater";
 import { updateSigns } from "./updaters/SignUpdater";
 import { updateLogoPanels } from "./updaters/LogoPanelUpdater";
 import {
@@ -76,6 +76,7 @@ export default function VenueViewer({
   const labelSpritesRef = useRef<Map<string, THREE_TYPES.Sprite>>(new Map());
   const standSignsRef = useRef<Map<string, THREE_TYPES.Mesh>>(new Map());
   const standLogoPanelsRef = useRef<Map<string, THREE_TYPES.Mesh>>(new Map());
+  const zoneSpritesRef = useRef<Map<string, THREE_TYPES.Sprite>>(new Map());
   const speakerCardsRef = useRef<Map<string, THREE_TYPES.Object3D[]>>(
     new Map(),
   );
@@ -187,7 +188,7 @@ export default function VenueViewer({
         // ── Build all venue geometry ──
         buildGround(THREE, scene);
         buildEntrances(THREE, scene);
-        buildZones(THREE, scene);
+        zoneSpritesRef.current = buildZones(THREE, scene);
         await buildChairs(THREE, scene);
         buildTVs(THREE, scene);
         buildMainStage(THREE, scene);
@@ -228,6 +229,7 @@ export default function VenueViewer({
     if (!THREE || isLoading) return;
 
     updateLabels(THREE, labelSpritesRef.current, getStandCompany);
+    updateZoneLabels(THREE, zoneSpritesRef.current, selectedDay);
     updateSigns(THREE, standSignsRef.current, getStandCompany);
     updateLogoPanels(THREE, standLogoPanelsRef.current, getStandCompany);
   }, [selectedDay, getStandCompany, isLoading]);

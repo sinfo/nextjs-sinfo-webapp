@@ -9,7 +9,9 @@ import { createTextCanvas } from "../textures/TextCanvasFactory";
 export function buildZones(
   THREE: typeof THREE_TYPES,
   scene: THREE_TYPES.Scene,
-): void {
+): Map<string, THREE_TYPES.Sprite> {
+  const zoneSprites = new Map<string, THREE_TYPES.Sprite>();
+
   venueConfig.zones.forEach((zone) => {
     const h = zone.height || 0.01;
     const isBox = zone.height && zone.height > 0.05;
@@ -64,5 +66,9 @@ export function buildZones(
     labelSprite.position.set(zone.position.x, h + 0.5, labelZ);
     labelSprite.scale.set(6, 1.5, 1);
     scene.add(labelSprite);
+
+    zoneSprites.set(zone.id, labelSprite);
   });
+
+  return zoneSprites;
 }

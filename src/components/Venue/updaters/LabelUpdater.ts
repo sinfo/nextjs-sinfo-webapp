@@ -81,3 +81,47 @@ export function updateLabels(
     }
   });
 }
+
+/**
+ * Updates zone label sprites dynamically for dynamic zones like the showcase zone.
+ */
+export function updateZoneLabels(
+  THREE: typeof THREE_TYPES,
+  zoneSprites: Map<string, THREE_TYPES.Sprite>,
+  selectedDay: number,
+): void {
+  const showcaseSprite = zoneSprites.get("showcase-zone");
+  if (showcaseSprite) {
+    let newLabel = "Showcase Zone";
+    if (selectedDay === 0 || selectedDay === 1) newLabel = "Startups";
+    else if (selectedDay === 2) newLabel = "Lusófona Games";
+    else if (selectedDay === 3) newLabel = "ONGs";
+    else if (selectedDay === 4) newLabel = "Research Institutes";
+
+    const cw = 512;
+    const ch = 96;
+    const canvas = document.createElement("canvas");
+    canvas.width = cw;
+    canvas.height = ch;
+    const ctx = canvas.getContext("2d")!;
+
+    // Transparent background
+    ctx.clearRect(0, 0, cw, ch);
+
+    ctx.font = `bold 40px ${FONT_FAMILY}`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#ffffff";
+
+    ctx.fillText(newLabel, cw / 2, ch / 2);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.minFilter = THREE.LinearFilter;
+    tex.colorSpace = THREE.SRGBColorSpace;
+
+    const mat = showcaseSprite.material as THREE_TYPES.SpriteMaterial;
+    mat.map?.dispose();
+    mat.map = tex;
+    mat.needsUpdate = true;
+  }
+}
