@@ -224,15 +224,15 @@ const stands: Stand[] = [
     height: 2.5,
   },
 
-  // ── Column B (pair top, quad bottom) ──
-  // Top pair (z = -5.75)
+  // ── Column B (quad top, pair bottom) ──
+  // Quad (z = -5.75, -3.25)
   {
     id: "3",
     label: "3",
     position: { x: -9.45, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    doubleGroup: "B-Top",
+    quadGroup: "B",
   },
   {
     id: "4",
@@ -240,13 +240,12 @@ const stands: Stand[] = [
     position: { x: -6.95, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    doubleGroup: "B-Top",
+    quadGroup: "B",
   },
-  // Quad (z = -0.75, 1.75)
   {
     id: "5",
     label: "5",
-    position: { x: -9.45, z: -0.75 },
+    position: { x: -9.45, z: -3.25 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
     quadGroup: "B",
@@ -254,18 +253,19 @@ const stands: Stand[] = [
   {
     id: "6",
     label: "6",
-    position: { x: -6.95, z: -0.75 },
+    position: { x: -6.95, z: -3.25 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
     quadGroup: "B",
   },
+  // Bottom pair (z = 1.75)
   {
     id: "7",
     label: "7",
     position: { x: -9.45, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    quadGroup: "B",
+    doubleGroup: "B-Bot",
   },
   {
     id: "8",
@@ -273,18 +273,18 @@ const stands: Stand[] = [
     position: { x: -6.95, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    quadGroup: "B",
+    doubleGroup: "B-Bot",
   },
 
-  // ── Column C (quad top, pair bottom) ──
-  // Quad (z = -5.75, -3.25)
+  // ── Column C (pair top, quad bottom) ──
+  // Top pair (z = -5.75)
   {
     id: "9",
     label: "9",
     position: { x: -1.25, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    quadGroup: "C",
+    doubleGroup: "C-Top",
   },
   {
     id: "10",
@@ -292,12 +292,13 @@ const stands: Stand[] = [
     position: { x: 1.25, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    quadGroup: "C",
+    doubleGroup: "C-Top",
   },
+  // Quad (z = -0.75, 1.75)
   {
     id: "11",
     label: "11",
-    position: { x: -1.25, z: -3.25 },
+    position: { x: -1.25, z: -0.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
     quadGroup: "C",
@@ -305,19 +306,18 @@ const stands: Stand[] = [
   {
     id: "12",
     label: "12",
-    position: { x: 1.25, z: -3.25 },
+    position: { x: 1.25, z: -0.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
     quadGroup: "C",
   },
-  // Bottom pair (z = 1.75)
   {
     id: "13",
     label: "13",
     position: { x: -1.25, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    doubleGroup: "C-Bot",
+    quadGroup: "C",
   },
   {
     id: "14",
@@ -325,18 +325,18 @@ const stands: Stand[] = [
     position: { x: 1.25, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    doubleGroup: "C-Bot",
+    quadGroup: "C",
   },
 
-  // ── Column D (pair top, quad bottom) ──
-  // Top pair (z = -5.75)
+  // ── Column D (quad top, pair bottom) ──
+  // Quad (z = -5.75, -3.25)
   {
     id: "15",
     label: "15",
     position: { x: 6.95, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    doubleGroup: "D-Top",
+    quadGroup: "D",
   },
   {
     id: "16",
@@ -344,13 +344,12 @@ const stands: Stand[] = [
     position: { x: 9.45, z: -5.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    doubleGroup: "D-Top",
+    quadGroup: "D",
   },
-  // Quad (z = -0.75, 1.75)
   {
     id: "17",
     label: "17",
-    position: { x: 6.95, z: -0.75 },
+    position: { x: 6.95, z: -3.25 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
     quadGroup: "D",
@@ -358,18 +357,19 @@ const stands: Stand[] = [
   {
     id: "18",
     label: "18",
-    position: { x: 9.45, z: -0.75 },
+    position: { x: 9.45, z: -3.25 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
     quadGroup: "D",
   },
+  // Bottom pair (z = 1.75)
   {
     id: "19",
     label: "19",
     position: { x: 6.95, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    quadGroup: "D",
+    doubleGroup: "D-Bot",
   },
   {
     id: "20",
@@ -377,7 +377,7 @@ const stands: Stand[] = [
     position: { x: 9.45, z: 1.75 },
     size: { w: 2.5, d: 2.5 },
     height: 2.5,
-    quadGroup: "D",
+    doubleGroup: "D-Bot",
   },
 
   // ── Column E (far right, vertical stack) ──
