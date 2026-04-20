@@ -16,7 +16,7 @@ export interface CalendarButtonProps {
 }
 
 function formatTime(date: string): string {
-  return moment.utc(date).format("YYYYMMDDTHHmmssZ").replace("+01:00", "Z");
+  return moment.utc(date).format("YYYYMMDDTHHmmss[Z]");
 }
 
 function formatDate(date: string, duration: number): string {
@@ -24,7 +24,7 @@ function formatDate(date: string, duration: number): string {
   const endDate = formatTime(
     moment.utc(date).add(duration, "minutes").toISOString(),
   );
-  return `${startDate}%2F${endDate}`;
+  return `${startDate}/${endDate}`;
 }
 
 export function CalendarButton({
