@@ -60,6 +60,7 @@ export default async function Home() {
   const highlightedSpeakers: Speaker[] = speakers
     ? speakers.sort(() => Math.random() - 0.5).slice(0, N_SPEAKER_TILES)
     : [];
+  const CECILIA_ID = "69e5e2c4868a84c5e45715a1";
 
   let standDates = new Set(
     companies?.flatMap(
@@ -139,7 +140,9 @@ export default async function Home() {
       {/* Highlighted Speakers */}
       <GridList title="Speakers" link="/speakers" linkText="See all" scrollable>
         {highlightedSpeakers.length > 0 ? (
-          highlightedSpeakers.map((s) => <SpeakerTile key={s.id} speaker={s} />)
+          highlightedSpeakers
+            .filter((s) => s.id !== CECILIA_ID) // filter Cecilia out of the speakers page
+            .map((s) => <SpeakerTile key={s.id} speaker={s} />)
         ) : (
           <ListCard title="Nothing to show" />
         )}
