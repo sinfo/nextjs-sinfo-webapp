@@ -104,7 +104,7 @@ export default async function Home() {
       )}
 
       {/* Download CVs section */}
-      {downloadCVsLinks && <DownloadCVs links={downloadCVsLinks} />}
+      {/* {downloadCVsLinks && <DownloadCVs links={downloadCVsLinks} />} */}
 
       {/* Upcoming Sessions */}
       <List

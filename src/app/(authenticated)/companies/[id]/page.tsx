@@ -85,7 +85,7 @@ export default async function Company({ params }: { params: CompanyParams }) {
       </div>
 
       {/* Download CVs */}
-      {downloadCVsLinks && <DownloadCVs links={downloadCVsLinks} />}
+      {/* {downloadCVsLinks && <DownloadCVs links={downloadCVsLinks} />} */}
 
       {/* Members section */}
       {user && isMember(user.role) && (
