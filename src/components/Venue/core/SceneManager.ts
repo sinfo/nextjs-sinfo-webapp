@@ -184,6 +184,7 @@ export async function initScene(
   // ── Cleanup ──
   const cleanup = () => {
     resizeObserver.disconnect();
+    renderer.forceContextLoss();
     renderer.dispose();
     renderer.domElement.remove();
     controls.dispose();
