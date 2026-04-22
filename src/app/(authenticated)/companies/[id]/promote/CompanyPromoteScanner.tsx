@@ -20,7 +20,7 @@ export default function CompanyPromoteScanner({
   const [topCard, setTopCard] = useState<ReactNode | undefined>();
   const [bottomCard, setBottomCard] = useState<ReactNode | undefined>();
   const [statusCard, setStatusCard] = useState<ReactNode | undefined>();
-  const cardsTimeout = useRef<NodeJS.Timeout | null>(null);
+  const cardsTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   async function handleQRCodeScanned(data: string) {
     const scannedUser = getUserFromQRCode(data);
@@ -33,7 +33,7 @@ export default function CompanyPromoteScanner({
       if (
         await UserService.promote(cannonToken, scannedUser.id, {
           role: "company",
-          company: [{ company: company.id }],
+          company: { company: company.id }, // Revertido para Objeto. O Stale Closure já está resolvido abaixo.
         })
       ) {
         setStatusCard(
