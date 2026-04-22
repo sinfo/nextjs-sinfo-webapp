@@ -216,7 +216,7 @@ export const UserService = (() => {
         company: {
           company: string;
           edition?: string;
-        };
+        }; // Revertido para Objeto sem os [] de Array
       }
     | {
         role: "team" | "admin";

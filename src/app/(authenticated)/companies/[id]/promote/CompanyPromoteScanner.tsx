@@ -6,7 +6,7 @@ import QRCodeScanner from "@/components/QRCodeScanner";
 import { UserTile } from "@/components/user/UserTile";
 import { UserService } from "@/services/UserService";
 import { getUserFromQRCode } from "@/utils/utils";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState, useRef } from "react";
 
 interface CompanyPromoteScannerProps {
   cannonToken: string;
@@ -20,18 +20,20 @@ export default function CompanyPromoteScanner({
   const [topCard, setTopCard] = useState<ReactNode | undefined>();
   const [bottomCard, setBottomCard] = useState<ReactNode | undefined>();
   const [statusCard, setStatusCard] = useState<ReactNode | undefined>();
-  let cardsTimeout: NodeJS.Timeout;
+  const cardsTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   async function handleQRCodeScanned(data: string) {
     const scannedUser = getUserFromQRCode(data);
-    cardsTimeout && clearTimeout(cardsTimeout);
+    if (cardsTimeout.current) {
+      clearTimeout(cardsTimeout.current);
+    }
 
     if (scannedUser) {
       setBottomCard(<UserTile user={scannedUser} />);
       if (
         await UserService.promote(cannonToken, scannedUser.id, {
           role: "company",
-          company: { company: company.id },
+          company: { company: company.id }, // Revertido para Objeto. O Stale Closure já está resolvido abaixo.
         })
       ) {
         setStatusCard(
@@ -49,7 +51,7 @@ export default function CompanyPromoteScanner({
       setBottomCard(<MessageCard type="danger" content="Invalid QR-Code" />);
     }
 
-    cardsTimeout = setTimeout(() => {
+    cardsTimeout.current = setTimeout(() => {
       setBottomCard(null);
       setStatusCard(null);
     }, 10 * 1000); // 10 seconds
@@ -76,6 +78,7 @@ export default function CompanyPromoteScanner({
 
   return (
     <QRCodeScanner
+      key={company.id}
       onQRCodeScanned={handleQRCodeScanned}
       topCard={topCard}
       bottomCard={bottomCard}
