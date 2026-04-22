@@ -3,33 +3,13 @@
  */
 
 import type * as THREE_TYPES from "three";
-// @ts-ignore - GLTFLoader is in Three.js examples
-import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader";
+import { loadCachedModel, loadCachedTexture } from "../core/ModelLoader";
 import { venueConfig } from "@/constants/venueData";
-
-async function loadModel(
-  loader: GLTFLoader,
-  url: string,
-): Promise<THREE_TYPES.Group> {
-  return new Promise((resolve, reject) => {
-    loader.load(
-      url,
-      (gltf: GLTF) => {
-        resolve(gltf.scene);
-      },
-      undefined,
-      (error: ErrorEvent | unknown) => {
-        console.error(`Error loading model ${url}:`, error);
-        reject(error);
-      },
-    );
-  });
-}
 
 /**
  * Creates a procedurally generated computer monitor.
  */
-function createMonitor(THREE: typeof THREE_TYPES): THREE_TYPES.Group {
+async function createMonitor(THREE: typeof THREE_TYPES): Promise<THREE_TYPES.Group> {
   const monitor = new THREE.Group();
   monitor.name = "computer-monitor";
 
@@ -38,8 +18,8 @@ function createMonitor(THREE: typeof THREE_TYPES): THREE_TYPES.Group {
     color: monitorColor,
     roughness: 0.8,
   });
-  const textureLoader = new THREE.TextureLoader();
-  const desktopTexture = textureLoader.load("/models/backgrounds/desktop.png");
+  
+  const desktopTexture = await loadCachedTexture("/models/backgrounds/desktop.png", THREE);
   desktopTexture.colorSpace = THREE.SRGBColorSpace;
 
   const screenMaterial = new THREE.MeshStandardMaterial({
@@ -92,17 +72,16 @@ function createMonitor(THREE: typeof THREE_TYPES): THREE_TYPES.Group {
  */
 export async function createGamingSetup(
   THREE: typeof THREE_TYPES,
-  loader: GLTFLoader,
 ): Promise<THREE_TYPES.Group> {
   const group = new THREE.Group();
   group.name = "gaming-setup-component";
 
   try {
     const [pc, table, keyboard, mouse] = await Promise.all([
-      loadModel(loader, "/models/gaming/pc.glb"),
-      loadModel(loader, "/models/gaming/table.glb"),
-      loadModel(loader, "/models/gaming/keyboard.glb"),
-      loadModel(loader, "/models/gaming/mouse.glb"),
+      loadCachedModel("/models/gaming/pc.glb"),
+      loadCachedModel("/models/gaming/table.glb"),
+      loadCachedModel("/models/gaming/keyboard.glb"),
+      loadCachedModel("/models/gaming/mouse.glb"),
     ]);
 
     // Enable shadows for all parts
@@ -156,7 +135,7 @@ export async function createGamingSetup(
     mouse.rotation.y = -Math.PI / 2;
     pc.rotation.y = Math.PI / 2;
 
-    const monitor = createMonitor(THREE);
+    const monitor = await createMonitor(THREE);
 
     // Position monitor on the table
     monitor.position.set(0, 0, 0.1);
@@ -174,13 +153,11 @@ export async function buildGamingZone(
   THREE: typeof THREE_TYPES,
   scene: THREE_TYPES.Scene,
 ): Promise<void> {
-  const loader = new GLTFLoader();
-
   const gamingZone = venueConfig.zones.find((z) => z.id === "gaming-zone");
   if (!gamingZone) return;
 
   try {
-    const hackyModel = await loadModel(loader, "/models/characters/hacky.glb");
+    const hackyModel = await loadCachedModel("/models/characters/hacky.glb");
 
     hackyModel.traverse((child) => {
       if ((child as THREE_TYPES.Mesh).isMesh) {
@@ -214,9 +191,9 @@ export async function buildGamingZone(
     const hpZone = venueConfig.zones.find((z) => z.id === "hp-zone");
     if (hpZone) {
       const [hpSetup1, hpSetup2, simModel] = await Promise.all([
-        createGamingSetup(THREE, loader),
-        createGamingSetup(THREE, loader),
-        loadModel(loader, "/models/gaming/sim.glb"),
+        createGamingSetup(THREE),
+        createGamingSetup(THREE),
+        loadCachedModel("/models/gaming/sim.glb"),
       ]);
 
       // Enable shadows on the simulator component
@@ -252,7 +229,7 @@ export async function buildGamingZone(
     }
 
     // Load and position Arcades
-    const arcadeModel = await loadModel(loader, "/models/gaming/arcade.glb");
+    const arcadeModel = await loadCachedModel("/models/gaming/arcade.glb");
     arcadeModel.traverse((child) => {
       if ((child as THREE_TYPES.Mesh).isMesh) {
         child.castShadow = true;
