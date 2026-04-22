@@ -9,7 +9,9 @@ import { venueConfig } from "@/constants/venueData";
 /**
  * Creates a procedurally generated computer monitor.
  */
-async function createMonitor(THREE: typeof THREE_TYPES): Promise<THREE_TYPES.Group> {
+async function createMonitor(
+  THREE: typeof THREE_TYPES,
+): Promise<THREE_TYPES.Group> {
   const monitor = new THREE.Group();
   monitor.name = "computer-monitor";
 
@@ -18,8 +20,11 @@ async function createMonitor(THREE: typeof THREE_TYPES): Promise<THREE_TYPES.Gro
     color: monitorColor,
     roughness: 0.8,
   });
-  
-  const desktopTexture = await loadCachedTexture("/models/backgrounds/desktop.png", THREE);
+
+  const desktopTexture = await loadCachedTexture(
+    "/models/backgrounds/desktop.png",
+    THREE,
+  );
   desktopTexture.colorSpace = THREE.SRGBColorSpace;
 
   const screenMaterial = new THREE.MeshStandardMaterial({
