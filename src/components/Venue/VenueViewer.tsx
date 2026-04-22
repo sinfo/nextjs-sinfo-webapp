@@ -186,16 +186,21 @@ export default function VenueViewer({
         const { THREE, scene } = ctx;
 
         // ── Build all venue geometry ──
+        // Run synchronous builders first
         buildGround(THREE, scene);
         buildEntrances(THREE, scene);
         zoneSpritesRef.current = buildZones(THREE, scene);
-        await buildChairs(THREE, scene);
         buildTVs(THREE, scene);
-        await buildMainStage(THREE, scene);
-        await buildConnectStage(THREE, scene);
         buildLoungeDecorations(THREE, scene);
-        await buildPlants(THREE, scene);
-        await buildGamingZone(THREE, scene);
+
+        // Run async heavily network/parsing dependent builders concurrently
+        await Promise.all([
+          buildChairs(THREE, scene),
+          buildMainStage(THREE, scene),
+          buildConnectStage(THREE, scene),
+          buildPlants(THREE, scene),
+          buildGamingZone(THREE, scene),
+        ]);
 
         const standRefs = buildAllStands(THREE, scene);
         standMeshesRef.current = standRefs.standMeshes;
