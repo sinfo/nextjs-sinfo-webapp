@@ -3,14 +3,15 @@
  */
 
 import type * as THREE_TYPES from "three";
+import { loadCachedTexture } from "../core/ModelLoader";
 import { venueConfig } from "@/constants/venueData";
 import { DIR } from "../core/utils";
 import { createTextCanvas } from "../textures/TextCanvasFactory";
 
-export function buildMainStage(
+export async function buildMainStage(
   THREE: typeof THREE_TYPES,
   scene: THREE_TYPES.Scene,
-): void {
+): Promise<void> {
   const mainStageZone = venueConfig.zones.find((z) => z.id === "main-stage");
   if (!mainStageZone) return;
 
@@ -55,8 +56,7 @@ export function buildMainStage(
   );
 
   // Backdrop texture
-  const textureLoader = new THREE.TextureLoader();
-  const backdropTex = textureLoader.load("/models/backgrounds/desktop.png");
+  const backdropTex = await loadCachedTexture("/models/backgrounds/desktop.png", THREE);
   backdropTex.colorSpace = THREE.SRGBColorSpace;
 
   const backdropMat = new THREE.MeshStandardMaterial({
@@ -138,10 +138,10 @@ export function buildMainStage(
   stageGroup.add(table);
 }
 
-export function buildConnectStage(
+export async function buildConnectStage(
   THREE: typeof THREE_TYPES,
   scene: THREE_TYPES.Scene,
-): void {
+): Promise<void> {
   const connectStageZone = venueConfig.zones.find(
     (z) => z.id === "connect-stage",
   );
@@ -169,8 +169,7 @@ export function buildConnectStage(
   );
 
   // Backdrop texture
-  const textureLoader = new THREE.TextureLoader();
-  const backdropTex = textureLoader.load("/models/backgrounds/desktop.png");
+  const backdropTex = await loadCachedTexture("/models/backgrounds/desktop.png", THREE);
   backdropTex.colorSpace = THREE.SRGBColorSpace;
 
   const backdropMat = new THREE.MeshStandardMaterial({
