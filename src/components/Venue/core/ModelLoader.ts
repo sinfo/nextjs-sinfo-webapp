@@ -7,40 +7,59 @@ const textureCache: Record<string, Promise<THREE_TYPES.Texture>> = {};
 
 let gltfLoader: GLTFLoader | null = null;
 
+const blobUrlCache: Record<string, string> = {};
+const inflightAssetRequests: Record<string, Promise<string>> = {};
+
 /**
  * Helper to fetch and cache an asset using the browser's Cache API.
  * This guarantees the asset is stored on the local disk without relying on HTTP headers,
  * drastically speeding up subsequent refreshes.
+ * Collapses concurrent requests using inflightAssetRequests.
  */
-async function getAssetUrl(url: string): Promise<{ assetUrl: string; cleanup: () => void }> {
-  if (typeof window === "undefined" || !("caches" in window)) {
-    return { assetUrl: url, cleanup: () => {} };
+export async function getAssetUrl(url: string): Promise<string> {
+  if (blobUrlCache[url]) {
+    return blobUrlCache[url];
   }
 
-  const cacheName = "sinfo-venue-assets-v1";
-  try {
-    const cache = await caches.open(cacheName);
-    let response = await cache.match(url);
+  if (url in inflightAssetRequests) {
+    return inflightAssetRequests[url];
+  }
 
-    if (!response) {
-      response = await fetch(url);
-      if (response.ok) {
-        // Store a clone of the response in Cache API so we can also read it below
-        await cache.put(url, response.clone());
-      } else {
-        return { assetUrl: url, cleanup: () => {} };
-      }
+  const promise = (async () => {
+    if (typeof window === "undefined" || !("caches" in window)) {
+      return url;
     }
 
-    const blob = await response.blob();
-    const blobUrl = URL.createObjectURL(blob);
-    return {
-      assetUrl: blobUrl,
-      cleanup: () => URL.revokeObjectURL(blobUrl),
-    };
-  } catch (err) {
-    console.warn("Failed to use Cache Storage API, falling back:", err);
-    return { assetUrl: url, cleanup: () => {} };
+    const cacheName = "sinfo-venue-assets-v1";
+    try {
+      const cache = await caches.open(cacheName);
+      let response = await cache.match(url);
+
+      if (!response) {
+        response = await fetch(url);
+        if (response.ok) {
+          // Store a clone of the response in Cache API so we can also read it below
+          await cache.put(url, response.clone());
+        } else {
+          return url;
+        }
+      }
+
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      blobUrlCache[url] = blobUrl;
+      return blobUrl;
+    } catch (err) {
+      console.warn("Failed to use Cache Storage API, falling back:", err);
+      return url;
+    }
+  })();
+
+  inflightAssetRequests[url] = promise;
+  try {
+    return await promise;
+  } finally {
+    delete inflightAssetRequests[url];
   }
 }
 
@@ -52,26 +71,26 @@ export function loadCachedModel(url: string): Promise<THREE_TYPES.Group> {
     gltfLoader = new GLTFLoader();
   }
 
-  if (glbCache[url]) {
-    return glbCache[url].then((scene) => scene.clone(true) as THREE_TYPES.Group);
+  if (url in glbCache) {
+    return glbCache[url].then(
+      (scene) => scene.clone(true) as THREE_TYPES.Group,
+    );
   }
 
   const promise = (async () => {
-    const { assetUrl, cleanup } = await getAssetUrl(url);
+    const assetUrl = await getAssetUrl(url);
 
     return new Promise<THREE_TYPES.Group>((resolve, reject) => {
       gltfLoader!.load(
         assetUrl,
         (gltf: GLTF) => {
-          cleanup();
           resolve(gltf.scene);
         },
         undefined,
         (error: ErrorEvent | unknown) => {
-          cleanup();
           console.error(`Error loading model ${url}:`, error);
           reject(error);
-        }
+        },
       );
     });
   })();
@@ -85,28 +104,26 @@ export function loadCachedModel(url: string): Promise<THREE_TYPES.Group> {
  */
 export function loadCachedTexture(
   url: string,
-  THREE: typeof THREE_TYPES
+  THREE: typeof THREE_TYPES,
 ): Promise<THREE_TYPES.Texture> {
-  if (textureCache[url]) {
+  if (url in textureCache) {
     return textureCache[url].then((tex) => tex.clone());
   }
 
   const textureLoader = new THREE.TextureLoader();
   const promise = (async () => {
-    const { assetUrl, cleanup } = await getAssetUrl(url);
+    const assetUrl = await getAssetUrl(url);
 
     return new Promise<THREE_TYPES.Texture>((resolve, reject) => {
       textureLoader.load(
         assetUrl,
         (texture) => {
-          cleanup();
           resolve(texture);
         },
         undefined,
         (error) => {
-          cleanup();
           reject(error);
-        }
+        },
       );
     });
   })();

@@ -56,7 +56,10 @@ export async function buildMainStage(
   );
 
   // Backdrop texture
-  const backdropTex = await loadCachedTexture("/models/backgrounds/desktop.png", THREE);
+  const backdropTex = await loadCachedTexture(
+    "/models/backgrounds/desktop.png",
+    THREE,
+  );
   backdropTex.colorSpace = THREE.SRGBColorSpace;
 
   const backdropMat = new THREE.MeshStandardMaterial({
@@ -169,7 +172,10 @@ export async function buildConnectStage(
   );
 
   // Backdrop texture
-  const backdropTex = await loadCachedTexture("/models/backgrounds/desktop.png", THREE);
+  const backdropTex = await loadCachedTexture(
+    "/models/backgrounds/desktop.png",
+    THREE,
+  );
   backdropTex.colorSpace = THREE.SRGBColorSpace;
 
   const backdropMat = new THREE.MeshStandardMaterial({

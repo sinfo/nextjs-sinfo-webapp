@@ -3,6 +3,7 @@
  */
 
 import type * as THREE_TYPES from "three";
+import { getAssetUrl } from "../core/ModelLoader";
 import { BLOB_COLORS, FONT_FAMILY } from "../core/constants";
 
 /**
@@ -174,34 +175,38 @@ export function createSpeakerCardTexture(
   };
 
   if (speaker.img) {
-    const img = new window.Image();
-    img.crossOrigin = "anonymous";
-    img.src = speaker.img;
-    img.onload = () => {
-      drawBase();
+    getAssetUrl(speaker.img).then((assetUrl) => {
+      const img = new window.Image();
+      img.crossOrigin = "anonymous";
+      img.src = assetUrl;
+      img.onload = () => {
+        drawBase();
 
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(w / 2, imgY, imgR, 0, Math.PI * 2);
-      ctx.closePath();
-      ctx.clip();
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(w / 2, imgY, imgR, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
 
-      const ratio = Math.max((imgR * 2) / img.width, (imgR * 2) / img.height);
-      const dw = img.width * ratio;
-      const dh = img.height * ratio;
-      ctx.drawImage(img, w / 2 - dw / 2, imgY - dh / 2, dw, dh);
-      ctx.restore();
+        const ratio = Math.max((imgR * 2) / img.width, (imgR * 2) / img.height);
+        const dw = img.width * ratio;
+        const dh = img.height * ratio;
+        ctx.drawImage(img, w / 2 - dw / 2, imgY - dh / 2, dw, dh);
+        ctx.restore();
 
-      // Border
-      ctx.beginPath();
-      ctx.arc(w / 2, imgY, imgR, 0, Math.PI * 2);
-      ctx.lineWidth = 12;
-      ctx.strokeStyle = "#ffffff";
-      ctx.stroke();
+        // Border
+        ctx.beginPath();
+        ctx.arc(w / 2, imgY, imgR, 0, Math.PI * 2);
+        ctx.lineWidth = 12;
+        ctx.strokeStyle = "#ffffff";
+        ctx.stroke();
 
-      tex.needsUpdate = true;
-    };
-    img.onerror = drawImagePlaceholder;
+        tex.needsUpdate = true;
+      };
+      img.onerror = () => {
+        drawImagePlaceholder();
+      };
+    });
   } else {
     drawImagePlaceholder();
   }
