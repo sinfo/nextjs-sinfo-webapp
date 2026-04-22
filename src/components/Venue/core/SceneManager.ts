@@ -116,6 +116,24 @@ export async function initScene(
   controls.target.set(CONTROLS_TARGET.x, CONTROLS_TARGET.y, CONTROLS_TARGET.z);
   controls.enabled = false; // starts in 2D mode
 
+  // ── Restore Camera State ──
+  try {
+    const saved = sessionStorage.getItem("sinfo-venue-camera-state");
+    if (saved) {
+      const state = JSON.parse(saved);
+      perspCamera.position.copy(state.perspPos);
+      perspCamera.zoom = state.perspZoom;
+      orthoCamera.position.copy(state.orthoPos);
+      orthoCamera.zoom = state.orthoZoom;
+      controls.target.copy(state.target);
+      perspCamera.updateProjectionMatrix();
+      orthoCamera.updateProjectionMatrix();
+      controls.update();
+    }
+  } catch (e) {
+    // Gracefully ignore parse errors
+  }
+
   // Google Maps style: Left = Pan, Right = Rotate
   controls.mouseButtons = {
     LEFT: THREE.MOUSE.PAN,
@@ -183,6 +201,21 @@ export async function initScene(
 
   // ── Cleanup ──
   const cleanup = () => {
+    try {
+      sessionStorage.setItem(
+        "sinfo-venue-camera-state",
+        JSON.stringify({
+          target: controls.target,
+          perspPos: perspCamera.position,
+          orthoPos: orthoCamera.position,
+          perspZoom: perspCamera.zoom,
+          orthoZoom: orthoCamera.zoom,
+        }),
+      );
+    } catch (e) {
+      // Ignore sessionStorage errors
+    }
+
     resizeObserver.disconnect();
     renderer.forceContextLoss();
     renderer.dispose();
