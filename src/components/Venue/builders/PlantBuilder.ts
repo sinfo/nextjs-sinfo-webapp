@@ -3,37 +3,15 @@
  */
 
 import type * as THREE_TYPES from "three";
-// @ts-ignore - GLTFLoader is in Three.js examples
-import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader";
+import { loadCachedModel } from "../core/ModelLoader";
 import { venueConfig } from "@/constants/venueData";
-
-async function loadModel(
-  loader: GLTFLoader,
-  url: string,
-): Promise<THREE_TYPES.Group> {
-  return new Promise((resolve, reject) => {
-    loader.load(
-      url,
-      (gltf: GLTF) => {
-        resolve(gltf.scene);
-      },
-      undefined,
-      (error: ErrorEvent | unknown) => {
-        console.error(`Error loading model ${url}:`, error);
-        reject(error);
-      },
-    );
-  });
-}
 
 export async function buildPlants(
   THREE: typeof THREE_TYPES,
   scene: THREE_TYPES.Scene,
 ): Promise<void> {
-  const loader = new GLTFLoader();
-
   try {
-    const plantModel = await loadModel(loader, "/models/plant/plant.glb");
+    const plantModel = await loadCachedModel("/models/plant/plant.glb");
 
     plantModel.traverse((child) => {
       if ((child as THREE_TYPES.Mesh).isMesh) {

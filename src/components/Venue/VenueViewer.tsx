@@ -191,8 +191,8 @@ export default function VenueViewer({
         zoneSpritesRef.current = buildZones(THREE, scene);
         await buildChairs(THREE, scene);
         buildTVs(THREE, scene);
-        buildMainStage(THREE, scene);
-        buildConnectStage(THREE, scene);
+        await buildMainStage(THREE, scene);
+        await buildConnectStage(THREE, scene);
         buildLoungeDecorations(THREE, scene);
         await buildPlants(THREE, scene);
         await buildGamingZone(THREE, scene);

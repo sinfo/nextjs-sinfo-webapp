@@ -4,39 +4,16 @@
  */
 
 import type * as THREE_TYPES from "three";
-// @ts-ignore - GLTFLoader is in Three.js examples but may not have types resolve in this environment
-import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader";
+import { loadCachedModel } from "../core/ModelLoader";
 import { venueConfig } from "@/constants/venueData";
 import { DIR } from "../core/utils";
-
-async function loadModel(
-  loader: GLTFLoader,
-  url: string,
-): Promise<THREE_TYPES.Group> {
-  return new Promise((resolve, reject) => {
-    loader.load(
-      url,
-      (gltf: GLTF) => {
-        resolve(gltf.scene);
-      },
-      undefined,
-      (error: ErrorEvent | unknown) => {
-        console.error(`Error loading model ${url}:`, error);
-        reject(error);
-      },
-    );
-  });
-}
 
 export async function buildChairs(
   THREE: typeof THREE_TYPES,
   scene: THREE_TYPES.Scene,
 ): Promise<void> {
-  const loader = new GLTFLoader();
-
   try {
-    const metalChairScene = await loadModel(
-      loader,
+    const metalChairScene = await loadCachedModel(
       "/models/chair/metal_folding_chair.glb",
     );
 
