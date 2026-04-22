@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { venueConfig, type DayConfig } from "@/constants/venueData";
 import type * as THREE_TYPES from "three";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import EventDayButton from "@/components/EventDayButton";
+import GridList from "@/components/GridList";
 
 // ── Core ──
 import { initScene, startAnimationLoop } from "./core/SceneManager";
@@ -81,12 +83,82 @@ export default function VenueViewer({
     new Map(),
   );
 
-  const is3DRef = useRef(false);
-
   // ── State ──
-  const [is3D, setIs3D] = useState(false);
+  const [is3D, setIs3D] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("sinfo-venue-is3d") === "true";
+    }
+    return false;
+  });
+  const is3DRef = useRef(is3D);
+  const isUserToggleRef = useRef(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("sinfo-venue-is3d", String(is3D));
+    }
+  }, [is3D]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDay, setSelectedDay] = useState(0);
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  // ── Sync URL Day Param ──
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    const searchParamDay = searchParams.get("day");
+
+    // 1. If we have a URL param, use it and cache it
+    if (searchParamDay) {
+      const targetDate = searchParamDay === "today" ? today : searchParamDay;
+      const idx = venueConfig.days.findIndex((d) => d.date === targetDate);
+      if (idx !== -1) {
+        setSelectedDay(idx);
+        sessionStorage.setItem("sinfo-venue-day", targetDate);
+        return;
+      }
+    }
+
+    // 2. Fallback to Session Storage
+    const savedDay = sessionStorage.getItem("sinfo-venue-day");
+    if (savedDay) {
+      const savedIdx = venueConfig.days.findIndex((d) => d.date === savedDay);
+      if (savedIdx !== -1) {
+        setSelectedDay(savedIdx);
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("day", savedDay);
+        window.history.replaceState(
+          null,
+          "",
+          `${pathname}?${params.toString()}`,
+        );
+        return;
+      }
+    }
+
+    // 3. Default to today if it exists in config, else 0
+    const todayIdx = venueConfig.days.findIndex((d) => d.date === today);
+    const finalIdx = todayIdx !== -1 ? todayIdx : 0;
+    setSelectedDay(finalIdx);
+
+    // Instantly inject the default day into the URL so it is bookmarkable immediately
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("day", venueConfig.days[finalIdx].date);
+    window.history.replaceState(null, "", `${pathname}?${params.toString()}`);
+    sessionStorage.setItem("sinfo-venue-day", venueConfig.days[finalIdx].date);
+  }, [searchParams, pathname]);
+
+  const handleDayChange = (idx: number) => {
+    setSelectedDay(idx);
+    const dateStr = venueConfig.days[idx].date;
+    sessionStorage.setItem("sinfo-venue-day", dateStr);
+
+    // Update the browser URL instantly to bypass Next.js transition latency
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("day", dateStr);
+    window.history.pushState(null, "", `${pathname}?${params.toString()}`);
+  };
 
   const currentDay: DayConfig | undefined = venueConfig.days[selectedDay];
 
@@ -253,38 +325,46 @@ export default function VenueViewer({
     is3DRef.current = is3D;
     const controls = controlsRef.current;
 
-    if (is3D) {
-      controls.enabled = true;
-      perspCameraRef.current.position.set(
-        PERSP_INITIAL_POSITION.x,
-        PERSP_INITIAL_POSITION.y,
-        PERSP_INITIAL_POSITION.z,
-      );
-      perspCameraRef.current.zoom = PERSP_INITIAL_ZOOM;
-      perspCameraRef.current.updateProjectionMatrix();
-      controls.target.set(
-        CONTROLS_TARGET.x,
-        CONTROLS_TARGET.y,
-        CONTROLS_TARGET.z,
-      );
-      controls.update();
+    // Apply strict camera boundaries ONLY when the user explicitly clicks the 2D/3D toggle
+    // Do NOT reset positions if this is just the component remounting from history.
+    if (isUserToggleRef.current) {
+      if (is3D) {
+        controls.enabled = true;
+        perspCameraRef.current.position.set(
+          PERSP_INITIAL_POSITION.x,
+          PERSP_INITIAL_POSITION.y,
+          PERSP_INITIAL_POSITION.z,
+        );
+        perspCameraRef.current.zoom = PERSP_INITIAL_ZOOM;
+        perspCameraRef.current.updateProjectionMatrix();
+        controls.target.set(
+          CONTROLS_TARGET.x,
+          CONTROLS_TARGET.y,
+          CONTROLS_TARGET.z,
+        );
+        controls.update();
+      } else {
+        controls.enabled = false;
+        orthoCameraRef.current.position.set(
+          ORTHO_INITIAL_POSITION.x,
+          ORTHO_INITIAL_POSITION.y,
+          ORTHO_INITIAL_POSITION.z,
+        );
+        orthoCameraRef.current.lookAt(
+          ORTHO_INITIAL_POSITION.x,
+          0,
+          ORTHO_INITIAL_POSITION.z,
+        );
+        orthoCameraRef.current.zoom = ORTHO_INITIAL_ZOOM;
+        orthoCameraRef.current.updateProjectionMatrix();
+      }
+      isUserToggleRef.current = false;
     } else {
-      controls.enabled = false;
-      orthoCameraRef.current.position.set(
-        ORTHO_INITIAL_POSITION.x,
-        ORTHO_INITIAL_POSITION.y,
-        ORTHO_INITIAL_POSITION.z,
-      );
-      orthoCameraRef.current.lookAt(
-        ORTHO_INITIAL_POSITION.x,
-        0,
-        ORTHO_INITIAL_POSITION.z,
-      );
-      orthoCameraRef.current.zoom = ORTHO_INITIAL_ZOOM;
-      orthoCameraRef.current.updateProjectionMatrix();
+      // Just bind controls
+      controls.enabled = is3D;
     }
 
-    // Update label sprite positions
+    // Update label sprite positions based on 3D depth
     labelSpritesRef.current.forEach((sprite) => {
       const scale = 2;
       sprite.scale.set(scale, scale, 1);
@@ -293,7 +373,7 @@ export default function VenueViewer({
 
     // Update speaker cards layout
     updateSpeakerCardsLayout(speakerCardsRef.current, is3D);
-  }, [is3D]);
+  }, [is3D, isLoading]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // Effect 4: Pointer interaction (hover + click)
@@ -379,23 +459,17 @@ export default function VenueViewer({
   return (
     <div className="flex flex-col">
       {/* ═══ Day Selector Pills ═══ */}
-      <div className="flex items-center justify-center gap-1 sm:gap-2 px-4 py-4 bg-gray-50 border-b border-gray-200">
-        {venueConfig.days.map((day, idx) => (
-          <button
-            key={day.date}
-            onClick={() => setSelectedDay(idx)}
-            className={`
-              px-3 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap
-              ${
-                selectedDay === idx
-                  ? "bg-sinfo-primary text-white shadow-lg shadow-sinfo-primary/30 scale-105"
-                  : "bg-white text-gray-600 hover:bg-gray-100 hover:text-gray-900 border border-gray-200"
-              }
-            `}
-          >
-            {day.label}
-          </button>
-        ))}
+      <div className="bg-gray-50 border-b border-gray-200 pb-2 pt-4 px-4">
+        <GridList>
+          {venueConfig.days.map((day, idx) => (
+            <EventDayButton
+              key={day.date}
+              date={day.date}
+              onClick={() => handleDayChange(idx)}
+              selected={selectedDay === idx}
+            />
+          ))}
+        </GridList>
       </div>
 
       {/* ═══ 3D Viewer ═══ */}
@@ -425,7 +499,10 @@ export default function VenueViewer({
         {/* 2D/3D toggle */}
         <div className="absolute top-4 right-4 z-20 flex gap-2">
           <button
-            onClick={() => setIs3D(false)}
+            onClick={() => {
+              isUserToggleRef.current = true;
+              setIs3D(false);
+            }}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 shadow-md ${
               !is3D
                 ? "bg-sinfo-primary text-white"
@@ -435,7 +512,10 @@ export default function VenueViewer({
             2D
           </button>
           <button
-            onClick={() => setIs3D(true)}
+            onClick={() => {
+              isUserToggleRef.current = true;
+              setIs3D(true);
+            }}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 shadow-md ${
               is3D
                 ? "bg-sinfo-primary text-white"
