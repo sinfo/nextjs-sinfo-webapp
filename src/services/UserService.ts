@@ -216,7 +216,7 @@ export const UserService = (() => {
         company: {
           company: string;
           edition?: string;
-        };
+        }[];
       }
     | {
         role: "team" | "admin";
