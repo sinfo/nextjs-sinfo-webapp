@@ -33,7 +33,7 @@ export default function CompanyPromoteScanner({
       if (
         await UserService.promote(cannonToken, scannedUser.id, {
           role: "company",
-          company: { company: company.id }, // Revertido para Objeto. O Stale Closure já está resolvido abaixo.
+          company: { company: company.id },
         })
       ) {
         setStatusCard(
