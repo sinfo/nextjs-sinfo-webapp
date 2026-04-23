@@ -4,8 +4,10 @@ import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { venueConfig, type DayConfig } from "@/constants/venueData";
 import type * as THREE_TYPES from "three";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { isMember } from "@/utils/utils";
 import EventDayButton from "@/components/EventDayButton";
 import GridList from "@/components/GridList";
+import { Package } from "lucide-react";
 
 // ── Core ──
 import { initScene, startAnimationLoop } from "./core/SceneManager";
@@ -51,6 +53,7 @@ interface VenueViewerProps {
   companies?: Company[];
   speakers?: Speaker[];
   sessions?: SINFOSession[];
+  userRole?: string;
 }
 
 const shouldDebug = false;
@@ -59,6 +62,7 @@ export default function VenueViewer({
   companies,
   speakers,
   sessions,
+  userRole,
 }: VenueViewerProps) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -100,6 +104,9 @@ export default function VenueViewer({
   }, [is3D]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDay, setSelectedDay] = useState(0);
+  const [isLogisticsMode, setIsLogisticsMode] = useState(false);
+
+  const userIsMember = userRole ? isMember(userRole) : false;
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -161,6 +168,46 @@ export default function VenueViewer({
   };
 
   const currentDay: DayConfig | undefined = venueConfig.days[selectedDay];
+
+  // ── Logistics Logic: Identify stands that changed compared to the previous day ──
+  const changingStands = useMemo(() => {
+    const result = new Set<string>();
+    const currentDate = venueConfig.days[selectedDay]?.date;
+    if (!currentDate) return result;
+
+    const findCompanyIdForStandOnDay = (sid: string, dateStr: string) => {
+      return companies?.find((c) =>
+        c.stands?.some(
+          (s) => s.standId === sid && s.date?.startsWith(dateStr),
+        ),
+      )?.id;
+    };
+
+    if (selectedDay === 0) {
+      // First day: any stand populated on this day is a change (from "nothing")
+      venueConfig.stands.forEach((stand) => {
+        if (findCompanyIdForStandOnDay(stand.id, currentDate)) {
+          result.add(stand.id);
+        }
+      });
+      return result;
+    }
+
+    const prevDate = venueConfig.days[selectedDay - 1]?.date;
+    if (!prevDate) return result;
+
+    venueConfig.stands.forEach((stand) => {
+      const currentCid = findCompanyIdForStandOnDay(stand.id, currentDate);
+      const prevCid = findCompanyIdForStandOnDay(stand.id, prevDate);
+
+      // We highlight stands that are changing companies OR being newly occupied today
+      if (currentCid !== prevCid && currentCid) {
+        result.add(stand.id);
+      }
+    });
+
+    return result;
+  }, [selectedDay, companies]);
 
   // ── Enrich speakers with sessions ──
   const enrichedSpeakers = useMemo(() => {
@@ -299,17 +346,58 @@ export default function VenueViewer({
   }, []);
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // Effect 2: Update labels/signs/logos when day changes
+  // Effect 2: Update labels/signs/logos/visibility when day or mode changes
   // ═══════════════════════════════════════════════════════════════════════════
   useEffect(() => {
     const THREE = threeRef.current;
-    if (!THREE || isLoading) return;
+    const scene = sceneRef.current;
+    if (!THREE || !scene || isLoading) return;
 
-    updateLabels(THREE, labelSpritesRef.current, getStandCompany);
+    // 1. Update component textures/content
+    updateLabels(
+      THREE,
+      labelSpritesRef.current,
+      getStandCompany,
+      isLogisticsMode,
+    );
     updateZoneLabels(THREE, zoneSpritesRef.current, selectedDay);
-    updateSigns(THREE, standSignsRef.current, getStandCompany);
+    updateSigns(THREE, standSignsRef.current, getStandCompany, isLogisticsMode);
     updateLogoPanels(THREE, standLogoPanelsRef.current, getStandCompany);
-  }, [selectedDay, getStandCompany, isLoading]);
+
+    // 2. Handle Logistics Mode visibility filtering
+    standMeshesRef.current.forEach((mesh, standId) => {
+      // Mesh is always visible as requested
+      mesh.visible = true;
+
+      const sprite = labelSpritesRef.current.get(standId);
+      if (sprite) {
+        // Only show label if normal mode OR (logistics mode AND changing)
+        sprite.visible = !isLogisticsMode || changingStands.has(standId);
+      }
+    });
+
+    // Hide logo panels in logistics mode for cleaner look
+    standLogoPanelsRef.current.forEach((panel) => {
+      panel.visible = !isLogisticsMode;
+    });
+
+    // Hide decorative elements in logistics mode
+    scene.traverse((child) => {
+      if (
+        child.userData.isDecorative ||
+        child.userData.isSpeakerCard ||
+        child.userData.isSpeakerStem
+      ) {
+        child.visible = !isLogisticsMode;
+      }
+    });
+  }, [
+    selectedDay,
+    getStandCompany,
+    isLoading,
+    isLogisticsMode,
+    changingStands,
+  ]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // Effect 3: Toggle 2D/3D camera mode
@@ -496,34 +584,50 @@ export default function VenueViewer({
           />
         )}
 
-        {/* 2D/3D toggle */}
-        <div className="absolute top-4 right-4 z-20 flex gap-2">
-          <button
-            onClick={() => {
-              isUserToggleRef.current = true;
-              setIs3D(false);
-            }}
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 shadow-md ${
-              !is3D
-                ? "bg-sinfo-primary text-white"
-                : "bg-white/90 text-gray-700 hover:bg-white"
-            }`}
-          >
-            2D
-          </button>
-          <button
-            onClick={() => {
-              isUserToggleRef.current = true;
-              setIs3D(true);
-            }}
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 shadow-md ${
-              is3D
-                ? "bg-sinfo-primary text-white"
-                : "bg-white/90 text-gray-700 hover:bg-white"
-            }`}
-          >
-            3D
-          </button>
+        {/* Mode Toggles */}
+        <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-2">
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                isUserToggleRef.current = true;
+                setIs3D(false);
+              }}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 shadow-md ${
+                !is3D
+                  ? "bg-sinfo-primary text-white"
+                  : "bg-white/90 text-gray-700 hover:bg-white"
+              }`}
+            >
+              2D
+            </button>
+            <button
+              onClick={() => {
+                isUserToggleRef.current = true;
+                setIs3D(true);
+              }}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 shadow-md ${
+                is3D
+                  ? "bg-sinfo-primary text-white"
+                  : "bg-white/90 text-gray-700 hover:bg-white"
+              }`}
+            >
+              3D
+            </button>
+          </div>
+
+          {userIsMember && (
+            <button
+              onClick={() => setIsLogisticsMode(!isLogisticsMode)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 shadow-md ${
+                isLogisticsMode
+                  ? "bg-amber-500 text-white shadow-amber-500/30"
+                  : "bg-white/90 text-gray-700 hover:bg-white"
+              }`}
+            >
+              <Package size={18} />
+              Logistics
+            </button>
+          )}
         </div>
       </div>
     </div>

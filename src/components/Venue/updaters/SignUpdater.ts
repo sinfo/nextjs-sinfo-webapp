@@ -13,10 +13,16 @@ export function updateSigns(
   THREE: typeof THREE_TYPES,
   standSigns: Map<string, THREE_TYPES.Mesh>,
   getStandCompany: (standId: string) => Company | undefined,
+  isLogisticsMode: boolean = false,
 ): void {
   venueConfig.stands.forEach((stand) => {
-    const company = getStandCompany(stand.id);
     const sign = standSigns.get(stand.id);
+    if (sign) {
+      sign.visible = !isLogisticsMode;
+    }
+    if (isLogisticsMode) return;
+
+    const company = getStandCompany(stand.id);
 
     if (sign && company) {
       const nameCanvas = createTextCanvas(company.name, {

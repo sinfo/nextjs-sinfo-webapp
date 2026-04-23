@@ -17,6 +17,7 @@ export function buildLoungeDecorations(
 
   const loungeGroup = new THREE.Group();
   loungeGroup.name = "lounge-decorations";
+  loungeGroup.userData.isDecorative = true;
   scene.add(loungeGroup);
 
   // ── Colors ──

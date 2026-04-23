@@ -14,6 +14,7 @@ export function updateLabels(
   THREE: typeof THREE_TYPES,
   labelSprites: Map<string, THREE_TYPES.Sprite>,
   getStandCompany: (standId: string) => Company | undefined,
+  isLogisticsMode: boolean = false,
 ): void {
   venueConfig.stands.forEach((stand) => {
     const company = getStandCompany(stand.id);
@@ -44,6 +45,61 @@ export function updateLabels(
     (sprite.material as THREE_TYPES.SpriteMaterial).map?.dispose();
     (sprite.material as THREE_TYPES.SpriteMaterial).map = tex;
     (sprite.material as THREE_TYPES.SpriteMaterial).needsUpdate = true;
+
+    if (isLogisticsMode && company) {
+      const details = company.standDetails || {
+        chairs: 0,
+        table: false,
+        lettering: false,
+      };
+
+      const renderLogistics = (img?: HTMLImageElement) => {
+        ctx.fillStyle = bg;
+        ctx.beginPath();
+        ctx.roundRect(0, 0, cw, ch, 16);
+        ctx.fill();
+
+        if (img) {
+          const maxLogoH = 110;
+          const ratio = Math.min(220 / img.width, maxLogoH / img.height);
+          const dw = img.width * ratio;
+          const dh = img.height * ratio;
+          ctx.drawImage(img, (cw - dw) / 2, 15, dw, dh);
+        } else {
+          ctx.fillStyle = BRAND_NAVY;
+          ctx.font = `bold 24px ${FONT_FAMILY}`;
+          ctx.textAlign = "center";
+          ctx.fillText(company.name, cw / 2, 60);
+        }
+
+        ctx.fillStyle = BRAND_NAVY;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        const tStr = `Table: ${details.table ? "✅" : "❌"}`;
+        const cStr = `Chairs: ${details.chairs}`;
+        const lStr = `Lettering: ${details.lettering ? "✅" : "❌"}`;
+
+        ctx.font = `bold 24px ${FONT_FAMILY}`;
+        ctx.fillText(tStr, cw / 2, ch / 2 + 35);
+        ctx.fillText(cStr, cw / 2, ch / 2 + 70);
+        ctx.fillText(lStr, cw / 2, ch / 2 + 105);
+        tex.needsUpdate = true;
+      };
+
+      if (company.img) {
+        getAssetUrl(company.img).then((assetUrl) => {
+          const img = new window.Image();
+          img.crossOrigin = "anonymous";
+          img.src = assetUrl;
+          img.onload = () => renderLogistics(img);
+          img.onerror = () => renderLogistics();
+        });
+      } else {
+        renderLogistics();
+      }
+      return;
+    }
 
     if (company?.img) {
       // Load logo image securely via Cache API
