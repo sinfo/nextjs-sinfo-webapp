@@ -2,9 +2,16 @@ import { CompanyService } from "@/services/CompanyService";
 import { SpeakerService } from "@/services/SpeakerService";
 import { SessionService } from "@/services/SessionService";
 import VenueViewer from "@/components/Venue/VenueViewer";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
+import { UserService } from "@/services/UserService";
 
 export default async function VenuePage() {
   const all_companies = await CompanyService.getCompanies();
+  const session = await getServerSession(authOptions);
+  const user = session?.cannonToken
+    ? await UserService.getMe(session.cannonToken)
+    : null;
 
   function companiesNotFetched() {
     return (
@@ -48,6 +55,7 @@ export default async function VenuePage() {
         companies={uniqueCompanies}
         speakers={speakers}
         sessions={sessions}
+        userRole={user?.role}
       />
     </div>
   );

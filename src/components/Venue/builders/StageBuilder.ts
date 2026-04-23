@@ -17,6 +17,7 @@ export async function buildMainStage(
 
   const stageGroup = new THREE.Group();
   stageGroup.name = "main-stage-setup";
+  stageGroup.userData.isDecorative = true;
   scene.add(stageGroup);
 
   const zoneHeight = mainStageZone.height || 0.15;
@@ -152,6 +153,7 @@ export async function buildConnectStage(
 
   const stageGroup = new THREE.Group();
   stageGroup.name = "connect-stage-setup";
+  stageGroup.userData.isDecorative = true;
   scene.add(stageGroup);
 
   const zoneHeight = connectStageZone.height || 0.4;

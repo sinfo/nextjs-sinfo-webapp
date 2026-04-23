@@ -173,6 +173,7 @@ export async function buildGamingZone(
 
     const gamingGroup = new THREE.Group();
     gamingGroup.name = "gaming-group";
+    gamingGroup.userData.isDecorative = true;
     scene.add(gamingGroup);
 
     // Initial scale adjustment for a humanoid

@@ -74,6 +74,7 @@ export function buildTVs(
 ): void {
   const tvsGroup = new THREE.Group();
   tvsGroup.name = "tvs-group";
+  tvsGroup.userData.isDecorative = true;
   scene.add(tvsGroup);
 
   // TVs are now only placed in Rooms 1 & 2. Main Stage uses StageBuilder.

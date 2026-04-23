@@ -17,11 +17,13 @@ export async function buildPlants(
       if ((child as THREE_TYPES.Mesh).isMesh) {
         child.castShadow = true;
         child.receiveShadow = true;
+        child.userData.isDecorative = true;
       }
     });
 
     const plantsGroup = new THREE.Group();
     plantsGroup.name = "plants-group";
+    plantsGroup.userData.isDecorative = true;
     scene.add(plantsGroup);
 
     const s = 0.6; // Starting scale
