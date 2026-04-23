@@ -177,9 +177,7 @@ export default function VenueViewer({
 
     const findCompanyIdForStandOnDay = (sid: string, dateStr: string) => {
       return companies?.find((c) =>
-        c.stands?.some(
-          (s) => s.standId === sid && s.date?.startsWith(dateStr),
-        ),
+        c.stands?.some((s) => s.standId === sid && s.date?.startsWith(dateStr)),
       )?.id;
     };
 
