@@ -28,7 +28,7 @@ const N_SPEAKER_TILES = 10;
 
 export default async function Home() {
   const session = (await getServerSession(authOptions))!;
-  const user = await UserService.getMe(session.cannonToken);
+  const user = await UserService.getMe(session?.cannonToken);
   if (!user) return <UserSignOut />;
 
   const event = await EventService.getLatest();
