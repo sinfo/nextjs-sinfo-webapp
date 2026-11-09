@@ -2,6 +2,7 @@ import BlankPageWithMessage from "@/components/BlankPageMessage";
 import List from "@/components/List";
 import { ShowMore } from "@/components/ShowMore";
 import { SessionTile } from "@/components/session";
+import { FavoriteSpeakerButton } from "@/components/speaker";
 import { SpeakerService } from "@/services/SpeakerService";
 import Image from "next/image";
 
@@ -26,6 +27,7 @@ export default async function Speaker({ params }: { params: SpeakerParams }) {
     <div className="container mx-auto">
       <div className="flex flex-col items-center gap-y-2 p-4 text-center">
         <h2 className="text-2xl font-bold">{speaker.name}</h2>
+        <FavoriteSpeakerButton speakerId={speaker.id} variant="button" />
         <Image
           className="w-40 h-40 object-contain"
           width={150}

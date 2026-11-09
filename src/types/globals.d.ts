@@ -51,6 +51,7 @@ type User = {
   points?: number;
   registered?: string;
   updated?: string;
+  favoriteSpeakers?: string[];
 };
 
 type Connection = {

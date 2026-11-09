@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link, { LinkProps } from "next/link";
 
+import { ReactNode } from "react";
+
 interface GridCardProps {
   title: string;
   img: string;
@@ -10,6 +12,7 @@ interface GridCardProps {
   label?: string;
   link?: string;
   linkProps?: LinkProps;
+  action?: ReactNode;
 }
 
 export default function GridCard({
@@ -21,37 +24,41 @@ export default function GridCard({
   label,
   link,
   linkProps,
+  action,
 }: GridCardProps) {
   return (
-    <Link href={link || "#"} {...linkProps}>
-      <div className="w-[160px] min-h-[240px] flex flex-col items-center justify-between px-4 py-4 gap-y-2 text-sm bg-white rounded-md shadow-md text-center overflow-hidden hover:bg-slate-50 hover:shadow-sm active:bg-gray-200 active:shadow-none">
-        <span title={title} className="h-10 w-full line-clamp-2">
-          {title}
-        </span>
-        <Image
-          className="w-[128px] h-[128px] object-contain"
-          width={128}
-          height={128}
-          src={img}
-          alt={imgAltText}
-        />
-        <div className="h-[32px]">
-          {extraImage && (
-            <Image
-              className="w-[100px] h-[32px] object-contain"
-              width={100}
-              height={32}
-              src={extraImage}
-              alt={extraImageAltText}
-            />
-          )}
-          {label && (
-            <span className="m-auto bg-sinfo-secondary font-bold text-white rounded-md px-2 py-1 uppercase">
-              {label}
-            </span>
-          )}
+    <div className="relative group">
+      <Link href={link || "#"} {...linkProps}>
+        <div className="w-[160px] min-h-[240px] flex flex-col items-center justify-between px-4 py-4 gap-y-2 text-sm bg-white rounded-md shadow-md text-center overflow-hidden hover:bg-slate-50 hover:shadow-sm active:bg-gray-200 active:shadow-none">
+          <span title={title} className="h-10 w-full line-clamp-2">
+            {title}
+          </span>
+          <Image
+            className="w-[128px] h-[128px] object-contain"
+            width={128}
+            height={128}
+            src={img}
+            alt={imgAltText}
+          />
+          <div className="h-[32px]">
+            {extraImage && (
+              <Image
+                className="w-[100px] h-[32px] object-contain"
+                width={100}
+                height={32}
+                src={extraImage}
+                alt={extraImageAltText}
+              />
+            )}
+            {label && (
+              <span className="m-auto bg-sinfo-secondary font-bold text-white rounded-md px-2 py-1 uppercase">
+                {label}
+              </span>
+            )}
+          </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+      {action && <div className="absolute top-2 right-2 z-10">{action}</div>}
+    </div>
   );
 }

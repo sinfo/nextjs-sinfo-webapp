@@ -2,7 +2,7 @@ import { SessionService } from "@/services/SessionService";
 import { CompanyService } from "@/services/CompanyService";
 import { SpeakerService } from "@/services/SpeakerService";
 import { CompanyTile } from "@/components/company";
-import { SpeakerTile } from "@/components/speaker";
+import { FavoriteSpeakersSection, SpeakerTile } from "@/components/speaker";
 import { SessionTile } from "@/components/session";
 import ListCard from "@/components/ListCard";
 import List from "@/components/List";
@@ -21,6 +21,7 @@ import UserSignOut from "@/components/UserSignOut";
 import { SPIN_WHEEL_MAXIMUM } from "@/constants";
 import { EventService } from "@/services/EventService";
 import DownloadCVs from "@/components/company/DownloadCVs";
+import { enrichSpeakersWithSessions } from "@/utils/speaker";
 
 const N_SESSION_TILES = 3;
 const N_COMPANY_TILES = 15;
@@ -35,6 +36,8 @@ export default async function Home() {
   const eventSessions = await SessionService.getSessions();
   const companies = await CompanyService.getCompanies();
   const speakers = await SpeakerService.getSpeakers();
+
+  const enrichedSpeakers = enrichSpeakersWithSessions(speakers, eventSessions);
 
   // choose upcoming or random sessions
   const tenMinutesEarlier = new Date(new Date().getTime() - 10 * 60 * 1000);
@@ -120,6 +123,9 @@ export default async function Home() {
           <ListCard title="Nothing to show" />
         )}
       </List>
+
+      {/* Favorite Speakers */}
+      <FavoriteSpeakersSection allSpeakers={enrichedSpeakers} />
 
       {/* Highlighted Companies */}
       <GridList

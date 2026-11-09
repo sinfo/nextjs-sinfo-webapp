@@ -11,6 +11,7 @@ export const MOCK_SESSIONS: SINFOSession[] = [
     description:
       "Learn practical strategies and tips to excel in live coding interviews, hosted by industry experts.",
     company: MOCK_COMPANIES[11],
+    speakers: [MOCK_SPEAKERS[1]],
     date: "2024-12-01T12:00:00Z",
     duration: 90,
     event: "31",
@@ -44,6 +45,7 @@ export const MOCK_SESSIONS: SINFOSession[] = [
     description:
       "Hands-on session to learn how to deploy a scalable Node.js application using Cloudflare Workers.",
     company: MOCK_COMPANIES[9],
+    speakers: [MOCK_SPEAKERS[3]],
     date: "2025-02-18T09:00:00Z",
     duration: 90,
     event: "31",
@@ -82,6 +84,7 @@ export const MOCK_SESSIONS: SINFOSession[] = [
     description:
       "Master the fundamentals of Git version control to improve your collaboration and code management.",
     company: MOCK_COMPANIES[6],
+    speakers: [MOCK_SPEAKERS[0]],
     date: "2025-02-18T10:00:00Z",
     duration: 90,
     event: "31",
@@ -101,6 +104,7 @@ export const MOCK_SESSIONS: SINFOSession[] = [
     description:
       "Learn about Cloudflare's mission, services, and how it's shaping the future of the internet.",
     company: MOCK_COMPANIES[9],
+    speakers: [MOCK_SPEAKERS[2]],
     date: "2025-02-19T11:00:00Z",
     duration: 20,
     event: "31",
